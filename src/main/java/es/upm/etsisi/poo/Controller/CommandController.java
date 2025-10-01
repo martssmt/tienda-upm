@@ -1,5 +1,6 @@
 package es.upm.etsisi.poo.Controller;
 
+import es.upm.etsisi.poo.Model.Category;
 import es.upm.etsisi.poo.View.ConsoleView;
 
 import java.util.Arrays;
@@ -42,6 +43,34 @@ public class CommandController {
                 break;
         }
 
+    }
+
+    private void handleProduct(String[] tokens) {
+        switch (tokens[1].toLowerCase()) {
+            case "add":
+                int id = Integer.parseInt(tokens[2]);
+                String name = tokens[3].replace("\"", "");
+                Category category = Category.valueOf(tokens[4].toUpperCase());
+                double price = Double.parseDouble(tokens[5]);
+                productController.handleAdd(id, name, category, price);
+                break;
+            case "list":
+                productController.handleList();
+                break;
+            case "update":
+                id = Integer.parseInt(tokens[2]);
+                String field = tokens[3];
+                String value = tokens[4];
+                productController.handleUpdate(id, field, value);
+                break;
+            case "remove":
+                id = Integer.parseInt(tokens[2]);
+                productController.handleRemove(id);
+                break;
+            case default:
+                view.showMessage("Unknown command: " + String.join(" ", Arrays.copyOfRange(tokens, 0, tokens.length)));
+                break;
+        }
     }
 
 }
