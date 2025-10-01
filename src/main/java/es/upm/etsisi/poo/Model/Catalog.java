@@ -12,7 +12,6 @@ public class Catalog {
     }
 
     public boolean addProduct(Product product) {
-
         if (this.productsList.size()>=MAX_PRODUCTS){
             return false;
         }
@@ -27,6 +26,14 @@ public class Catalog {
 
     public Product getProduct(int id){
         return this.productsList.getOrDefault(id, null);
+    }
+
+    public boolean removeProduct(int id){
+        if (this.productsList.containsKey(id)) {
+            this.productsList.remove(id);
+            return true;
+        }
+        return false;
     }
 
 }
