@@ -48,4 +48,13 @@ public class ProductController {
         }
     }
 
+    public void handleRemove(int id) {
+        if (this.catalog.removeProduct(id)) {
+            this.view.showMessage("prod remove: ok");
+        } else {
+            this.view.showMessage("Product with id " + id + " already does not exist in the catalog.");
+            this.view.showMessage("prod remove: error");
+        }
+    }
+
 }
