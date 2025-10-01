@@ -16,17 +16,16 @@ public class ProductController {
     }
 
     public Catalog getCatalog() {
-        return catalog;
+        return this.catalog;
     }
 
     public void handleAdd(int id, String name, Category category, double price) {
         Product product = new Product(id, name, category, price);
-        boolean productAdded=catalog.addProduct(product);
-        if (!productAdded) {
+        if (this.catalog.addProduct(product)) {
             this.view.showMessage("Product with id " + id + " already exists in the catalog.");
             this.view.showMessage("prod add: error");
         } else {
-            this.handlePrint(product);
+            this.view.showProduct(product);
             this.view.showMessage("prod add: ok");
         }
     }
@@ -34,10 +33,6 @@ public class ProductController {
     public void handleList() {
         this.view.showCatalog(this.catalog.toString());
         this.view.showMessage("prod list: ok");
-    }
-
-    public void handlePrint(Product product) {
-        this.view.showProduct(product.toString());
     }
 
 }
