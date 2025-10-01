@@ -56,4 +56,8 @@ public class TicketController {
         }
     }
 
+    public void handlePrint() {
+        this.view.showTicket(ticket.toString());
+    }
+
 }
