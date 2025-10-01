@@ -96,4 +96,8 @@ public class CommandController {
         }
     }
 
+    private void handleEcho(String[] tokens) {
+        view.showMessage(String.join(" ", Arrays.copyOfRange(tokens, 1, tokens.length)));
+    }
+
 }
