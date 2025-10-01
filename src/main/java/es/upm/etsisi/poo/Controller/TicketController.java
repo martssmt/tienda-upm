@@ -58,6 +58,7 @@ public class TicketController {
 
     public void handlePrint() {
         this.view.showTicket(this.ticket.toString());
+        this.view.showMessage("ticket print: ok");
     }
 
 }
