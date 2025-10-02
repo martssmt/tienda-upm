@@ -31,4 +31,17 @@ public class Ticket {
         return result;
     }
 
+    public boolean removeProduct(int id){
+        boolean result = true;
+        if(id < 0 || id >= this.itemList.size()){
+            result = false;
+        }
+        itemList.remove(id);
+        return result;
+    }
+
+    public void clear(){
+        this.itemList.clear();
+    }
+
 }
