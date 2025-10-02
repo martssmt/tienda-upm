@@ -64,4 +64,12 @@ public class Ticket {
         return result;
     }
 
+    public double calculateFinalPrice(){
+        return this.calculateTotalPrice() -  calculateTotalDiscount();
+    }
+
+    public Product getProduct(int id){
+        return this.itemList.get(id).getProduct();
+    }
+
 }
