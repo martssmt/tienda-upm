@@ -25,4 +25,8 @@ public class ConsoleView {
         Discounts if there are ≥2 units in the category: MERCH 0%, STATIONERY 5%, CLOTHES 7%, BOOKS 10%, ELECTRONICS 3%.""";
         System.out.println(MESSAGE);
     }
+
+    public void showProduct(Product product) {
+        System.out.println(product.toString());
+    }
 }
