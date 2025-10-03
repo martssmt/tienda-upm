@@ -33,4 +33,8 @@ public class ConsoleView {
     public void showTicket(String ticketText) {
         System.out.println(ticketText);
     }
+
+    public void showCatalog(String catalogText) {
+        System.out.println(catalogText);
+    }
 }
