@@ -13,15 +13,15 @@ public class Product {
         }
         if (price <= 0) throw new IllegalArgumentException("El precio debe ser mayor que 0");
 
-        this.id=id;
+        this.id = id;
         this.name = name;
         this.category = category;
         this.price = price;
     }
 
-    public void setId(int id){
+    public void setId(int id) {
         if (id <= 0) throw new IllegalArgumentException("El ID debe ser positivo");
-        this.id=id;
+        this.id = id;
     }
 
     public void setName(String name) {
@@ -37,7 +37,7 @@ public class Product {
 
     public void setPrice(double price) {
         if (price <= 0) throw new IllegalArgumentException("El precio debe ser mayor que 0");
-        this.price=price;
+        this.price = price;
     }
 
     public int getId() {
@@ -57,7 +57,7 @@ public class Product {
     }
 
     private boolean equals(Product product) {
-        return this.id==product.id;
+        return this.id == product.id;
     }
 
     @Override
@@ -76,7 +76,7 @@ public class Product {
 
     @Override
     public String toString() {
-        return "{class:Product, id:"+this.id+", name:'"+this.name+"'," +
-                " category:"+this.category.name()+", price:"+this.price+"}";
+        return "{class:Product, id:" + this.id + ", name:'" + this.name + "'," +
+                " category:" + this.category.name() + ", price:" + this.price + "}";
     }
 }
