@@ -45,15 +45,6 @@ public class Product {
         return this.price;
     }
 
-    @Override
-    public String toString() {
-        return "Product{" +
-                "name='" + this.name + '\'' +
-                ", category=" + this.category +
-                ", price=" + this.price +
-                '}';
-    }
-
     private boolean equals(Product product) {
         return this.id==product.id;
     }
@@ -62,9 +53,19 @@ public class Product {
     public boolean equals(Object obj) {
         if (obj != null) {
             return this.equals((Product) obj);
-
         } else {
             return false;
         }
+    }
+
+    @Override
+    public int hashCode() {
+        return Integer.hashCode(id);
+    }
+
+    @Override
+    public String toString() {
+        return "{class:Product, id:"+this.id+", name:'"+this.name+"'," +
+                " category:"+this.category.name()+", price:"+this.price+"}";
     }
 }
