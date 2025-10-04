@@ -13,7 +13,7 @@ public enum Category {
         this.discount=discount;
     }
 
-    public double getValueDiscount(){
+    public double getDiscount(){
         return this.discount;
     }
 }
