@@ -7,6 +7,12 @@ public class Product {
     private double price;
 
     public Product(int id, String name, Category category, double price) {
+        if (id <= 0) throw new IllegalArgumentException("El ID debe ser positivo");
+        if (name == null || name.isEmpty() || name.length() > 100) {
+            throw new IllegalArgumentException("El nombre no puede estar vacío ni superar 100 caracteres");
+        }
+        if (price <= 0) throw new IllegalArgumentException("El precio debe ser mayor que 0");
+
         this.id=id;
         this.name = name;
         this.category = category;
@@ -14,10 +20,14 @@ public class Product {
     }
 
     public void setId(int id){
+        if (id <= 0) throw new IllegalArgumentException("El ID debe ser positivo");
         this.id=id;
     }
 
     public void setName(String name) {
+        if (name == null || name.isEmpty() || name.length() > 100) {
+            throw new IllegalArgumentException("El nombre no puede estar vacio ni superar 100 caracteres");
+        }
         this.name = name;
     }
 
@@ -26,7 +36,8 @@ public class Product {
     }
 
     public void setPrice(double price) {
-       this.price=price;
+        if (price <= 0) throw new IllegalArgumentException("El precio debe ser mayor que 0");
+        this.price=price;
     }
 
     public int getId() {
