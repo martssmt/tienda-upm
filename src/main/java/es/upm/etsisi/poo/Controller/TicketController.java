@@ -46,7 +46,7 @@ public class TicketController {
             this.handlePrint();
             this.view.showMessage("ticket remove: error");
         } else {
-            boolean productRemoved = this.ticket.removeProduct(product);
+            boolean productRemoved = this.ticket.removeProduct(id);
             this.handlePrint();
             if (productRemoved) {
                 this.view.showMessage("ticket remove: ok");
