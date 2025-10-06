@@ -2,6 +2,7 @@ package es.upm.etsisi.poo.Model;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 public class Catalog {
     private static final int MAX_PRODUCTS = 200;
@@ -11,7 +12,7 @@ public class Catalog {
         this.productsList = new HashMap<>();
     }
 
-    public Map<Integer, Product> getProductList() { // no se usa
+    public Map<Integer, Product> getProductList() {
         return new HashMap<>(this.productsList);
     }
 
@@ -19,64 +20,70 @@ public class Catalog {
         return this.productsList.get(id);
     }
 
-    public boolean addProduct(Product product) {
+    public void addProduct(Product product) throws IllegalArgumentException, IllegalStateException {
         if (product == null) {
             throw new IllegalArgumentException("The product cannot be null");
         }
 
         if (this.productsList.size() >= MAX_PRODUCTS) {
-            //System.out.println("Lista de productos completa, no se pueden añadir mas productos");
-            return false;
+            throw new IllegalStateException("The catalog is full (max " + MAX_PRODUCTS + " products)");
         }
 
         if (this.productsList.containsKey(product.getId())) {
-            //System.out.println("No puede haber un producto con un mismo id");
-            return false;
+            throw new IllegalStateException("A product with ID " + product.getId() + " already exists");
         }
 
         this.productsList.put(product.getId(), product);
-        return true;
     }
 
-    public boolean removeProduct(int id) {
-        if (this.productsList.containsKey(id)) {
-            this.productsList.remove(id);
-            return true;
+    public void removeProduct(int id) throws IllegalArgumentException, NoSuchElementException {
+        if (id <= 0) {
+            throw new IllegalArgumentException("The product ID must be positive");
         }
-        //System.out.println("No existe en la lista el producto seleccionado");
-        return false;
+
+        if (!this.productsList.containsKey(id)) {
+            throw new NoSuchElementException("No product found with ID " + id);
+        }
+
+        this.productsList.remove(id);
     }
 
-    public boolean updateProduct(int id, String field, String value) {
-        Product product = productsList.get(id);
+    public void updateProduct(int id, String field, String value)
+            throws IllegalArgumentException, NoSuchElementException {
+
+        Product product = this.productsList.get(id);
         if (product == null) {
-            return false; // No existe el producto seleccionado
+            throw new NoSuchElementException("No product found with ID " + id);
         }
 
         switch (field.toLowerCase()) {
             case "name":
+                if (value == null || value.isBlank()) {
+                    throw new IllegalArgumentException("Name cannot be empty");
+                }
                 product.setName(value);
-                return true;
+                break;
 
             case "category":
                 try {
-                    product.setCategory(Category.valueOf(value.toUpperCase()));
-                    return true;
+                    Category category = Category.valueOf(value.toUpperCase());
+                    product.setCategory(category);
                 } catch (IllegalArgumentException e) {
-                    return false; // Category no existe
+                    throw new IllegalArgumentException("Invalid category: " + value);
                 }
+                break;
 
             case "price":
                 try {
                     double newPrice = Double.parseDouble(value);
                     product.setPrice(newPrice);
-                    return true;
                 } catch (NumberFormatException e) {
-                    return false; // Error precio no es un numero
+                    throw new NumberFormatException("Price must be a valid number");
                 }
+                break;
 
             default:
-                return false; // field no encontrado
+                throw new IllegalArgumentException("Invalid field: " + field);
         }
     }
 
