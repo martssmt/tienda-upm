@@ -19,35 +19,24 @@ public class ProductController {
 
     public void handleAdd(int id, String name, Category category, double price) {
         Product product = new Product(id, name, category, price);
-        if (this.catalog.addProduct(product)) {
-            ConsoleView.showProduct(product);
-            ConsoleView.showMessage("prod add: ok");
-        } else {
-            ConsoleView.showMessage("Product with id " + id + " already exists in the catalog.");
-            ConsoleView.showMessage("prod add: error");
-        }
+        this.catalog.addProduct(product);
+        ConsoleView.showProduct(product);
+        ConsoleView.showMessage("prod add: ok");
     }
 
     public void handleList() {
-        ConsoleView.showCatalog(this.catalog.toString());
+        ConsoleView.showCatalog(this.catalog);
         ConsoleView.showMessage("prod list: ok");
     }
 
     public void handleUpdate(int id, String field, String value) {
-        if (this.catalog.updateProduct(id, field, value)) {
-            ConsoleView.showMessage("prod update: ok");
-        } else {
-            ConsoleView.showMessage("prod update: error");
-        }
+        this.catalog.updateProduct(id, field, value);
+        ConsoleView.showMessage("prod update: ok");
     }
 
     public void handleRemove(int id) {
-        if (this.catalog.removeProduct(id)) {
-            ConsoleView.showMessage("prod remove: ok");
-        } else {
-            ConsoleView.showMessage("Product with id " + id + " already does not exist in the catalog.");
-            ConsoleView.showMessage("prod remove: error");
-        }
+        this.catalog.removeProduct(id);
+        ConsoleView.showMessage("prod remove: ok");
     }
 
 }

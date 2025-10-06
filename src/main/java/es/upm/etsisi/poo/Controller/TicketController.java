@@ -22,40 +22,19 @@ public class TicketController {
 
     public void handleAdd(int id, int quantity) {
         Product product = this.catalog.getProduct(id);
-        if (product == null) {
-            ConsoleView.showMessage("Product with id " + id + " does not exist in the catalog.");
-            this.handlePrint();
-            ConsoleView.showMessage("ticket add: error");
-        } else {
-            boolean productAdded = this.ticket.addProduct(product, quantity);
-            this.handlePrint();
-            if (productAdded) {
-                ConsoleView.showMessage("ticket add: ok");
-            } else {
-                ConsoleView.showMessage("ticket add: error");
-            }
-        }
+        this.ticket.addProduct(product, quantity);
+        ConsoleView.showTicket(this.ticket);
+        ConsoleView.showMessage("ticket add: ok");
     }
 
     public void handleRemove(int id) {
-        Product product = this.ticket.getProduct(id);
-        if (product == null) {
-            ConsoleView.showMessage("Product with id " + id + " does not exist in the ticket.");
-            this.handlePrint();
-            ConsoleView.showMessage("ticket remove: error");
-        } else {
-            boolean productRemoved = this.ticket.removeProduct(id);
-            this.handlePrint();
-            if (productRemoved) {
-                ConsoleView.showMessage("ticket remove: ok");
-            } else {
-                ConsoleView.showMessage("ticket remove: error");
-            }
-        }
+        this.ticket.removeProduct(id);
+        ConsoleView.showTicket(this.ticket);
+        ConsoleView.showMessage("ticket remove: ok");
     }
 
     public void handlePrint() {
-        ConsoleView.showTicket(this.ticket.toString());
+        ConsoleView.showTicket(this.ticket);
         ConsoleView.showMessage("ticket print: ok");
     }
 
