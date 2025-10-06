@@ -1,7 +1,7 @@
 package es.upm.etsisi.poo.Model;
 
-public class Product {
-    private int id;
+public class Product implements Comparable<Product> {
+    private final int id;
     private String name;
     private Category category;
     private double price;
@@ -17,11 +17,6 @@ public class Product {
         this.name = name;
         this.category = category;
         this.price = price;
-    }
-
-    public void setId(int id) { // no se usa
-        if (id <= 0) throw new IllegalArgumentException("The ID field must be a positive number");
-        this.id = id;
     }
 
     public void setName(String name) {
@@ -72,6 +67,11 @@ public class Product {
     @Override
     public int hashCode() {
         return Integer.hashCode(id);
+    }
+
+    @Override
+    public int compareTo(Product product) {
+        return Integer.compare(this.id, product.id);
     }
 
     @Override
