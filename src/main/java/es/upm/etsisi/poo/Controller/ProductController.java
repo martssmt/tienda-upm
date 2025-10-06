@@ -8,11 +8,9 @@ import es.upm.etsisi.poo.View.ConsoleView;
 public class ProductController {
 
     private Catalog catalog;
-    private ConsoleView view;
 
-    public ProductController(ConsoleView view) {
+    public ProductController() {
         this.catalog = new Catalog();
-        this.view = view;
     }
 
     public Catalog getCatalog() {
@@ -22,33 +20,33 @@ public class ProductController {
     public void handleAdd(int id, String name, Category category, double price) {
         Product product = new Product(id, name, category, price);
         if (this.catalog.addProduct(product)) {
-            this.view.showMessage("Product with id " + id + " already exists in the catalog.");
-            this.view.showMessage("prod add: error");
+            ConsoleView.showMessage("Product with id " + id + " already exists in the catalog.");
+            ConsoleView.showMessage("prod add: error");
         } else {
-            this.view.showProduct(product);
-            this.view.showMessage("prod add: ok");
+            ConsoleView.showProduct(product);
+            ConsoleView.showMessage("prod add: ok");
         }
     }
 
     public void handleList() {
-        this.view.showCatalog(this.catalog.toString());
-        this.view.showMessage("prod list: ok");
+        ConsoleView.showCatalog(this.catalog.toString());
+        ConsoleView.showMessage("prod list: ok");
     }
 
     public void handleUpdate(int id, String field, String value) {
         if (this.catalog.updateProduct(id, field, value)) {
-            this.view.showMessage("prod update: ok");
+            ConsoleView.showMessage("prod update: ok");
         } else {
-            this.view.showMessage("prod update: error");
+            ConsoleView.showMessage("prod update: error");
         }
     }
 
     public void handleRemove(int id) {
         if (this.catalog.removeProduct(id)) {
-            this.view.showMessage("prod remove: ok");
+            ConsoleView.showMessage("prod remove: ok");
         } else {
-            this.view.showMessage("Product with id " + id + " already does not exist in the catalog.");
-            this.view.showMessage("prod remove: error");
+            ConsoleView.showMessage("Product with id " + id + " already does not exist in the catalog.");
+            ConsoleView.showMessage("prod remove: error");
         }
     }
 

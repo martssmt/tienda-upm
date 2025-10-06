@@ -9,12 +9,10 @@ public class CommandController {
 
     private final ProductController productController;
     private final TicketController ticketController;
-    private final ConsoleView view;
 
-    public CommandController(ProductController productController, TicketController ticketController, ConsoleView view) {
+    public CommandController(ProductController productController, TicketController ticketController) {
         this.productController = productController;
         this.ticketController = ticketController;
-        this.view = view;
     }
 
     public void parseCommand(String input) {
@@ -26,14 +24,14 @@ public class CommandController {
         switch (tokens[0].toLowerCase()) {
             case "prod" -> this.handleProduct(tokens, input);
             case "ticket" -> this.handleTicket(tokens);
-            case "help" -> this.view.showHelp();
+            case "help" -> ConsoleView.showHelp();
             case "echo" -> this.handleEcho(tokens);
             case "exit" -> {
-                this.view.showMessage("Closing application.");
-                this.view.showMessage("Goodbye!");
+                ConsoleView.showMessage("Closing application.");
+                ConsoleView.showMessage("Goodbye!");
                 System.exit(0);
             }
-            default -> this.view.showMessage("Unknown command: " + input);
+            default -> ConsoleView.showMessage("Unknown command: " + input);
         }
 
     }
@@ -43,7 +41,7 @@ public class CommandController {
     private void handleProduct(String[] tokens, String input) {
 
         if (tokens.length < 2) {
-            this.view.showMessage("Error: prod command needs arguments");
+            ConsoleView.showMessage("Error: prod command needs arguments");
             return;
         }
 
@@ -52,7 +50,7 @@ public class CommandController {
             case "list" -> this.productList(tokens);
             case "update" -> this.productUpdate(tokens);
             case "remove" -> this.productRemove(tokens);
-            default -> this.view.showMessage("Unknown command: " + input);
+            default -> ConsoleView.showMessage("Unknown command: " + input);
         }
 
     }
@@ -78,9 +76,9 @@ public class CommandController {
 
             this.productController.handleAdd(id, name, category, price);
         } catch (NumberFormatException e) {
-            this.view.showMessage("Error: Type mismatch for argument.");
+            ConsoleView.showMessage("Error: Type mismatch for argument.");
         } catch (Exception e) {
-            this.view.showMessage("Error in prod add: " + e.getMessage());
+            ConsoleView.showMessage("Error in prod add: " + e.getMessage());
         }
     }
 
@@ -91,7 +89,7 @@ public class CommandController {
             }
             this.productController.handleList();
         } catch (Exception e) {
-            this.view.showMessage("Error in prod list: " + e.getMessage());
+            ConsoleView.showMessage("Error in prod list: " + e.getMessage());
         }
     }
 
@@ -108,9 +106,9 @@ public class CommandController {
             String value = String.join(" ", Arrays.copyOfRange(tokens, 4, tokens.length));
             this.productController.handleUpdate(idUpdate, field, value);
         } catch (NumberFormatException e) {
-            this.view.showMessage("Error: Type mismatch for argument.");
+            ConsoleView.showMessage("Error: Type mismatch for argument.");
         } catch (Exception e) {
-            this.view.showMessage("Error in prod update: " + e.getMessage());
+            ConsoleView.showMessage("Error in prod update: " + e.getMessage());
         }
     }
 
@@ -122,9 +120,9 @@ public class CommandController {
             int idRemove = Integer.parseInt(tokens[2]);
             this.productController.handleRemove(idRemove);
         } catch (NumberFormatException e) {
-            this.view.showMessage("Error: Type mismatch for argument.");
+            ConsoleView.showMessage("Error: Type mismatch for argument.");
         } catch (Exception e) {
-            this.view.showMessage("Error in prod remove: " + e.getMessage());
+            ConsoleView.showMessage("Error in prod remove: " + e.getMessage());
         }
     }
 
@@ -133,7 +131,7 @@ public class CommandController {
     private void handleTicket(String[] tokens) {
 
         if (tokens.length < 2) {
-            this.view.showMessage("Error: ticket command needs arguments");
+            ConsoleView.showMessage("Error: ticket command needs arguments");
             return;
         }
 
@@ -143,7 +141,7 @@ public class CommandController {
             case "remove" -> this.ticketRemove(tokens);
             case "print" -> this.ticketController.handlePrint();
             default ->
-                    this.view.showMessage("Unknown command: " + String.join(" ", Arrays.copyOfRange(tokens, 0, tokens.length)));
+                    ConsoleView.showMessage("Unknown command: " + String.join(" ", Arrays.copyOfRange(tokens, 0, tokens.length)));
         }
 
     }
@@ -155,7 +153,7 @@ public class CommandController {
             }
             this.ticketController.handleNew();
         } catch (Exception e) {
-            this.view.showMessage("Error in ticket new: " + e.getMessage());
+            ConsoleView.showMessage("Error in ticket new: " + e.getMessage());
         }
     }
 
@@ -168,9 +166,9 @@ public class CommandController {
             int quantity = Integer.parseInt(tokens[3]);
             this.ticketController.handleAdd(idAdd, quantity);
         } catch (NumberFormatException e) {
-            this.view.showMessage("Error: Type mismatch for argument.");
+            ConsoleView.showMessage("Error: Type mismatch for argument.");
         } catch (Exception e) {
-            this.view.showMessage("Error in ticket add: " + e.getMessage());
+            ConsoleView.showMessage("Error in ticket add: " + e.getMessage());
         }
     }
 
@@ -182,16 +180,16 @@ public class CommandController {
             int idRemove = Integer.parseInt(tokens[2]);
             this.ticketController.handleRemove(idRemove);
         } catch (NumberFormatException e) {
-            this.view.showMessage("Error: Type mismatch for argument.");
+            ConsoleView.showMessage("Error: Type mismatch for argument.");
         } catch (Exception e) {
-            this.view.showMessage("Error in ticket remove: " + e.getMessage());
+            ConsoleView.showMessage("Error in ticket remove: " + e.getMessage());
         }
     }
 
     // Echo
 
     private void handleEcho(String[] tokens) {
-        this.view.showMessage(String.join(" ", Arrays.copyOfRange(tokens, 1, tokens.length)));
+        ConsoleView.showMessage(String.join(" ", Arrays.copyOfRange(tokens, 1, tokens.length)));
     }
 
 }
