@@ -11,7 +11,7 @@ public class Catalog {
         this.productsList = new HashMap<>();
     }
 
-    public Map<Integer, Product> getProductList() {
+    public Map<Integer, Product> getProductList() { // no se usa
         return new HashMap<>(this.productsList);
     }
 
@@ -21,15 +21,15 @@ public class Catalog {
 
     public boolean addProduct(Product product) {
         if (product == null) {
-            throw new IllegalArgumentException("El producto no puede ser nulo");
+            throw new IllegalArgumentException("The product cannot be null");
         }
 
-        if (this.productsList.size()>=MAX_PRODUCTS){
+        if (this.productsList.size() >= MAX_PRODUCTS) {
             //System.out.println("Lista de productos completa, no se pueden añadir mas productos");
             return false;
         }
 
-        if (this.productsList.containsKey(product.getId())){
+        if (this.productsList.containsKey(product.getId())) {
             //System.out.println("No puede haber un producto con un mismo id");
             return false;
         }
@@ -38,7 +38,7 @@ public class Catalog {
         return true;
     }
 
-    public boolean removeProduct(int id){
+    public boolean removeProduct(int id) {
         if (this.productsList.containsKey(id)) {
             this.productsList.remove(id);
             return true;
@@ -78,5 +78,15 @@ public class Catalog {
             default:
                 return false; // field no encontrado
         }
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb=new StringBuilder();
+        sb.append("Catalog:\n");
+        for(Product product : this.productsList.values()){
+            sb.append(product);
+        }
+        return sb.toString();
     }
 }
