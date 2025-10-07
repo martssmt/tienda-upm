@@ -14,14 +14,18 @@ public class App {
             ProductController productController = new ProductController();
             Catalog catalog = productController.getCatalog();
             TicketController ticketController = new TicketController(catalog);
-            CommandController command = new CommandController(productController, ticketController);
+            CommandController commandController = new CommandController(productController, ticketController);
+            boolean running = true;
             System.out.println("Welcome to the ticket module App.");
             System.out.println("Ticket module. Type 'help' to see commands.");
-            while (true) {
+            while (running) {
                 System.out.print("\ntUPM> ");
                 String line = reader.readLine();
-                command.parseCommand(line);
+                running = commandController.parseCommand(line);
             }
+            System.out.println("Closing application.");
+            System.out.println("Goodbye!");
+            reader.close();
         } catch (IOException exception) {
             throw new RuntimeException(exception);
         }
