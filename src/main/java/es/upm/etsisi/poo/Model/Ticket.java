@@ -67,7 +67,7 @@ public class Ticket {
         this.itemList.clear();
     }
 
-    public double calculateTotalDiscount(){
+    private double calculateTotalDiscount(){
         double result = 0;
 
         Map<Category, Integer> QuantitiesEachCategory = new HashMap<>();
@@ -88,7 +88,7 @@ public class Ticket {
         return  result;
     }
 
-    public double calculateTotalPrice(){
+    private double calculateTotalPrice(){
         double result = 0;
         for (TicketItem item : this.itemList) {
             result += item.getSubtotal();
@@ -96,12 +96,8 @@ public class Ticket {
         return result;
     }
 
-    public double calculateFinalPrice(){
+    private double calculateFinalPrice(){
         return this.calculateTotalPrice() -  calculateTotalDiscount();
-    }
-
-    public Product getProduct(int id){
-        return this.itemList.get(id).getProduct();
     }
 
     @Override
