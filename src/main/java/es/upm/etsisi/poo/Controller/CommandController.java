@@ -16,9 +16,9 @@ public class CommandController {
         this.ticketController = ticketController;
     }
 
-    public void parseCommand(String input) {
+    public boolean parseCommand(String input) {
 
-        if (input == null || input.trim().isEmpty()) return;
+        if (input == null || input.trim().isEmpty()) return true;
 
         String[] tokens = input.trim().split(" ");
 
@@ -29,9 +29,7 @@ public class CommandController {
                 case "help" -> ConsoleView.showHelp();
                 case "echo" -> this.handleEcho(input);
                 case "exit" -> {
-                    ConsoleView.showMessage("Closing application.");
-                    ConsoleView.showMessage("Goodbye!");
-                    System.exit(EXIT_SUCCESS);
+                    return false;
                 }
                 default -> ConsoleView.showMessage("Unknown command: " + input);
             }
@@ -45,6 +43,8 @@ public class CommandController {
             ConsoleView.showMessage("Error: " + e.getMessage());
             ConsoleView.showMessage(tokens[0] + " " + tokens[1] + ": error");
         }
+
+        return true;
 
     }
 
