@@ -65,7 +65,7 @@ public class CommandController {
 
     }
 
-    private void productAdd(String input) {
+    private void productAdd(String input) throws NumberFormatException{
 
         int firstQuote = input.indexOf('"');
         int lastQuote = input.lastIndexOf('"');
@@ -105,7 +105,7 @@ public class CommandController {
 
     }
 
-    private void productUpdate(String[] tokens) {
+    private void productUpdate(String[] tokens) throws NumberFormatException{
 
         if (tokens.length < 5) {
             throw new IllegalArgumentException("Usage: prod update <id> NAME|CATEGORY|PRICE <value>");
@@ -129,7 +129,7 @@ public class CommandController {
 
     }
 
-    private void productRemove(String[] tokens) {
+    private void productRemove(String[] tokens) throws NumberFormatException {
 
         if (tokens.length != 3) {
             throw new IllegalArgumentException("Usage: prod remove <id>");
@@ -172,7 +172,7 @@ public class CommandController {
 
     }
 
-    private void ticketAdd(String[] tokens) {
+    private void ticketAdd(String[] tokens) throws NumberFormatException {
 
         if (tokens.length != 4) {
             throw new IllegalArgumentException("Usage: ticket add <prodId> <quantity>");
@@ -188,7 +188,7 @@ public class CommandController {
 
     }
 
-    private void ticketRemove(String[] tokens) {
+    private void ticketRemove(String[] tokens) throws NumberFormatException {
 
         if (tokens.length < 3) {
             throw new IllegalArgumentException("Usage: ticket remove <prodId>");

@@ -27,7 +27,7 @@ public class TicketController {
         ConsoleView.showMessage("ticket add: ok");
     }
 
-    public void handleRemove(int id) {
+    public void handleRemove(int id) throws IllegalStateException {
         Product product = catalog.getProduct(id);
         if (product == null) {
             throw new IllegalStateException("No product found with ID " + id + " in the catalog");
