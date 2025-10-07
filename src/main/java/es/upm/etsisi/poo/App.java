@@ -18,7 +18,7 @@ public class App {
             System.out.println("Welcome to the ticket module App.");
             System.out.println("Ticket module. Type 'help' to see commands.");
             while (true) {
-                System.out.print("tUPM> ");
+                System.out.print("\ntUPM> ");
                 String line = reader.readLine();
                 command.parseCommand(line);
             }
