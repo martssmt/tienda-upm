@@ -1,13 +1,13 @@
 package es.upm.etsisi.poo.Model;
 
-public class Product implements Comparable<Product> {
+public class Product {
     private final int id;
     private String name;
     private Category category;
     private double price;
 
-    public Product(int id, String name, Category category, double price) {
-        if (id <= 0) throw new IllegalArgumentException("The ID field must be a positive number");
+    public Product(int id, String name, Category category, double price)
+            throws IllegalArgumentException {
         if (name == null || name.isEmpty() || name.length() > 100) {
             throw new IllegalArgumentException("The name field cannot be empty or exceed 100 characters");
         }
@@ -19,7 +19,7 @@ public class Product implements Comparable<Product> {
         this.price = price;
     }
 
-    public void setName(String name) {
+    public void setName(String name) throws IllegalArgumentException {
         if (name == null || name.isEmpty() || name.length() > 100) {
             throw new IllegalArgumentException("The name field cannot be empty or exceed 100 characters");
         }
@@ -30,7 +30,7 @@ public class Product implements Comparable<Product> {
         this.category = category;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(double price) throws IllegalArgumentException {
         if (price <= 0) throw new IllegalArgumentException("The price field must be greater than 0");
         this.price = price;
     }
@@ -70,13 +70,8 @@ public class Product implements Comparable<Product> {
     }
 
     @Override
-    public int compareTo(Product product) {
-        return Integer.compare(this.id, product.id);
-    }
-
-    @Override
     public String toString() {
         return "{class:Product, id:" + this.id + ", name:'" + this.name + "'," +
-                " category:" + this.category.name() + ", price:" + this.price + "}";
+                " category:" + this.category.name() + ", price:" + this.price + "}\n";
     }
 }
