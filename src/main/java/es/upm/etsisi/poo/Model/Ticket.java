@@ -1,20 +1,34 @@
 package es.upm.etsisi.poo.Model;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.NoSuchElementException;
+import java.util.Iterator
 
 public class Ticket {
     private final LinkedList<TicketItem> itemList;
+    private final static int MAX_PRODUCTS = 100;
+    private int numberOfProducts;
 
     public Ticket(){
         this.itemList = new LinkedList<>();
+        this.numberOfProducts = 0;
     }
 
-    public boolean addProduct(Product product, int quantity) {
-        boolean result = true;
-        if(product == null || quantity <= 0){
-            result = false;
+    public void addProduct(Product product, int quantity) {
+        if(product == null){
+            throw new NullPointerException("Product cannot be null");
         }
+
+        if(quantity <= 0){
+            throw new IllegalArgumentException("Quantity cannot be negative or zero");
+        }
+
+        if(numberOfProducts >= MAX_PRODUCTS){
+            throw new IllegalArgumentException("The number of products cannot be greater than " + MAX_PRODUCT);
+        }
+
         boolean itemFound = false;
+
         Iterator<TicketItem> iterator = this.itemList.iterator();
         while(iterator.hasNext() && !itemFound){
             TicketItem item = iterator.next();
@@ -28,7 +42,7 @@ public class Ticket {
             itemList.add(newItem);
         }
 
-        return result;
+        numberOfProducts += quantity;
     }
 
     public boolean removeProduct(int id){
@@ -74,16 +88,9 @@ public class Ticket {
 
     @Override
     public String toString() {
-        LinkedList<TicketItem> sortedList = new LinkedList<>(this.itemList);
-        sortedList.sort(new Comparator<TicketItem>() {
-            @Override
-            public int compare(TicketItem a, TicketItem b) {
-                return a.getProduct().getName().compareTo(b.getProduct().getName());
-            }
-        });
 
         StringBuilder result = new StringBuilder();
-        Iterator<TicketItem> iterator = sortedList.iterator();
+        Iterator<TicketItem> iterator = this.itemList.iterator();
         while(iterator.hasNext()){
             TicketItem item = iterator.next();
             result.append(item.getProduct().toString());
