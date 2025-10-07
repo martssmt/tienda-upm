@@ -15,7 +15,7 @@ public class Ticket {
         this.numberOfProducts = 0;
     }
 
-    public void addProduct(Product product, int quantity) {
+    public void addProduct(Product product, int quantity) throws IllegalArgumentException, NullPointerException {
         if(product == null){
             throw new NullPointerException("Product cannot be null");
         }
@@ -47,7 +47,7 @@ public class Ticket {
         this.itemList.sort(null);
     }
 
-    public void removeProduct(Product product){
+    public void removeProduct(Product product) throws IllegalArgumentException {
         boolean itemFound = false;
         Iterator<TicketItem> iterator = this.itemList.iterator();
         while(iterator.hasNext() && !itemFound){
