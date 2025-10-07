@@ -7,7 +7,7 @@ import es.upm.etsisi.poo.View.ConsoleView;
 
 public class ProductController {
 
-    private Catalog catalog;
+    private final Catalog catalog;
 
     public ProductController() {
         this.catalog = new Catalog();

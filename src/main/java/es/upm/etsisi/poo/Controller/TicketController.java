@@ -7,8 +7,8 @@ import es.upm.etsisi.poo.View.ConsoleView;
 
 public class TicketController {
 
-    private Ticket ticket;
-    private Catalog catalog;
+    private final Ticket ticket;
+    private final Catalog catalog;
 
     public TicketController(Catalog catalog) {
         this.catalog = catalog;
