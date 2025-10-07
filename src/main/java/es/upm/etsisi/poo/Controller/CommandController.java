@@ -50,7 +50,7 @@ public class CommandController {
 
     // Product:
 
-    private void handleProduct(String[] tokens, String input) {
+    private void handleProduct(String[] tokens, String input) throws IllegalArgumentException {
 
         if (tokens.length < 2) {
             throw new IllegalArgumentException("prod command needs arguments");
@@ -66,7 +66,7 @@ public class CommandController {
 
     }
 
-    private void productAdd(String input) throws NumberFormatException {
+    private void productAdd(String input) throws IllegalArgumentException {
 
         int firstQuote = input.indexOf('"');
         int lastQuote = input.lastIndexOf('"');
@@ -96,7 +96,7 @@ public class CommandController {
 
     }
 
-    private void productList(String[] tokens) {
+    private void productList(String[] tokens) throws IllegalArgumentException {
 
         if (tokens.length != 2) {
             throw new IllegalArgumentException("Usage: prod list");
@@ -106,7 +106,7 @@ public class CommandController {
 
     }
 
-    private void productUpdate(String[] tokens) throws NumberFormatException {
+    private void productUpdate(String[] tokens) throws IllegalArgumentException {
 
         if (tokens.length < 5) {
             throw new IllegalArgumentException("Usage: prod update <id> NAME|CATEGORY|PRICE <value>");
@@ -130,7 +130,7 @@ public class CommandController {
 
     }
 
-    private void productRemove(String[] tokens) throws NumberFormatException {
+    private void productRemove(String[] tokens) throws IllegalArgumentException {
 
         if (tokens.length != 3) {
             throw new IllegalArgumentException("Usage: prod remove <id>");
@@ -147,7 +147,7 @@ public class CommandController {
 
     // Ticket:
 
-    private void handleTicket(String[] tokens, String input) {
+    private void handleTicket(String[] tokens, String input) throws IllegalArgumentException {
 
         if (tokens.length < 2) {
             throw new IllegalArgumentException("ticket command needs arguments");
@@ -163,7 +163,7 @@ public class CommandController {
 
     }
 
-    private void ticketNew(String[] tokens) {
+    private void ticketNew(String[] tokens) throws IllegalArgumentException {
 
         if (tokens.length != 2) {
             throw new IllegalArgumentException("Usage: ticket new");
@@ -173,7 +173,7 @@ public class CommandController {
 
     }
 
-    private void ticketAdd(String[] tokens) throws NumberFormatException {
+    private void ticketAdd(String[] tokens) throws IllegalArgumentException {
 
         if (tokens.length != 4) {
             throw new IllegalArgumentException("Usage: ticket add <prodId> <quantity>");
@@ -189,7 +189,7 @@ public class CommandController {
 
     }
 
-    private void ticketRemove(String[] tokens) throws NumberFormatException {
+    private void ticketRemove(String[] tokens) throws IllegalArgumentException {
 
         if (tokens.length < 3) {
             throw new IllegalArgumentException("Usage: ticket remove <prodId>");
