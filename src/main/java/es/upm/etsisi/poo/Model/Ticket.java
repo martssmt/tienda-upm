@@ -1,8 +1,7 @@
 package es.upm.etsisi.poo.Model;
 
 import java.util.LinkedList;
-import java.util.NoSuchElementException;
-import java.util.Iterator
+import java.util.Iterator;
 
 public class Ticket {
     private final LinkedList<TicketItem> itemList;
@@ -23,8 +22,8 @@ public class Ticket {
             throw new IllegalArgumentException("Quantity cannot be negative or zero");
         }
 
-        if(numberOfProducts >= MAX_PRODUCTS){
-            throw new IllegalArgumentException("The number of products cannot be greater than " + MAX_PRODUCT);
+        if(this.numberOfProducts >= MAX_PRODUCTS){
+            throw new IllegalArgumentException("The number of products cannot be greater than " + MAX_PRODUCTS);
         }
 
         boolean itemFound = false;
@@ -39,19 +38,26 @@ public class Ticket {
         }
         if(!itemFound){
             TicketItem newItem = new TicketItem(product, quantity, product.getCategory().getDiscount());
-            itemList.add(newItem);
+            this.itemList.add(newItem);
         }
 
-        numberOfProducts += quantity;
+        this.numberOfProducts += quantity;
     }
 
-    public boolean removeProduct(int id){
-        boolean result = true;
-        if(id < 0 || id >= this.itemList.size()){
-            result = false;
+    public void removeProduct(Product product){
+        boolean itemFound = false;
+        Iterator<TicketItem> iterator = this.itemList.iterator();
+        while(iterator.hasNext() && !itemFound){
+            TicketItem item = iterator.next();
+            if (item.getProduct().equals(product)){
+                itemFound = true;
+                this.numberOfProducts -= item.getQuantity();
+                this.itemList.remove(item);
+            }
         }
-        itemList.remove(id);
-        return result;
+        if(!itemFound){
+            throw new IllegalArgumentException("Product is not included in the ticket");
+        }
     }
 
     public void clear(){
