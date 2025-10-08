@@ -24,7 +24,7 @@ public class Ticket {
             throw new IllegalArgumentException("Quantity cannot be negative or zero");
         }
 
-        if(this.numberOfProducts >= MAX_PRODUCTS){
+        if(this.numberOfProducts + quantity >= MAX_PRODUCTS){
             throw new IllegalArgumentException("The number of products cannot be greater than " + MAX_PRODUCTS);
         }
 
@@ -65,6 +65,7 @@ public class Ticket {
 
     public void clear(){
         this.itemList.clear();
+        this.numberOfProducts = 0;
     }
 
     private double calculateTotalDiscount(){
@@ -126,7 +127,7 @@ public class Ticket {
 
         result.append("Total price: ").append(this.calculateTotalPrice()).append("\n");
         result.append("Total discount: ").append(this.calculateTotalDiscount()).append("\n");
-        result.append("Final Price: ").append(this.calculateFinalPrice()).append("\n");
+        result.append("Final Price: ").append(this.calculateFinalPrice());
 
         return result.toString();
     }
