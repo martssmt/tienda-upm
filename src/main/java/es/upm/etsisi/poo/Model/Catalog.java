@@ -12,10 +12,6 @@ public class Catalog {
         this.productsList = new HashMap<>();
     }
 
-    public Map<Integer, Product> getProductList() {
-        return new HashMap<>(this.productsList);
-    }
-
     public Product getProduct(int id) {
         return this.productsList.get(id);
     }
