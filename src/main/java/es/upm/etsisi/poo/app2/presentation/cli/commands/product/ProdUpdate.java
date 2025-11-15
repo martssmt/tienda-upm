@@ -2,5 +2,5 @@ package es.upm.etsisi.poo.app2.presentation.cli.commands.product;
 
 import es.upm.etsisi.poo.app2.presentation.cli.Command;
 
-public class AddFood implements Command {
+public class ProdUpdate implements Command {
 }
