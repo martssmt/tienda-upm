@@ -40,7 +40,10 @@ public class CashierService implements Service<Cashier> {
     }
 
     public void add(Cashier cashier) {
-
+        if (this.cashierRepository.findByMail(cashier.getMail()) != null) {
+            throw new DuplicateException("There is already a cashier with mail " + cashier.getMail() + " registered.");
+        }
+        this.cashierRepository.add(cashier);
     }
 
     public void newTicket(Ticket ticket) {
@@ -61,6 +64,15 @@ public class CashierService implements Service<Cashier> {
 
     public void removeProduct(String cashierId, String ticketId, String prodId) {
 
+    }
+
+    public void ticketList() {
+        this.view.showList("Ticket List:", this.cashierRepository.listTickets());
+    }
+
+    public void ticketListFromCashier(String cashierId) {
+        Cashier cashier = this.cashierRepository.findById(cashierId);
+        this.view.showList("Tickets:", cashier.getTicketList());
     }
 
 }
