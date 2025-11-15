@@ -46,7 +46,7 @@ public class ProductService implements Service<Product> {
     }
 
     public void update(String id, String field, String value) {
-        Product prod=findProd(id);
+        Product prod = findProd(id);
         switch (field.toUpperCase()) {
             case "NAME":
                 prod.setName(value);
@@ -75,7 +75,7 @@ public class ProductService implements Service<Product> {
     }
 
     public Product findProd(String id) {
-        Product prod=this.productRepository.findById(id);
+        Product prod = this.productRepository.findById(id);
         if (prod == null) {
             throw new NotFoundException("There is no product with id " + id + " in the Catalog.");
         }
