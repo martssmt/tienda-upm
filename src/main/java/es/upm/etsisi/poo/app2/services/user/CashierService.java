@@ -7,6 +7,7 @@ import es.upm.etsisi.poo.app2.data.repositories.CashierRepository;
 import es.upm.etsisi.poo.app2.presentation.view.View;
 import es.upm.etsisi.poo.app2.services.Service;
 import es.upm.etsisi.poo.app2.services.exceptions.DuplicateException;
+import es.upm.etsisi.poo.app2.services.exceptions.NotFoundException;
 
 public class CashierService implements Service<Cashier> {
 
@@ -29,7 +30,7 @@ public class CashierService implements Service<Cashier> {
     @Override
     public void remove(String id) {
         if (this.cashierRepository.findById(id) != null) {
-            throw new DuplicateException("There is already a cashier with id " + id + " registered.");
+            throw new NotFoundException("There is no cashier with id " + id + " registered.");
         }
         this.cashierRepository.remove(id);
     }
@@ -46,12 +47,20 @@ public class CashierService implements Service<Cashier> {
         this.cashierRepository.add(cashier);
     }
 
-    public void newTicket(Ticket ticket) {
-
+    public void newTicket(Ticket ticket, String cashierId) {
+        Cashier cashier = this.cashierRepository.findById(cashierId);
+        if (cashier==null) {
+            throw new NotFoundException("There is no cashier with id " + cashierId + " registered.");
+        }
+        cashier.newTicket(Ticket);
     }
 
-    public void newTicket(Ticket ticket, String id) {
-
+    public void newTicket(Ticket ticket, String ticketId, String cashierId) {
+        Cashier cashier = this.cashierRepository.findById(cashierId);
+        if (cashier==null) {
+            throw new NotFoundException("There is no cashier with id " + cashierId + " registered.");
+        }
+        cashier.newTicket(ticket, ticketId);
     }
 
     public void print(String cashierId, String ticketId) {
