@@ -20,7 +20,7 @@ public class ClientService implements Service<Client> {
     @Override
     public void add(Client client, String id) {
         if (this.clientRepository.findById(id) != null) {
-            throw new DuplicateException("There is already a client with DNI " + id + " in the Catalog.");
+            throw new DuplicateException("There is already a client with DNI " + id + " registered.");
         }
         this.clientRepository.add(client, id);
     }
@@ -28,14 +28,14 @@ public class ClientService implements Service<Client> {
     @Override
     public void remove(String id) {
         if (this.clientRepository.findById(id) == null) {
-            throw new NotFoundException("There is no client with id " + id + " in the Catalog.");
+            throw new NotFoundException("There is no client with id " + id + " registered.");
         }
         this.clientRepository.remove(id);
     }
 
     @Override
     public void list() {
-        this.view.showList("Client:",this.clientRepository.list());
+        this.view.showList("Client:", this.clientRepository.list());
     }
 
 }
