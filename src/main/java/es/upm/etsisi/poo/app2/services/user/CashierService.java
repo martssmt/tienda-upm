@@ -2,7 +2,6 @@ package es.upm.etsisi.poo.app2.services.user;
 
 import es.upm.etsisi.poo.app2.data.model.shop.Product;
 import es.upm.etsisi.poo.app2.data.model.shop.Ticket;
-import es.upm.etsisi.poo.app2.data.model.shop.TicketItem;
 import es.upm.etsisi.poo.app2.data.model.user.Cashier;
 import es.upm.etsisi.poo.app2.data.repositories.CashierRepository;
 import es.upm.etsisi.poo.app2.presentation.view.View;
@@ -92,7 +91,15 @@ public class CashierService implements Service<Cashier> {
     }
 
     public void removeProduct(String cashierId, String ticketId, String prodId) {
-
+        Cashier cashier = this.cashierRepository.findById(cashierId);
+        if (cashier == null) {
+            throw new NotFoundException("There is no cashier with id " + cashierId + " registered.");
+        }
+        Ticket ticket = cashier.getTicket(ticketId);
+        if (ticket == null) {
+            throw new NotFoundException("There is no ticket with id " + ticketId + " registered by cashier with id " + cashierId + ".");
+        }
+        ticket.remove(prodId);
     }
 
     public void ticketList() {
