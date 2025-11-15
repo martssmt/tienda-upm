@@ -5,6 +5,7 @@ import es.upm.etsisi.poo.app2.data.model.shop.BasicProduct;
 import es.upm.etsisi.poo.app2.data.model.shop.Category;
 import es.upm.etsisi.poo.app2.data.model.shop.Product;
 import es.upm.etsisi.poo.app2.data.repositories.ProductRepository;
+import es.upm.etsisi.poo.app2.presentation.view.View;
 import es.upm.etsisi.poo.app2.services.Service;
 import es.upm.etsisi.poo.app2.services.exceptions.DuplicateException;
 import es.upm.etsisi.poo.app2.services.exceptions.NotFoundException;
@@ -12,9 +13,11 @@ import es.upm.etsisi.poo.app2.services.exceptions.NotFoundException;
 public class ProductService implements Service<Product> {
 
     private final ProductRepository productRepository;
+    private final View view;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, View view) {
         this.productRepository = productRepository;
+        this.view = view;
     }
 
     @Override
@@ -35,7 +38,7 @@ public class ProductService implements Service<Product> {
 
     @Override
     public void list() {
-        this.productRepository.list();
+        this.view.showList("Catalog:", this.productRepository.list());
     }
 
     public void add(Product product) {
