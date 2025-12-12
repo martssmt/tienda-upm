@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public abstract class RepositoryShopMap<T extends Entity> implements RepositoryShop<T> {
+public abstract class RepositoryShopMap<T extends Entity<Integer>> implements RepositoryShop<T> {
 
     protected final Map<Integer, T> map;
     protected Integer id;

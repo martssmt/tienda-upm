@@ -16,15 +16,12 @@ import java.util.*;
 
 public class Ticket extends Entity<String> {
     private final List<TicketItem> itemList;
-    private final Integer MAX_PRODUCTS = 100;
+    private static final Integer MAX_PRODUCTS = 100;
     private Integer numberOfProducts;
     private final String clientId;
     private final String cashierId;
     private Status status;
     private String name;
-
-    private final LocalDateTime openDate;
-    private LocalDateTime closeDate;
 
     public Ticket(String id, String clientId, String cashierId) {
         super();
@@ -37,10 +34,10 @@ public class Ticket extends Entity<String> {
         }
         this.clientId = clientId;
         this.cashierId = cashierId;
-        this.itemList = new LinkedList<TicketItem>();
+        this.itemList = new LinkedList<>();
         this.numberOfProducts = 0;
         this.status = Status.EMPTY;
-        this.openDate = LocalDateTime.now();
+        LocalDateTime openDate = LocalDateTime.now();
         this.name = this.id;
     }
 
@@ -80,7 +77,7 @@ public class Ticket extends Entity<String> {
     }
 
     public void add(Product product, Integer quantity) {
-        if (this.numberOfProducts + quantity > this.MAX_PRODUCTS) {
+        if (this.numberOfProducts + quantity > MAX_PRODUCTS) {
             throw new FullTicketException();
         }
 
@@ -117,7 +114,7 @@ public class Ticket extends Entity<String> {
     }
 
     public void addCustom(Product product, Integer quantity, String[] texts) {
-        if (this.numberOfProducts + quantity > this.MAX_PRODUCTS) {
+        if (this.numberOfProducts + quantity > MAX_PRODUCTS) {
             throw new FullTicketException();
         }
         TicketItem newItem = new CustomTicketItem((CustomProduct) product, quantity, ((CustomProduct) product).getCategory().getDiscount(), texts);
@@ -151,9 +148,9 @@ public class Ticket extends Entity<String> {
             return;
         }
         this.status = Status.CLOSED;
-        this.closeDate = LocalDateTime.now();
+        LocalDateTime closeDate = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yy-MM-dd-HH:mm");
-        String closeTimestamp = this.closeDate.format(formatter);
+        String closeTimestamp = closeDate.format(formatter);
         this.id = this.id + "-" + closeTimestamp;
         this.name = this.id;
     }
