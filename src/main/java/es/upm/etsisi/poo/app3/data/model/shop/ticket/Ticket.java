@@ -10,6 +10,7 @@ import es.upm.etsisi.poo.app3.data.model.shop.products.CustomProduct;
 import es.upm.etsisi.poo.app3.data.model.shop.products.Product;
 import es.upm.etsisi.poo.app3.data.model.shop.products.TimeProduct;
 
+import java.sql.Time;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -85,6 +86,10 @@ public class Ticket extends Entity<String> {
             throw new InvalidAttributeException("Quantity must be greater than 0");
         }
 
+        if(product instanceof TimeProduct) {
+            ((TimeProduct) product).validateAvailability();
+        }
+
         boolean itemFound = false;
         Iterator<TicketItem> iterator = this.itemList.iterator();
         while (iterator.hasNext() && !itemFound) {
@@ -147,6 +152,13 @@ public class Ticket extends Entity<String> {
         if (this.status == Status.CLOSED) {
             return;
         }
+
+        for (TicketItem item : this.itemList) {
+            if (item instanceof TimeTicketItem) {
+                ((TimeProduct) item.getProduct()).validateAvailability();
+            }
+        }
+
         this.status = Status.CLOSED;
         LocalDateTime closeDate = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yy-MM-dd-HH:mm");

@@ -79,4 +79,11 @@ public class TimeProduct extends Product {
 
         return stringBuilder.toString();
     }
+
+    public void validateAvailability(){
+        LocalDateTime minDate = LocalDateTime.now().plusHours(this.planningHours);
+        if(openDate.atStartOfDay().isBefore(minDate)){
+            throw new InvalidAttributeException("Invalid product date");
+        }
+    }
 }
