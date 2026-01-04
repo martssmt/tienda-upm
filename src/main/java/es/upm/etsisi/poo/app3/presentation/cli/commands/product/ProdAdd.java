@@ -28,17 +28,17 @@ public class ProdAdd implements Command {
 
     @Override
     public List<String> params() {
-        return List.of("[<id>]", "\"<name>\"", "<category>", "<price>", "[<numberTexts>]");
+        return List.of("[<id>]", "\"<name>\"", "<category>", "<price>", "[<maxPers>]");
     }
 
     @Override
     public String helpMessage() {
-        return "Adds a new product to the catalog with optional id, name, category, price and optional max people.";
+        return "Adds a new product to the catalog with optional id, name, category, price (depending on the product type) and optional max people.";
     }
 
     @Override
     public String[] assessParams(String[] params) {
-        if (params == null || params.length < 3 || params.length > 5)
+        if (params == null || params.length < 2 || params.length > 5)
             throw new CommandException("Usage: " + this.help());
         int index = 0;
         // Id
@@ -64,20 +64,23 @@ public class ProdAdd implements Command {
             throw new CommandException("Usage: " + this.help());
         index++;
         // Price
-        String price = params[index];
-        if (!price.matches("[+-]?\\d+(\\.\\d+)?([eE][+-]?\\d+)?")) {
-            throw new CommandException("Usage: " + this.help());
+        String price = "0";
+        if (index < params.length) {
+            price = params[index];
+            if (!price.matches("[+-]?\\d+(\\.\\d+)?([eE][+-]?\\d+)?")) {
+                throw new CommandException("Usage: " + this.help());
+            }
         }
         index++;
-        // NumberTexts (optional)
-        String numberTexts = null;
+        // maxPeople (optional)
+        String maxPeople = null;
         if (index < params.length) {
-            numberTexts = params[index];
-            if (!numberTexts.matches("-?\\d+"))
+            maxPeople = params[index];
+            if (!maxPeople.matches("-?\\d+"))
                 throw new CommandException("Usage: " + this.help());
         }
         // Return
-        return new String[]{id, name.trim(), category, price, numberTexts};
+        return new String[]{id, name.trim(), category, price, maxPeople};
     }
 
     @Override
