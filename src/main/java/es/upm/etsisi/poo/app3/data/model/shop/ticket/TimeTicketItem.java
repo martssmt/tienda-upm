@@ -8,15 +8,19 @@ public class TimeTicketItem extends TicketItem {
         super(timeProduct, quantity);
     }
 
+    private TimeProduct getProduct(){
+        return (TimeProduct) this.purchasable;
+    }
+
     @Override
     public Double getTotalPrice() {
-        return this.product.getPrice() * this.quantity;
+        return getProduct().getPrice() * this.quantity;
     }
 
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-        TimeProduct product = (TimeProduct) this.getProduct();
+        TimeProduct product = this.getProduct();
         String productType;
         if (product.getType() == TimeProductType.MEETING) {
             productType = "Meeting";
