@@ -58,7 +58,7 @@ public class TicketAdd implements Command {
         if (product instanceof CustomProduct) {
             String[] texts = java.util.Arrays.copyOfRange(params, 4, params.length);
             ticket = this.cashierService.addCustomProduct(cashid, ticketid, (CustomProduct) product, amount, texts);
-        } else if (product instanceof BasicProduct){
+        } else if (product instanceof BasicProduct) {
             ticket = this.cashierService.addProduct(cashid, ticketid, product, amount);
         } else {
             ticket = this.cashierService.addService(cashid, ticketid, product);

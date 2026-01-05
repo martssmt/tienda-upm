@@ -93,7 +93,7 @@ public class TicketNew implements Command {
                 ticketType = TicketType.PRODUCT;
                 break;
         }
-        clientType = this.clientService.findById(clientId).getType();
+        clientType = this.clientService.findById(clientId).getClientType();
         if (id != null) {
             ticket = new Ticket(id, clientId, cashId, ticketType, clientType);
         } else {

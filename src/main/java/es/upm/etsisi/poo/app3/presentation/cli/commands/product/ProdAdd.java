@@ -83,7 +83,7 @@ public class ProdAdd implements Command {
         index++;
         // Category
         String category = params[index];
-        if (!category.equals("MERCH") && !category.equals("STATIONARY")
+        if (!category.equals("MERCH") && !category.equals("STATIONERY")
                 && !category.equals("CLOTHES") && !category.equals("BOOK")
                 && !category.equals("ELECTRONICS"))
             throw new CommandException("Usage: " + this.help());
