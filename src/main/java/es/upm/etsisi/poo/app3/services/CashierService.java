@@ -84,6 +84,15 @@ public class CashierService implements Service<Cashier> {
         return cashier.getTicket(ticketId);
     }
 
+    public Ticket addService(String cashierId, String ticketId, Product product) {
+        Cashier cashier = this.cashierRepository.findById(cashierId);
+        if (cashier == null) {
+            throw new NotFoundException("There is no cashier with id " + cashierId + " registered.");
+        }
+        cashier.addService(ticketId, product);
+        return cashier.getTicket(ticketId);
+    }
+
     public Ticket removeProduct(String cashierId, String ticketId, Integer prodId) {
         Cashier cashier = this.cashierRepository.findById(cashierId);
         if (cashier == null) {
