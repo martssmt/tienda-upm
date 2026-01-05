@@ -2,23 +2,24 @@ package es.upm.etsisi.poo.app3.data.model.shop.ticket;
 
 import es.upm.etsisi.poo.app3.data.model.exceptions.InvalidAttributeException;
 import es.upm.etsisi.poo.app3.data.model.shop.products.Product;
+import es.upm.etsisi.poo.app3.data.model.shop.products.Purchasable;
 
 public abstract class TicketItem implements Comparable<TicketItem> {
-    protected Product product;
+    protected Purchasable<?> purchasable;
     protected Integer quantity;
 
-    public TicketItem(Product product, Integer quantity) {
-        if (quantity < 0) {
+    public TicketItem(Purchasable<?> purchasable, Integer quantity) {
+        if (quantity <= 0) {
             throw new InvalidAttributeException("Quantity must be positive");
         }
-        this.product = product;
+        this.purchasable = purchasable;
         this.quantity = quantity;
     }
 
     public abstract Double getTotalPrice();
 
-    public Product getProduct() {
-        return this.product;
+    public Purchasable<?> getPurchasable() {
+        return this.purchasable;
     }
 
     public Integer getQuantity() {
@@ -31,12 +32,24 @@ public abstract class TicketItem implements Comparable<TicketItem> {
 
     @Override
     public String toString() {
-        return this.product.toString();
+        return this.purchasable.toString();
     }
 
     @Override
-    public int compareTo(TicketItem ticketItem) {
-        String nameProduct = ticketItem.getProduct().getName();
-        return this.product.getName().compareTo(nameProduct);
+    public int compareTo(TicketItem other) {
+        boolean thisIsProduct = this.purchasable instanceof Product;
+        boolean otherIsProduct = other.purchasable instanceof Product;
+
+        if(thisIsProduct && !otherIsProduct) return -1;
+        if(!thisIsProduct && otherIsProduct) return 1;
+
+        if(thisIsProduct){
+            String thisName = ((Product) this.purchasable).getName();
+            String otherName = ((Product) other.purchasable).getName();
+            return thisName.compareTo(otherName);
+        }
+
+        return this.purchasable.getId().toString()
+                .compareTo(other.purchasable.getId().toString());
     }
 }
