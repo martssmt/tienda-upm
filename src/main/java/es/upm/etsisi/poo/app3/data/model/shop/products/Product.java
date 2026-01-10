@@ -1,6 +1,5 @@
 package es.upm.etsisi.poo.app3.data.model.shop.products;
 
-import es.upm.etsisi.poo.app3.data.model.Entity;
 import es.upm.etsisi.poo.app3.data.model.exceptions.InvalidAttributeException;
 
 import java.util.Objects;
@@ -13,6 +12,12 @@ public abstract class Product extends Purchasable<Integer> {
         super();
         this.name = name;
         this.price = price;
+    }
+
+    public Product(Product original) {
+        super();
+        this.name = original.name;
+        this.price = original.price;
     }
 
     public boolean equalsWithoutId(Product product) {

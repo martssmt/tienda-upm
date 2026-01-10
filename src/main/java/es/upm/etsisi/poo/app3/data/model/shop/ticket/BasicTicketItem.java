@@ -10,6 +10,10 @@ public class BasicTicketItem extends TicketItem {
         this.discountApplied = discountApplied;
     }
 
+    protected BasicProduct getProduct() {
+        return (BasicProduct) this.purchasable;
+    }
+
     public Double getDiscountApplied() {
         return this.discountApplied;
     }
@@ -20,7 +24,7 @@ public class BasicTicketItem extends TicketItem {
 
     @Override
     public Double getTotalPrice() {
-        return product.getPrice() * quantity;
+        return getProduct().getPrice() * quantity;
     }
 
     public Double getDiscount() {

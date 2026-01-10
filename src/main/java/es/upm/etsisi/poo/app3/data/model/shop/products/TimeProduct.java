@@ -29,6 +29,14 @@ public class TimeProduct extends Product {
         }
     }
 
+    public TimeProduct(TimeProduct original) {
+        super(original);
+        this.type = original.type;
+        this.openDate = original.openDate;
+        this.maxPeople = original.maxPeople;
+        this.planningHours = original.planningHours;
+    }
+
     public LocalDate getOpenDate() {
         return this.openDate;
     }
@@ -78,5 +86,12 @@ public class TimeProduct extends Product {
         stringBuilder.append("}");
 
         return stringBuilder.toString();
+    }
+
+    public void validateAvailability() {
+        LocalDateTime minDate = LocalDateTime.now().plusHours(this.planningHours);
+        if(openDate.atStartOfDay().isBefore(minDate)){
+            throw new InvalidAttributeException("Product is already expired");
+        }
     }
 }

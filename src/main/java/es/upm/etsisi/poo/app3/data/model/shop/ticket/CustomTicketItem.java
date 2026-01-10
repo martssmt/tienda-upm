@@ -1,6 +1,5 @@
 package es.upm.etsisi.poo.app3.data.model.shop.ticket;
 
-import es.upm.etsisi.poo.app3.data.model.shop.products.BasicProduct;
 import es.upm.etsisi.poo.app3.data.model.shop.products.CustomProduct;
 
 public class CustomTicketItem extends BasicTicketItem {
@@ -24,17 +23,18 @@ public class CustomTicketItem extends BasicTicketItem {
 
     @Override
     public String toString() {
+        CustomProduct product = (CustomProduct) this.purchasable;
         StringBuilder stringBuilder = new StringBuilder();
 
         stringBuilder.append("{class:ProductPersonalized, ");
-        stringBuilder.append("id:").append(this.product.getId()).append(", ");
-        stringBuilder.append("name:'").append(this.product.getName()).append("', ");
-        stringBuilder.append("category:").append(((BasicProduct) this.product).getCategory()).append(", ");
+        stringBuilder.append("id:").append(product.getId()).append(", ");
+        stringBuilder.append("name:'").append(product.getName()).append("', ");
+        stringBuilder.append("category:").append(product.getCategory()).append(", ");
 
         double perUnitPrice = this.getTotalPrice() / this.quantity;
         stringBuilder.append("price:").append(perUnitPrice).append(", ");
 
-        stringBuilder.append("maxPersonal:").append(((CustomProduct) this.product).getNumberTexts());
+        stringBuilder.append("maxPersonal:").append(product.getNumberTexts());
 
         if (this.texts.length != 0) {
             stringBuilder.append(", personalizationList:[");
