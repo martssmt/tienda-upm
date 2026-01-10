@@ -4,6 +4,7 @@ import es.upm.etsisi.poo.app3.data.model.exceptions.InvalidAttributeException;
 import es.upm.etsisi.poo.app3.data.model.shop.Category;
 
 public class CustomProduct extends BasicProduct {
+
     private Double originalPrice;
     private Integer numberTexts;
 
@@ -11,6 +12,12 @@ public class CustomProduct extends BasicProduct {
         super(name, category, originalPrice);
         this.originalPrice = originalPrice;
         this.numberTexts = numberTexts;
+    }
+
+    public CustomProduct(CustomProduct original) {
+        super(original);
+        this.originalPrice = original.originalPrice;
+        this.numberTexts = original.numberTexts;
     }
 
     public Double getOriginalPrice() {

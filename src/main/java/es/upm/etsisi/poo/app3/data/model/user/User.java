@@ -4,6 +4,7 @@ import es.upm.etsisi.poo.app3.data.model.Entity;
 import es.upm.etsisi.poo.app3.data.model.exceptions.InvalidAttributeException;
 
 public abstract class User extends Entity<String> {
+
     private String name;
     private String mail;
 

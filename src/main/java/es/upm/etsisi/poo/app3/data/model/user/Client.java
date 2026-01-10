@@ -3,27 +3,21 @@ package es.upm.etsisi.poo.app3.data.model.user;
 import es.upm.etsisi.poo.app3.data.model.exceptions.InvalidAttributeException;
 
 public class Client extends User {
-    private String cashierId;
-    private final ClientType clientType;
 
-    public Client(String name, String mail, String cashierId,  ClientType clientType) {
+    private final String cashierId;
+    private ClientType clientType;
+
+    public Client(String name, String mail, String cashierId) {
         super(name, mail);
         if (!cashierId.matches("UW[0-9]{7}")) {
             throw new InvalidAttributeException("Invalid cashierId");
         }
         this.cashierId = cashierId;
-        this.clientType = clientType;
+        this.clientType = null;
     }
 
     public String getCashierId() {
         return this.cashierId;
-    }
-
-    public void setCashierId(String cashierId) {
-        if (!cashierId.matches("UW[0-9]{7}")) {
-            throw new InvalidAttributeException("Invalid cashierId");
-        }
-        this.cashierId = cashierId;
     }
 
     public ClientType getClientType() {
@@ -32,22 +26,19 @@ public class Client extends User {
 
     @Override
     public void setId(String id) {
-        if(clientType == null){
-            throw new InvalidAttributeException("ClientType is null");
+        if (id == null || id.isEmpty()) {
+            throw new InvalidAttributeException("Invalid id: cannot be null or empty");
         }
 
-        switch(clientType) {
-            case COMPANY:
-                if (!id.matches("[A-Za-z][0-9]{8}")) {
-                    throw new InvalidAttributeException("Invalid NIF for company");
-                }
-                break;
-            case PERSON:
-                if (id.length() != 9) {
-                    throw new InvalidAttributeException("Invalid DNI");
-                }
-                break;
-        }
+        id = id.trim().toUpperCase();
+
+        if (id.matches("[XYZ]\\d{7}[A-Z]") || id.matches("\\d{8}[A-Z]")) // NIE o DNI
+            this.clientType = ClientType.PERSON;
+        else if (id.matches("[A-Z]\\d{8}")) // NIF
+            this.clientType = ClientType.COMPANY;
+        else
+            throw new InvalidAttributeException("Invalid id: " + id);
+
         this.id = id;
     }
 

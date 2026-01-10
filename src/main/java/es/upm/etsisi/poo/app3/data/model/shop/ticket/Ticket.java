@@ -14,37 +14,35 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class Ticket extends Entity<String> {
+
     private final List<TicketItem> itemList;
     private static final Integer MAX_PRODUCTS = 100;
     private Integer numberOfProducts;
-    private final String clientId;
-    private final String cashierId;
     private Status status;
     private String name;
     private final ClientType clientType;
     private final TicketType ticketType;
 
-    public Ticket(String id, String clientId, String cashierId, TicketType ticketType, ClientType clientType) {
+    public Ticket(String id, TicketType ticketType, ClientType clientType) {
         super();
         if (!id.matches("[0-9]{6}")) {
             throw new InvalidAttributeException("Invalid id");
         }
         this.id = id;
-        if (clientId.length() != 9) {
-            throw new InvalidAttributeException("Invalid clientId");
-        }
-        this.clientId = clientId;
-        this.cashierId = cashierId;
         this.itemList = new LinkedList<>();
         this.numberOfProducts = 0;
         this.status = Status.EMPTY;
         this.name = this.id;
         this.ticketType = ticketType;
         this.clientType = clientType;
+        if (clientType == ClientType.PERSON &&  ticketType != TicketType.PRODUCT)
+            throw new InvalidAttributeException("User tickets only accept product tickets");
+        else if (clientType == ClientType.COMPANY &&  ticketType == TicketType.PRODUCT)
+            throw new InvalidAttributeException("Company tickets do not accept only-products tickets");
     }
 
-    public Ticket(String clientId, String cashierId, TicketType ticketType, ClientType clientType) {
-        this(String.valueOf(new Random().nextInt(900000) + 100000), clientId, cashierId, ticketType, clientType);
+    public Ticket(TicketType ticketType, ClientType clientType) {
+        this(String.valueOf(new Random().nextInt(900000) + 100000), ticketType, clientType);
         this.name = this.generateName();
     }
 
@@ -60,14 +58,6 @@ public class Ticket extends Entity<String> {
 
     public Integer getNumberOfProducts() {
         return this.numberOfProducts;
-    }
-
-    public String getClientId() {
-        return this.clientId;
-    }
-
-    public String getCashierId() {
-        return this.cashierId;
     }
 
     public Status getStatus() {
@@ -86,24 +76,10 @@ public class Ticket extends Entity<String> {
 
         boolean isService = purchasable instanceof ProductService;
 
-        if (this.ticketType == TicketType.PRODUCT && isService) {
-            throw new InvalidAttributeException("Product ticket cannot contain services");
-        }
-
-        if (this.ticketType == TicketType.SERVICE && !isService) {
-            throw new InvalidAttributeException("Service ticket cannot contain products");
-        }
-
-        if (this.clientType == ClientType.PERSON && isService) {
-            throw new InvalidAttributeException("User clients cannot add services");
-        }
+        validateType(purchasable, isService);
 
         if (!isService && this.numberOfProducts + quantity > MAX_PRODUCTS) {
             throw new FullTicketException();
-        }
-
-        if(purchasable instanceof TimeProduct) {
-            ((TimeProduct) purchasable).validateAvailability();
         }
 
         boolean itemFound = false;
@@ -119,12 +95,12 @@ public class Ticket extends Entity<String> {
         if (!itemFound) {
             TicketItem newItem;
             if(isService){
-                newItem = new ServiceTicketItem((ProductService) purchasable);
+                newItem = new ServiceTicketItem(new ProductService((ProductService) purchasable));
             } else if (purchasable instanceof BasicProduct) {
-                newItem = new BasicTicketItem((BasicProduct) purchasable, quantity, ((BasicProduct) purchasable).getCategory().getDiscount());
+                newItem = new BasicTicketItem(new BasicProduct((BasicProduct) purchasable), quantity, ((BasicProduct) purchasable).getCategory().getDiscount());
                 this.numberOfProducts += quantity;
             } else {
-                newItem = new TimeTicketItem((TimeProduct) purchasable, quantity);
+                newItem = new TimeTicketItem(new TimeProduct((TimeProduct) purchasable), quantity);
                 this.numberOfProducts += quantity;
             }
             this.itemList.add(newItem);
@@ -137,7 +113,25 @@ public class Ticket extends Entity<String> {
         }
     }
 
-    public void addCustom(Product product, Integer quantity, String[] texts) {
+    private void validateType(Purchasable<?>  purchasable, boolean isService) {
+        if (this.ticketType == TicketType.PRODUCT && isService) {
+            throw new InvalidAttributeException("Product ticket cannot contain services");
+        }
+
+        if (this.ticketType == TicketType.SERVICE && !isService) {
+            throw new InvalidAttributeException("Service ticket cannot contain products");
+        }
+
+        if (this.clientType == ClientType.PERSON && isService) {
+            throw new InvalidAttributeException("User clients cannot add services");
+        }
+
+        if(purchasable instanceof TimeProduct) {
+            ((TimeProduct) purchasable).validateAvailability();
+        }
+    }
+
+    public void addCustom(CustomProduct product, Integer quantity, String[] texts) {
 
         if (quantity <= 0) {
             throw new InvalidAttributeException("Quantity must be greater than 0");
@@ -150,7 +144,7 @@ public class Ticket extends Entity<String> {
         if (this.numberOfProducts + quantity > MAX_PRODUCTS) {
             throw new FullTicketException();
         }
-        TicketItem newItem = new CustomTicketItem((CustomProduct) product, quantity, ((CustomProduct) product).getCategory().getDiscount(), texts);
+        TicketItem newItem = new CustomTicketItem(new CustomProduct(product), quantity, product.getCategory().getDiscount(), texts);
         this.itemList.add(newItem);
         this.numberOfProducts += quantity;
 

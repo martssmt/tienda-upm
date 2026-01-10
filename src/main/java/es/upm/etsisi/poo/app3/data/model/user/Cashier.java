@@ -3,7 +3,7 @@ package es.upm.etsisi.poo.app3.data.model.user;
 import es.upm.etsisi.poo.app3.data.model.exceptions.EntityNotFoundException;
 import es.upm.etsisi.poo.app3.data.model.exceptions.InvalidAttributeException;
 import es.upm.etsisi.poo.app3.data.model.shop.products.CustomProduct;
-import es.upm.etsisi.poo.app3.data.model.shop.products.Product;
+import es.upm.etsisi.poo.app3.data.model.shop.products.Purchasable;
 import es.upm.etsisi.poo.app3.data.model.shop.ticket.Ticket;
 
 import java.util.ArrayList;
@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Cashier extends User {
+
     private final Map<String, Ticket> ticketList;
     private static final String FORMAT = "UW[0-9]{7}";
 
@@ -32,12 +33,12 @@ public class Cashier extends User {
         this.ticketList.put(ticket.getId(), ticket);
     }
 
-    public void addProduct(String ticketId, Product product, Integer quantity) {
+    public void addProduct(String ticketId, Purchasable<?> purchasable, Integer quantity) {
         Ticket ticket = this.ticketList.get(ticketId);
         if (ticket == null) {
             throw new EntityNotFoundException("Ticket not found");
         }
-        ticket.add(product, quantity);
+        ticket.add(purchasable, quantity);
     }
 
     public void addCustomProduct(String ticketId, CustomProduct product, Integer quantity, String[] texts) {

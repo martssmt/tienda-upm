@@ -6,18 +6,25 @@ import es.upm.etsisi.poo.app3.data.model.shop.ServiceType;
 import java.time.LocalDate;
 
 public class ProductService extends Purchasable<String> {
+
     private final LocalDate maxUsageDate;
     private final ServiceType serviceType;
-    private static int counter = 1;
+    private static int idCounter = 1;
 
     public ProductService(LocalDate maxUsageDate, ServiceType serviceType) {
         this.maxUsageDate = maxUsageDate;
         this.serviceType = serviceType;
-        this.setId(counter++ + "S");
+        this.setId(idCounter++ + "S");
+    }
+
+    public ProductService(ProductService original) {
+        this.maxUsageDate = original.maxUsageDate;
+        this.serviceType = original.serviceType;
+        this.setId(original.getId());
     }
 
     public void validateUsage(){
-        if(maxUsageDate.isBefore(LocalDate.now())){
+        if(this.maxUsageDate.isBefore(LocalDate.now())){
             throw new InvalidAttributeException("Service expired");
         }
     }
