@@ -49,7 +49,7 @@ public class Cashier extends User {
         ticket.addCustom(product, quantity, texts);
     }
 
-    public void removeProduct(String ticketId, Integer productId) {
+    public void removeProduct(String ticketId, String productId) {
         Ticket ticket = this.ticketList.get(ticketId);
         if (ticket == null) {
             throw new EntityNotFoundException("Ticket not found");
