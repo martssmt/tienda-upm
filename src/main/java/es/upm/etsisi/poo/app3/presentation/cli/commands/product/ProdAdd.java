@@ -2,25 +2,22 @@ package es.upm.etsisi.poo.app3.presentation.cli.commands.product;
 
 import es.upm.etsisi.poo.app3.data.model.shop.Category;
 import es.upm.etsisi.poo.app3.data.model.shop.ServiceType;
-import es.upm.etsisi.poo.app3.data.model.shop.products.BasicProduct;
-import es.upm.etsisi.poo.app3.data.model.shop.products.CustomProduct;
-import es.upm.etsisi.poo.app3.data.model.shop.products.ProductService;
-import es.upm.etsisi.poo.app3.data.model.shop.products.Product;
-import es.upm.etsisi.poo.app3.services.ProductService;
+import es.upm.etsisi.poo.app3.data.model.shop.products.*;
 import es.upm.etsisi.poo.app3.presentation.cli.Command;
 import es.upm.etsisi.poo.app3.presentation.cli.exceptions.CommandException;
 import es.upm.etsisi.poo.app3.presentation.view.View;
+import es.upm.etsisi.poo.app3.services.PurchasableService;
 
 import java.time.LocalDate;
 import java.util.List;
 
 public class ProdAdd implements Command {
 
-    private final ProductService productService;
+    private final PurchasableService purchasableService;
     private final View view;
 
-    public ProdAdd(View view, ProductService productService) {
-        this.productService = productService;
+    public ProdAdd(View view, PurchasableService purchasableService) {
+        this.purchasableService = purchasableService;
         this.view = view;
     }
 
@@ -50,15 +47,11 @@ public class ProdAdd implements Command {
             String expiration = params[0];
             String type = params[1];
             // fecha
-            try {
-                LocalDate.parse(expiration);
-            } catch (Exception e) {
+            if (!expiration.matches("\\d{4}-\\d{2}-\\d{2}")) {
                 throw new CommandException("Invalid date format. Use yyyy-MM-dd");
             }
             // ServiceType
-            try {
-                ServiceType.valueOf(type.toUpperCase());
-            } catch (Exception e) {
+            if (!type.equals("INSURANCE") && !type.equals("TRANSPORT") && !type.equals("SHOW")) {
                 throw new CommandException("Invalid service type.");
             }
             // Return
@@ -89,12 +82,9 @@ public class ProdAdd implements Command {
             throw new CommandException("Usage: " + this.help());
         index++;
         // Price
-        String price = "0";
-        if (index < params.length) {
-            price = params[index];
-            if (!price.matches("[+-]?\\d+(\\.\\d+)?([eE][+-]?\\d+)?")) {
-                throw new CommandException("Usage: " + this.help());
-            }
+        String price = params[index];
+        if (!price.matches("[+-]?\\d+(\\.\\d+)?([eE][+-]?\\d+)?")) {
+            throw new CommandException("Usage: " + this.help());
         }
         index++;
         // maxPers (optional)
@@ -104,7 +94,6 @@ public class ProdAdd implements Command {
             if (!maxPers.matches("-?\\d+"))
                 throw new CommandException("Usage: " + this.help());
         }
-        //Return
         return new String[]{id, name.trim(), category, price, maxPers};
     }
 
@@ -112,14 +101,14 @@ public class ProdAdd implements Command {
     public void execute(String[] params) {
         params = this.assessParams(params);
 
-        Product product;
+        Purchasable<?> purchasable;
 
-        // -- SERVICIO --
         if (params[3] == null) {
+            // -- SERVICIO --
             LocalDate expiration = LocalDate.parse(params[1]);
             ServiceType type = ServiceType.valueOf(params[2].toUpperCase());
-            product = new ProductService(expiration, type);
-            this.productService.add(product);
+            purchasable = new ServiceProduct(expiration, type);
+            this.purchasableService.add(purchasable);
         } else {
             // -- PRODUCTO --
             String id = params[0];
@@ -131,17 +120,17 @@ public class ProdAdd implements Command {
                 numberTexts = Integer.parseInt(params[4]);
             }
             if (numberTexts == null) {
-                product = new BasicProduct(name, category, price);
+                purchasable = new BasicProduct(name, category, price);
             } else {
-                product = new CustomProduct(name, category, price, numberTexts);
+                purchasable = new CustomProduct(name, category, price, numberTexts);
             }
             if (id == null) {
-                this.productService.add(product);
+                this.purchasableService.add(purchasable);
             } else {
-                this.productService.add(product, id);
+                this.purchasableService.add(purchasable, id);
             }
         }
-        this.view.showEntity(product);
+        this.view.showEntity(purchasable);
         this.view.show("prod add: ok");
     }
 }
