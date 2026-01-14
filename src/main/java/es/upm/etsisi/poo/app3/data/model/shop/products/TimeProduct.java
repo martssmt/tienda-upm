@@ -2,16 +2,29 @@ package es.upm.etsisi.poo.app3.data.model.shop.products;
 
 import es.upm.etsisi.poo.app3.data.model.exceptions.InvalidAttributeException;
 import es.upm.etsisi.poo.app3.data.model.shop.TimeProductType;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+@jakarta.persistence.Entity
+@Table(name = "time_products")
 public class TimeProduct extends Product {
-    private final LocalDate openDate;
+
+    @Column(name = "open_date")
+    private LocalDate openDate;
     private static final Integer MAX_PEOPLE_GLOBAL = 100;
-    private final Integer maxPeople;
-    private final TimeProductType type;
-    private final Integer planningHours;
+    @Column(name = "max_people")
+    private Integer maxPeople;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "event_type")
+    private TimeProductType type;
+    @Column(name = "planning_hours")
+    private Integer planningHours;
+
+    protected TimeProduct() {
+        super();
+    }
 
     public TimeProduct(String name, TimeProductType type, Double price, LocalDate openDate, Integer maxPeople) {
         super(name, price);

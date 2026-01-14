@@ -18,6 +18,13 @@
 
         <mapping class="src.main.java.es.upm.etsisi.poo.app3.data.model.shop.ticket.Ticket.java"/>
         <mapping class="src.main.java.es.upm.etsisi.poo.app3.data.model.shop.ticket.TicketItem.java"/>
+        <mapping class="src.main.java.es.upm.etsisi.poo.app3.data.model.Entity.java"/>
+        <mapping class="src.main.java.es.upm.etsisi.poo.app3.data.model.shop.products.BasicProduct.java"/>
+        <mapping class="src.main.java.es.upm.etsisi.poo.app3.data.model.shop.products.CustomProduct.java"/>
+        <mapping class="src.main.java.es.upm.etsisi.poo.app3.data.model.shop.products.Product.java"/>
+        <mapping class="src.main.java.es.upm.etsisi.poo.app3.data.model.shop.products.Purchasable.java"/>
+        <mapping class="src.main.java.es.upm.etsisi.poo.app3.data.model.shop.products.ServiceProduct.java"/>
+        <mapping class="src.main.java.es.upm.etsisi.poo.app3.data.model.shop.products.TimeProduct.java"/>
 
     </session-factory>
 </hibernate-configuration>

@@ -2,12 +2,23 @@ package es.upm.etsisi.poo.app3.data.model.shop.products;
 
 import es.upm.etsisi.poo.app3.data.model.exceptions.InvalidAttributeException;
 import es.upm.etsisi.poo.app3.data.model.shop.ticket.TicketItem;
+import jakarta.persistence.*;
 
 import java.util.Objects;
 
+@jakarta.persistence.Entity
+@Table(name = "products")
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Product extends Purchasable<Integer> {
+
+    @Column(name = "name")
     private String name;
+    @Column(name = "price")
     private Double price;
+
+    public Product() {
+        super();
+    }
 
     public Product(String name, Double price) {
         super();

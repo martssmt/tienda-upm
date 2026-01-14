@@ -1,10 +1,18 @@
 package es.upm.etsisi.poo.app3.data.model.shop.products;
 
 import es.upm.etsisi.poo.app3.data.model.shop.Category;
+import jakarta.persistence.*;
 
+@jakarta.persistence.Entity
+@Table(name = "basic_products")
 public class BasicProduct extends Product {
 
+    @Enumerated(EnumType.STRING)
     private Category category;
+
+    public BasicProduct() {
+        super();
+    }
 
     public BasicProduct(String name, Category category, Double price) {
         super(name, price);
@@ -29,4 +37,8 @@ public class BasicProduct extends Product {
         return "{class:Product, id:" + this.getId() + ", name:'" + this.getName() +
                 "', category:" + this.category + ", price:" + this.getPrice() + "}";
     }
+
+    @Override
+    public void validateAvailability() {}
+
 }

@@ -3,11 +3,20 @@ package es.upm.etsisi.poo.app3.data.model.shop.products;
 import es.upm.etsisi.poo.app3.data.model.exceptions.InvalidAttributeException;
 import es.upm.etsisi.poo.app3.data.model.shop.Category;
 import es.upm.etsisi.poo.app3.data.model.shop.ticket.TicketItem;
+import jakarta.persistence.*;
 
+@jakarta.persistence.Entity
+@Table(name = "custom_products")
 public class CustomProduct extends BasicProduct {
 
+    @Column(name = "original_price")
     private Double originalPrice;
+    @Column(name = "number_texts")
     private Integer numberTexts;
+
+    public CustomProduct() {
+        super();
+    }
 
     public CustomProduct(String name, Category category, Double originalPrice, Integer numberTexts) {
         super(name, category, originalPrice);
