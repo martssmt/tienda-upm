@@ -32,14 +32,6 @@ public abstract class Product extends Purchasable<Integer> {
         this.price = original.price;
     }
 
-    public boolean equalsWithoutId(Product product) {
-        if (product == null || !Objects.equals(this.getClass(), product.getClass())) {
-            return false;
-        }
-        return Objects.equals(this.name, product.name)
-                && Objects.equals(this.price, product.getPrice());
-    }
-
     public Integer getId() {
         return this.id;
     }

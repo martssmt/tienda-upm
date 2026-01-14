@@ -3,7 +3,7 @@ package es.upm.etsisi.poo.app3;
 import es.upm.etsisi.poo.app3.data.repositories.CashierRepository;
 import es.upm.etsisi.poo.app3.data.repositories.ClientRepository;
 import es.upm.etsisi.poo.app3.data.repositories.hibernate.JPAUtil;
-import es.upm.etsisi.poo.app3.data.repositories.ProductRepository;
+import es.upm.etsisi.poo.app3.data.repositories.PurchasableRepository;
 import es.upm.etsisi.poo.app3.data.repositories.map.CashierRepositoryMap;
 import es.upm.etsisi.poo.app3.data.repositories.map.ClientRepositoryMap;
 import es.upm.etsisi.poo.app3.data.repositories.map.ProductRepositoryMap;
@@ -23,7 +23,7 @@ import es.upm.etsisi.poo.app3.services.ProductService;
 public class DependencyInjector {
     private static final DependencyInjector instance = new DependencyInjector();
 
-    private final ProductRepository productRepository;
+    private final PurchasableRepository purchasableRepository;
     private final ClientRepository clientRepository;
     private final CashierRepository cashierRepository;
 
@@ -36,13 +36,13 @@ public class DependencyInjector {
     private final CommandLineInterface commandLineInterface;
 
     private DependencyInjector() {
-        productRepository = new ProductRepositoryMap();
+        purchasableRepository = new ProductRepositoryMap();
         clientRepository = new ClientRepositoryMap();
         cashierRepository = new CashierRepositoryMap();
 
         clientService = new ClientService(this.clientRepository);
         cashierService = new CashierService(this.cashierRepository);
-        productService = new ProductService(this.productRepository);
+        productService = new ProductService(this.purchasableRepository);
 
         this.view = new View();
         this.commandLineInterface = new CommandLineInterface(this.view);
@@ -116,8 +116,8 @@ public class DependencyInjector {
         return clientRepository;
     }
 
-    public ProductRepository getProductRepository() {
-        return productRepository;
+    public PurchasableRepository getProductRepository() {
+        return purchasableRepository;
     }
 
     public CashierRepository getCashierRepository() {

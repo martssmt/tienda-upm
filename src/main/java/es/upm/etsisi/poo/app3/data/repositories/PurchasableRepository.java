@@ -1,11 +1,11 @@
 package es.upm.etsisi.poo.app3.data.repositories;
 
-import es.upm.etsisi.poo.app3.data.model.shop.products.Product;
+import es.upm.etsisi.poo.app3.data.model.shop.products.Purchasable;
 
-public interface ProductRepository extends RepositoryShop<Product> {
+public interface PurchasableRepository extends RepositoryShop<Purchasable<Object>, Object> {
 
-    void add(Product product);
+    void add(Purchasable<Object> purchasable);
 
-    boolean find(Product product);
+    boolean find(Purchasable<Object> purchasable);
 
 }
