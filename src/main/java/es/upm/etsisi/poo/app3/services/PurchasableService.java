@@ -5,6 +5,7 @@ import es.upm.etsisi.poo.app3.data.model.shop.Category;
 import es.upm.etsisi.poo.app3.data.model.shop.products.BasicProduct;
 import es.upm.etsisi.poo.app3.data.model.shop.products.Product;
 import es.upm.etsisi.poo.app3.data.model.shop.products.Purchasable;
+import es.upm.etsisi.poo.app3.data.model.shop.products.ServiceProduct;
 import es.upm.etsisi.poo.app3.data.repositories.PurchasableRepository;
 import es.upm.etsisi.poo.app3.services.exceptions.DuplicateException;
 import es.upm.etsisi.poo.app3.services.exceptions.NotFoundException;
@@ -52,7 +53,11 @@ public class PurchasableService implements Service<Purchasable<Object>> {
 
     public Product update(String id, String field, String value) {
         Integer idInteger = Integer.parseInt(id);
-        Product prod = findProd(idInteger);
+        Purchasable purchasable = findProd(idInteger);
+        if (purchasable instanceof ServiceProduct) {
+            throw new NotFoundException("There is no product with id " + id + " in the Catalog. Services cannot be updated");
+        }
+        Product prod = (Product) purchasable;
         switch (field.toUpperCase()) {
             case "NAME":
                 prod.setName(value);
@@ -69,14 +74,15 @@ public class PurchasableService implements Service<Purchasable<Object>> {
             default:
                 throw new InvalidAttributeException("Field not recognised");
         }
+        this.purchasableRepository.add((Purchasable) prod);
         return prod;
     }
 
-    public Product findProd(Integer id) {
-        Product prod = this.purchasableRepository.findById(id);
-        if (prod == null) {
+    public Purchasable findProd(Integer id) {
+        Purchasable purchasable = this.purchasableRepository.findById(id);
+        if (purchasable == null) {
             throw new NotFoundException("There is no product with id " + id + " in the Catalog.");
         }
-        return prod;
+        return purchasable;
     }
 }
