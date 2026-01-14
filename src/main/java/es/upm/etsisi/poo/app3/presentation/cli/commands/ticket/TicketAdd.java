@@ -1,8 +1,6 @@
 package es.upm.etsisi.poo.app3.presentation.cli.commands.ticket;
 
-import es.upm.etsisi.poo.app3.data.model.shop.products.BasicProduct;
-import es.upm.etsisi.poo.app3.data.model.shop.products.CustomProduct;
-import es.upm.etsisi.poo.app3.data.model.shop.products.Product;
+import es.upm.etsisi.poo.app3.data.model.shop.products.*;
 import es.upm.etsisi.poo.app3.services.PurchasableService;
 import es.upm.etsisi.poo.app3.data.model.shop.ticket.Ticket;
 import es.upm.etsisi.poo.app3.services.CashierService;
@@ -53,15 +51,13 @@ public class TicketAdd implements Command {
         String cashid = params[1];
         Integer prodid = Integer.parseInt(params[2]);
         Integer amount = Integer.parseInt(params[3]);
-        Product product = this.purchasableService.findProd(prodid);
+        Purchasable purchasable = this.purchasableService.findProd(prodid);
         Ticket ticket;
-        if (product instanceof CustomProduct) {
+        if (purchasable instanceof CustomProduct) {
             String[] texts = java.util.Arrays.copyOfRange(params, 4, params.length);
-            ticket = this.cashierService.addCustomProduct(cashid, ticketid, (CustomProduct) product, amount, texts);
-        } else if (product instanceof BasicProduct) {
-            ticket = this.cashierService.addProduct(cashid, ticketid, product, amount);
+            ticket = this.cashierService.addCustomProduct(cashid, ticketid, (CustomProduct) purchasable, amount, texts);
         } else {
-            ticket = this.cashierService.addService(cashid, ticketid, product);
+            ticket = this.cashierService.addProduct(cashid, ticketid, purchasable, amount);
         }
         this.view.showEntity(ticket);
         this.view.show("ticket add: ok");

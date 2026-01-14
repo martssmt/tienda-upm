@@ -2,6 +2,8 @@ package es.upm.etsisi.poo.app3.services;
 
 import es.upm.etsisi.poo.app3.data.model.shop.products.CustomProduct;
 import es.upm.etsisi.poo.app3.data.model.shop.products.Product;
+import es.upm.etsisi.poo.app3.data.model.shop.products.Purchasable;
+import es.upm.etsisi.poo.app3.data.model.shop.products.ServiceProduct;
 import es.upm.etsisi.poo.app3.data.model.shop.ticket.Ticket;
 import es.upm.etsisi.poo.app3.data.model.user.Cashier;
 import es.upm.etsisi.poo.app3.data.repositories.CashierRepository;
@@ -66,12 +68,13 @@ public class CashierService implements Service<Cashier> {
         return cashier.getTicket(ticketId);
     }
 
-    public Ticket addProduct(String cashierId, String ticketId, Product product, Integer quantity) {
+    public Ticket addProduct(String cashierId, String ticketId, Purchasable purchasable, Integer quantity) {
         Cashier cashier = this.cashierRepository.findById(cashierId);
         if (cashier == null) {
             throw new NotFoundException("There is no cashier with id " + cashierId + " registered.");
         }
-        cashier.addProduct(ticketId, product, quantity);
+        cashier.addProduct(ticketId, purchasable, quantity);
+        this.cashierRepository.add(cashier);
         return cashier.getTicket(ticketId);
     }
 
@@ -80,16 +83,8 @@ public class CashierService implements Service<Cashier> {
         if (cashier == null) {
             throw new NotFoundException("There is no cashier with id " + cashierId + " registered.");
         }
-        cashier.addCustomProduct(ticketId, product, quantity, texts);
-        return cashier.getTicket(ticketId);
-    }
-
-    public Ticket addService(String cashierId, String ticketId, Product product) {
-        Cashier cashier = this.cashierRepository.findById(cashierId);
-        if (cashier == null) {
-            throw new NotFoundException("There is no cashier with id " + cashierId + " registered.");
-        }
-        cashier.addService(ticketId, product);
+        cashier.addCustomProduct(ticketId, product, quantity, List.of(texts));
+        this.cashierRepository.add(cashier);
         return cashier.getTicket(ticketId);
     }
 

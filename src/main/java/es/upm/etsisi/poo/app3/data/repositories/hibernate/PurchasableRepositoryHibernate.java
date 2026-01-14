@@ -26,7 +26,7 @@ public class PurchasableRepositoryHibernate extends RepositoryShopHibernate<Purc
                 generatedId = findFirstAvailableIntegerId(em);
             }
             purchasable.setId(generatedId);
-            em.persist(purchasable);
+            em.merge(purchasable);
             em.getTransaction().commit();
         }
     }
