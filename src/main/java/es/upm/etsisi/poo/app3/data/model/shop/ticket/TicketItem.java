@@ -2,24 +2,29 @@ package es.upm.etsisi.poo.app3.data.model.shop.ticket;
 
 import es.upm.etsisi.poo.app3.data.model.exceptions.InvalidAttributeException;
 import es.upm.etsisi.poo.app3.data.model.shop.products.*;
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "ticket_items")
 public class TicketItem implements Comparable<TicketItem> {
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private final Purchasable<?> purchasable;
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long internalId; // ID técnico para base de datos
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "purchasable_id")
+    private Purchasable<?> purchasable;
+    @Column(name = "quantity")
     private int quantity;
     private double discountApplied;
-
-    @ElementCollection // Para guardar los textos de CustomProduct si fuera necesario
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "ticket_item_customTexts", joinColumns = @JoinColumn(name = "ticket_item_id")) // Para guardar los textos de CustomProduct si fuera necesario
     private List<String> customTexts;
+
+    protected TicketItem() {}
 
     public TicketItem(Purchasable<?> purchasable, Integer quantity) {
         if (quantity <= 0) {
@@ -28,7 +33,7 @@ public class TicketItem implements Comparable<TicketItem> {
         this.purchasable = purchasable;
         this.quantity = quantity;
         this.discountApplied = 0.0;
-        this.customTexts = null;
+        this.customTexts = new ArrayList<>();
     }
 
     public TicketItem(BasicProduct purchasable, Integer quantity) {
@@ -38,7 +43,7 @@ public class TicketItem implements Comparable<TicketItem> {
         this.purchasable = purchasable;
         this.quantity = quantity;
         this.discountApplied = purchasable.getCategory().getDiscount();
-        this.customTexts = null;
+        this.customTexts = new ArrayList<>();
     }
 
     public TicketItem(CustomProduct purchasable, Integer quantity, List<String> customTexts) {
@@ -93,10 +98,10 @@ public class TicketItem implements Comparable<TicketItem> {
         boolean thisIsProduct = this.purchasable instanceof Product;
         boolean otherIsProduct = other.purchasable instanceof Product;
 
-        if(thisIsProduct && !otherIsProduct) return -1;
-        if(!thisIsProduct && otherIsProduct) return 1;
+        if (thisIsProduct && !otherIsProduct) return -1;
+        if (!thisIsProduct && otherIsProduct) return 1;
 
-        if(thisIsProduct) {
+        if (thisIsProduct) {
             String thisName = ((Product) this.purchasable).getName();
             String otherName = ((Product) other.purchasable).getName();
             return thisName.compareTo(otherName);

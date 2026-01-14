@@ -16,7 +16,8 @@
 
         <property name="hbm2ddl.auto">update</property>
 
-        <mapping class="main.java.es.etsisi.poo.app3.data.model.shop."/>
+        <mapping class="src.main.java.es.upm.etsisi.poo.app3.data.model.shop.ticket.Ticket.java"/>
+        <mapping class="src.main.java.es.upm.etsisi.poo.app3.data.model.shop.ticket.TicketItem.java"/>
 
     </session-factory>
 </hibernate-configuration>

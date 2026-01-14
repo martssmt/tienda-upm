@@ -8,23 +8,32 @@ import es.upm.etsisi.poo.app3.data.model.shop.Status;
 import es.upm.etsisi.poo.app3.data.model.shop.TicketType;
 import es.upm.etsisi.poo.app3.data.model.shop.products.*;
 import es.upm.etsisi.poo.app3.data.model.user.ClientType;
-import jakarta.persistence.Transient;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+@jakarta.persistence.Entity
+@Table(name = "tickets")
 public class Ticket extends Entity<String> {
 
-    private final List<TicketItem> itemList;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @JoinColumn(name = "ticket_id")
+    private List<TicketItem> itemList;
     private static final Integer MAX_PRODUCTS = 100;
     private Integer numberOfProducts;
+    @Enumerated(EnumType.STRING)
     private Status status;
     private String name;
-    private final ClientType clientType;
-    private final TicketType ticketType;
+    @Enumerated(EnumType.STRING)
+    private ClientType clientType;
+    @Enumerated(EnumType.STRING)
+    private TicketType ticketType;
     @Transient // No se guarda en DB, es comportamiento
     private TicketPrintingStrategy printer;
+
+    protected Ticket() {}
 
     public Ticket(String id, TicketType ticketType, ClientType clientType) {
         super();
@@ -38,9 +47,9 @@ public class Ticket extends Entity<String> {
         this.name = this.id;
         this.ticketType = ticketType;
         this.clientType = clientType;
-        if (clientType == ClientType.PERSON &&  ticketType != TicketType.PRODUCT)
+        if (clientType == ClientType.PERSON && ticketType != TicketType.PRODUCT)
             throw new InvalidAttributeException("User tickets only accept product tickets");
-        else if (clientType == ClientType.COMPANY &&  ticketType == TicketType.PRODUCT)
+        else if (clientType == ClientType.COMPANY && ticketType == TicketType.PRODUCT)
             throw new InvalidAttributeException("Company tickets do not accept only-products tickets");
         this.printer = null;
     }
@@ -48,6 +57,15 @@ public class Ticket extends Entity<String> {
     public Ticket(TicketType ticketType, ClientType clientType) {
         this(String.valueOf(new Random().nextInt(900000) + 100000), ticketType, clientType);
         this.name = this.generateName();
+    }
+
+    @PostLoad
+    private void onLoad() {
+        if (this.clientType == ClientType.COMPANY) {
+            this.printer = new CompanyTicketPrinter();
+        } else {
+            this.printer = new PersonTicketPrinter();
+        }
     }
 
     private String generateName() {
@@ -84,7 +102,7 @@ public class Ticket extends Entity<String> {
 
         boolean isService = purchasable instanceof ServiceProduct;
 
-        validateType(purchasable, isService);
+        validateType(isService);
 
         purchasable.validateAvailability();
 
@@ -104,7 +122,7 @@ public class Ticket extends Entity<String> {
 
         if (!itemFound) {
             TicketItem newItem;
-            if(purchasable instanceof TimeProduct) {
+            if (purchasable instanceof TimeProduct) {
                 newItem = new TicketItem(new TimeProduct((TimeProduct) purchasable), quantity);
             } else if (isService) {
                 newItem = new TicketItem(new ServiceProduct((ServiceProduct) purchasable), quantity);
@@ -123,7 +141,7 @@ public class Ticket extends Entity<String> {
         }
     }
 
-    private void validateType(Purchasable<?>  purchasable, boolean isService) {
+    private void validateType(boolean isService) {
         if (this.ticketType == TicketType.PRODUCT && isService) {
             throw new InvalidAttributeException("Product ticket cannot contain services");
         }
@@ -168,7 +186,7 @@ public class Ticket extends Entity<String> {
             TicketItem item = iterator.next();
             if (item.getPurchasable().getId().equals(purchasableId)) {
                 itemFound = true;
-                if(!(item.getPurchasable() instanceof TimeProduct)){
+                if (!(item.getPurchasable() instanceof TimeProduct)) {
                     this.numberOfProducts -= item.getQuantity();
                 }
                 iterator.remove();
@@ -200,8 +218,7 @@ public class Ticket extends Entity<String> {
         LocalDateTime closeDate = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yy-MM-dd-HH:mm");
         String closeTimestamp = closeDate.format(formatter);
-        this.id = this.id + "-" + closeTimestamp;
-        this.name = this.id;
+        this.name = this.id + "-" + closeTimestamp;
     }
 
     public double calculateCategoryDiscount() {
@@ -229,7 +246,7 @@ public class Ticket extends Entity<String> {
         return result;
     }
 
-    public double calculateServiceDiscount(){
+    public double calculateServiceDiscount() {
         if (this.clientType != ClientType.COMPANY || this.ticketType != TicketType.COMBINED) {
             return 0.0;
         }
@@ -248,7 +265,7 @@ public class Ticket extends Entity<String> {
         return totalProductsPrice * (0.15 * numberOfServices);
     }
 
-    public double calculateTotalDiscount(){
+    public double calculateTotalDiscount() {
         return this.calculateCategoryDiscount() + this.calculateServiceDiscount();
     }
 
