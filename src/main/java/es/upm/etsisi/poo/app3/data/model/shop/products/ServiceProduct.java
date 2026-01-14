@@ -3,19 +3,28 @@ package es.upm.etsisi.poo.app3.data.model.shop.products;
 import es.upm.etsisi.poo.app3.data.model.exceptions.InvalidAttributeException;
 import es.upm.etsisi.poo.app3.data.model.shop.ServiceType;
 import es.upm.etsisi.poo.app3.data.model.shop.ticket.TicketItem;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
 
+@Entity
+@Table(name = "service_products")
 public class ServiceProduct extends Purchasable<String> {
 
-    private final LocalDate maxUsageDate;
-    private final ServiceType serviceType;
-    private static int idCounter = 1;
+    @Column(name = "max_usage_date")
+    private LocalDate maxUsageDate;
+    @Enumerated(EnumType.STRING)
+    private ServiceType serviceType;
 
-    public ServiceProduct(LocalDate maxUsageDate, ServiceType serviceType) {
+    // Hibernate necesita este constructor
+    protected ServiceProduct() {
+        super();
+    }
+
+    public ServiceProduct(LocalDate maxUsageDate, ServiceType serviceType, Integer nextId) {
         this.maxUsageDate = maxUsageDate;
         this.serviceType = serviceType;
-        this.setId(idCounter++ + "S");
+        this.id = nextId.toString() + "S";
     }
 
     public ServiceProduct(ServiceProduct original) {
@@ -33,15 +42,15 @@ public class ServiceProduct extends Purchasable<String> {
     }
 
     @Override
-    public void setId(String id){
-        if(id == null){
+    public void setId(String id) {
+        if (id == null) {
             throw new InvalidAttributeException("Service id cannot be null");
         }
         this.id = id;
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "{class:ProductService, id:" + this.getId() +
                 ", category:" + this.serviceType +
                 ", expiration:" + this.maxUsageDate + "}";
@@ -54,7 +63,7 @@ public class ServiceProduct extends Purchasable<String> {
 
     @Override
     public void validateAvailability() {
-        if(this.maxUsageDate.isBefore(LocalDate.now())){
+        if (this.maxUsageDate.isBefore(LocalDate.now())) {
             throw new InvalidAttributeException("Service expired");
         }
     }

@@ -1,8 +1,14 @@
 package es.upm.etsisi.poo.app3.data.model;
 
+import jakarta.persistence.Id;
+import jakarta.persistence.MappedSuperclass;
+
 import java.util.Objects;
 
+@MappedSuperclass
 public abstract class Entity<T> {
+
+    @Id
     protected T id;
 
     protected Entity() {
