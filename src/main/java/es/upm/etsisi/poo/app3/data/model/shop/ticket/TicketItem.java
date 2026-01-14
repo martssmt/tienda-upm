@@ -16,7 +16,7 @@ public class TicketItem implements Comparable<TicketItem> {
     private Long internalId; // ID técnico para base de datos
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "purchasable_id")
-    private Purchasable<?> purchasable;
+    private Purchasable purchasable;
     @Column(name = "quantity")
     private int quantity;
     private double discountApplied;
@@ -26,7 +26,7 @@ public class TicketItem implements Comparable<TicketItem> {
 
     protected TicketItem() {}
 
-    public TicketItem(Purchasable<?> purchasable, Integer quantity) {
+    public TicketItem(Purchasable purchasable, Integer quantity) {
         if (quantity <= 0) {
             throw new InvalidAttributeException("Quantity must be positive");
         }

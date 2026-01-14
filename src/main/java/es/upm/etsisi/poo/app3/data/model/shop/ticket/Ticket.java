@@ -20,6 +20,7 @@ public class Ticket extends Entity<String> {
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JoinColumn(name = "ticket_id")
+    @OrderBy("internalId ASC")
     private List<TicketItem> itemList;
     private static final Integer MAX_PRODUCTS = 100;
     private Integer numberOfProducts;

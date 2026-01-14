@@ -20,6 +20,9 @@ import es.upm.etsisi.poo.app3.services.CashierService;
 import es.upm.etsisi.poo.app3.services.ClientService;
 import es.upm.etsisi.poo.app3.services.PurchasableService;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class DependencyInjector {
     private static final DependencyInjector instance = new DependencyInjector();
 
@@ -74,6 +77,9 @@ public class DependencyInjector {
         this.commandLineInterface.add(new Exit());
 
         this.errorHandler = new ErrorHandler();
+
+        Logger.getLogger("org.hibernate").setLevel(Level.OFF);
+        Logger.getLogger("org.hibernate.orm.deprecation").setLevel(Level.OFF);
     }
 
     public static DependencyInjector getInstance() {
