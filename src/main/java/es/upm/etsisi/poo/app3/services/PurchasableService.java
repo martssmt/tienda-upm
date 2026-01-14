@@ -11,7 +11,7 @@ import es.upm.etsisi.poo.app3.services.exceptions.NotFoundException;
 
 import java.util.List;
 
-public class PurchasableService implements Service<Purchasable<?>> {
+public class PurchasableService implements Service<Purchasable<Object>> {
 
     private final PurchasableRepository purchasableRepository;
 
@@ -40,7 +40,7 @@ public class PurchasableService implements Service<Purchasable<?>> {
     }
 
     @Override
-    public List<Purchasable> list() {
+    public List<Purchasable<Object>> list() {
         return this.purchasableRepository.list();
     }
 

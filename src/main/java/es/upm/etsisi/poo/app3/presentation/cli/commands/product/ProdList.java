@@ -1,6 +1,7 @@
 package es.upm.etsisi.poo.app3.presentation.cli.commands.product;
 
 import es.upm.etsisi.poo.app3.data.model.shop.products.Product;
+import es.upm.etsisi.poo.app3.data.model.shop.products.Purchasable;
 import es.upm.etsisi.poo.app3.services.PurchasableService;
 import es.upm.etsisi.poo.app3.presentation.cli.Command;
 import es.upm.etsisi.poo.app3.presentation.cli.exceptions.CommandException;
@@ -43,9 +44,9 @@ public class ProdList implements Command {
 
     @Override
     public void execute(String[] params) {
-        //params = this.assessParams(params);
-        List<Product> products = this.purchasableService.list();
-        this.view.showList("Catalog:", products);
+        this.assessParams(params);
+        List<Purchasable> purchasables = this.purchasableService.list();
+        this.view.showList("Catalog:", purchasables);
         this.view.show("prod list: ok");
     }
 }
