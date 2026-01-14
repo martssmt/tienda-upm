@@ -5,16 +5,27 @@ import es.upm.etsisi.poo.app3.data.model.exceptions.InvalidAttributeException;
 import es.upm.etsisi.poo.app3.data.model.shop.products.CustomProduct;
 import es.upm.etsisi.poo.app3.data.model.shop.products.Purchasable;
 import es.upm.etsisi.poo.app3.data.model.shop.ticket.Ticket;
+import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@jakarta.persistence.Entity
+@Table(name = "cashiers")
 public class Cashier extends User {
 
-    private final Map<String, Ticket> ticketList;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JoinColumn(name = "cashier_id")
+    @MapKey(name = "id")
+    private Map<String, Ticket> ticketList;
+
     private static final String FORMAT = "UW[0-9]{7}";
+
+    protected Cashier() {
+        super();
+    }
 
     public Cashier(String name, String mail) {
         super(name, mail);

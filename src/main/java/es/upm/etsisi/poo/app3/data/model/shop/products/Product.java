@@ -16,7 +16,7 @@ public abstract class Product extends Purchasable<Integer> {
     @Column(name = "price")
     private Double price;
 
-    public Product() {
+    protected Product() {
         super();
     }
 

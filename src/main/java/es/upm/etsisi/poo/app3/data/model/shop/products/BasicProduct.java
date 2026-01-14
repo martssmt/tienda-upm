@@ -10,7 +10,7 @@ public class BasicProduct extends Product {
     @Enumerated(EnumType.STRING)
     private Category category;
 
-    public BasicProduct() {
+    protected BasicProduct() {
         super();
     }
 

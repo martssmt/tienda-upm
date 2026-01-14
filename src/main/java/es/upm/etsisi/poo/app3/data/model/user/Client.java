@@ -1,11 +1,31 @@
 package es.upm.etsisi.poo.app3.data.model.user;
 
 import es.upm.etsisi.poo.app3.data.model.exceptions.InvalidAttributeException;
+import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
+@jakarta.persistence.Entity
+@Table(name = "clients")
 public class Client extends User {
 
-    private final String cashierId;
+    @Column(name = "cashierId")
+    private String cashierId;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "client_type")
     private ClientType clientType;
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(
+            name = "client_tickets", // Nombre de la tabla secundaria en la DB
+            joinColumns = @JoinColumn(name = "client_id") // Columna que une con la tabla 'users/clients'
+    )
+    @Column(name = "ticket_list")
+    private List<String> ticketIds;
+
+    protected Client() {
+        super();
+    }
 
     public Client(String name, String mail, String cashierId) {
         super(name, mail);
@@ -14,6 +34,7 @@ public class Client extends User {
         }
         this.cashierId = cashierId;
         this.clientType = null;
+        this.ticketIds = new ArrayList<>();
     }
 
     public String getCashierId() {
@@ -22,6 +43,10 @@ public class Client extends User {
 
     public ClientType getClientType() {
         return this.clientType;
+    }
+
+    public List<String> getTicketIds() {
+        return ticketIds;
     }
 
     @Override

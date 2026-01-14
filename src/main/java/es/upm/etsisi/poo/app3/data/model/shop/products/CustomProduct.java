@@ -14,7 +14,7 @@ public class CustomProduct extends BasicProduct {
     @Column(name = "number_texts")
     private Integer numberTexts;
 
-    public CustomProduct() {
+    protected CustomProduct() {
         super();
     }
 
