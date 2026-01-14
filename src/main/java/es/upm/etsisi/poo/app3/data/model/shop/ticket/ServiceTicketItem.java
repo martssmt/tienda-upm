@@ -14,7 +14,7 @@ public class ServiceTicketItem extends TicketItem{
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         ProductService s = (ProductService) purchasable;
         return "{class:ProductService, id:" + s.getId() +
                 ", category:" + s.getServiceType() +

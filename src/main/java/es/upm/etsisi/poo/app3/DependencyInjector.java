@@ -2,6 +2,7 @@ package es.upm.etsisi.poo.app3;
 
 import es.upm.etsisi.poo.app3.data.repositories.CashierRepository;
 import es.upm.etsisi.poo.app3.data.repositories.ClientRepository;
+import es.upm.etsisi.poo.app3.data.repositories.hibernate.JPAUtil;
 import es.upm.etsisi.poo.app3.data.repositories.ProductRepository;
 import es.upm.etsisi.poo.app3.data.repositories.map.CashierRepositoryMap;
 import es.upm.etsisi.poo.app3.data.repositories.map.ClientRepositoryMap;
@@ -80,7 +81,11 @@ public class DependencyInjector {
     }
 
     public void run(String[] args) {
-        this.errorHandler.handlesErrors(this.commandLineInterface, this.view, args);
+        try {
+            this.errorHandler.handlesErrors(this.commandLineInterface, this.view, args);
+        } finally {
+            JPAUtil.shutdown();
+        }
     }
 
     public ErrorHandler getErrorHandler() {
