@@ -25,12 +25,12 @@ public class ClientAdd implements Command {
 
     @Override
     public List<String> params() {
-        return List.of("\"<nombre>\"", "<DNI>", "<email>", "<cashId>");
+        return List.of("\"<nombre>\"", "(<DNI>|<NIF>)", "<email>", "<cashId>");
     }
 
     @Override
     public String helpMessage() {
-        return "Implements a new client with name, DNI, email and cashId.";
+        return "Implements a new client with name, DNI or NIF, email and cashId.";
     }
 
     @Override

@@ -30,7 +30,7 @@ public class ClientList implements Command {
 
     @Override
     public String helpMessage() {
-        return "Lists all registered clients with their id, name, email and associated cashier id.";
+        return "Lists all registered clients with their id or nif, name, email and associated cashier id.";
     }
 
     @Override

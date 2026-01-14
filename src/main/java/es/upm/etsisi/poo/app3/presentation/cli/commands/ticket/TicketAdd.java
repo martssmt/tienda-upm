@@ -1,10 +1,11 @@
 package es.upm.etsisi.poo.app3.presentation.cli.commands.ticket;
 
+import es.upm.etsisi.poo.app3.data.model.shop.products.BasicProduct;
 import es.upm.etsisi.poo.app3.data.model.shop.products.CustomProduct;
 import es.upm.etsisi.poo.app3.data.model.shop.products.Product;
+import es.upm.etsisi.poo.app3.services.ProductService;
 import es.upm.etsisi.poo.app3.data.model.shop.ticket.Ticket;
 import es.upm.etsisi.poo.app3.services.CashierService;
-import es.upm.etsisi.poo.app3.services.ProductService;
 import es.upm.etsisi.poo.app3.presentation.cli.Command;
 import es.upm.etsisi.poo.app3.presentation.cli.exceptions.CommandException;
 import es.upm.etsisi.poo.app3.presentation.view.View;
@@ -57,8 +58,10 @@ public class TicketAdd implements Command {
         if (product instanceof CustomProduct) {
             String[] texts = java.util.Arrays.copyOfRange(params, 4, params.length);
             ticket = this.cashierService.addCustomProduct(cashid, ticketid, (CustomProduct) product, amount, texts);
-        } else {
+        } else if (product instanceof BasicProduct) {
             ticket = this.cashierService.addProduct(cashid, ticketid, product, amount);
+        } else {
+            ticket = this.cashierService.addService(cashid, ticketid, product);
         }
         this.view.showEntity(ticket);
         this.view.show("ticket add: ok");

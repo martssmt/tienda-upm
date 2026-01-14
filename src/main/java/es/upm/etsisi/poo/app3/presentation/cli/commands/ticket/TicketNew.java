@@ -1,6 +1,8 @@
 package es.upm.etsisi.poo.app3.presentation.cli.commands.ticket;
 
 import es.upm.etsisi.poo.app3.data.model.shop.ticket.Ticket;
+import es.upm.etsisi.poo.app3.data.model.user.ClientType;
+import es.upm.etsisi.poo.app3.data.model.shop.TicketType;
 import es.upm.etsisi.poo.app3.services.CashierService;
 import es.upm.etsisi.poo.app3.services.ClientService;
 import es.upm.etsisi.poo.app3.presentation.cli.Command;
@@ -28,23 +30,23 @@ public class TicketNew implements Command {
 
     @Override
     public List<String> params() {
-        return List.of("[<id>]", "<cashId>", "<userId>");
+        return List.of("[<id>]", "<cashId>", "<userId>", "-[c|p|s] (default -p option)");
     }
 
     @Override
     public String helpMessage() {
-        return "Creates a new ticket with optional id, cashId and userId.";
+        return "Creates a new ticket with optional id, cashId, userId and an optional ticket type (-c, -p or -s). If no type is given, -p is used.";
     }
 
     @Override
     public String[] assessParams(String[] params) {
-        if (params.length < 2 || params.length > 3)
+        if (params.length < 2 || params.length > 4)
             throw new CommandException("Usage: " + this.help());
         // Id
         int index = 0;
         String id = null;
         if (!params[0].startsWith("UW")) {
-            if (params.length != 3)
+            if (params.length != 3 && params.length != 4)
                 throw new CommandException("Usage: " + this.help());
             id = params[0];
             index++;
@@ -56,7 +58,17 @@ public class TicketNew implements Command {
         if (this.clientService.findById(clientId) == null) {
             throw new CommandException("Client with id " + clientId + " not found.");
         }
-        return new String[]{id, cashId, clientId};
+        // TicketType -c | -p | -s (default -p)
+        String type = "-p";
+        index++;
+        if (index < params.length) {
+            String t = params[index];
+            if (!t.matches("-[cps]")) {
+                throw new CommandException("Ticket type " + t + " is invalid. Use -c, -p or -s.");
+            }
+            type = t;
+        }
+        return new String[]{id, cashId, clientId, type};
     }
 
     @Override
@@ -65,11 +77,27 @@ public class TicketNew implements Command {
         String id = params[0];
         String cashId = params[1];
         String clientId = params[2];
+        String type = params[3];
+        TicketType ticketType;
+        ClientType clientType;
         Ticket ticket;
+        switch (type) {
+            case "-c":
+                ticketType = TicketType.COMBINED;
+                break;
+            case "-s":
+                ticketType = TicketType.SERVICE;
+                break;
+            case "-p":
+            default:
+                ticketType = TicketType.PRODUCT;
+                break;
+        }
+        clientType = this.clientService.findById(clientId).getClientType();
         if (id != null) {
-            ticket = new Ticket(id, clientId, cashId);
+            ticket = new Ticket(id, clientId, cashId, ticketType, clientType);
         } else {
-            ticket = new Ticket(clientId, cashId);
+            ticket = new Ticket(clientId, cashId, ticketType, clientType);
         }
         this.cashierService.newTicket(ticket, cashId);
         this.view.showEntity(ticket);
