@@ -1,21 +1,21 @@
 package es.upm.etsisi.poo.app3.data.repositories.hibernate;
 
-import es.upm.etsisi.poo.app3.data.model.Entity;
-import es.upm.etsisi.poo.app3.data.repositories.RepositoryShop;
+import es.upm.etsisi.poo.app3.data.model.user.User;
+import es.upm.etsisi.poo.app3.data.repositories.RepositoryUser;
 import jakarta.persistence.EntityManager;
 
 import java.util.List;
 
-public abstract class RepositoryShopHibernate<T extends Entity<ID>, ID> implements RepositoryShop<T, ID> {
+public abstract class RepositoryUserHibernate<T extends User> implements RepositoryUser<T> {
 
     private final Class<T> entityManager;
 
-    public RepositoryShopHibernate(Class<T> entityManager) {
+    public RepositoryUserHibernate(Class<T> entityManager) {
         this.entityManager = entityManager;
     }
 
     @Override
-    public void add(T entity, ID id) {
+    public void add(T entity, String id) {
         try (EntityManager em = JPAUtil.em()) {
             em.getTransaction().begin();
             entity.setId(id);
@@ -25,12 +25,13 @@ public abstract class RepositoryShopHibernate<T extends Entity<ID>, ID> implemen
     }
 
     @Override
-    public void remove(ID id) {
+    public void remove(String id) {
         try (EntityManager em = JPAUtil.em()) {
             em.getTransaction().begin();
             T entity = em.find(this.entityManager, id);
-            if (entity == null)
+            if (entity != null) {
                 em.remove(entity);
+            }
             em.getTransaction().commit();
         }
     }
@@ -38,16 +39,26 @@ public abstract class RepositoryShopHibernate<T extends Entity<ID>, ID> implemen
     @Override
     public List<T> list() {
         try (EntityManager em = JPAUtil.em()) {
-            String jpql = "SELECT e FROM " + this.entityManager.getSimpleName() + " e";
+            String jpql = "SELECT u FROM " + this.entityManager.getSimpleName() + " u";
             return em.createQuery(jpql, this.entityManager).getResultList();
         }
     }
 
     @Override
-    public T findById(ID id) {
+    public T findById(String id) {
         try (EntityManager em = JPAUtil.em()) {
             return em.find(this.entityManager, id);
         }
     }
 
+    @Override
+    public T findByMail(String mail) {
+        try (EntityManager em = JPAUtil.em()) {
+            String jpql = "SELECT u FROM " + this.entityManager.getSimpleName() + " u WHERE u.mail = :email";
+            List<T> results = em.createQuery(jpql, this.entityManager)
+                    .setParameter("email", mail)
+                    .getResultList();
+            return results.isEmpty() ? null : results.getFirst();
+        }
+    }
 }
