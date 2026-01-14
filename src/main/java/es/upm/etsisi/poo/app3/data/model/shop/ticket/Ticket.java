@@ -8,6 +8,7 @@ import es.upm.etsisi.poo.app3.data.model.shop.Status;
 import es.upm.etsisi.poo.app3.data.model.shop.TicketType;
 import es.upm.etsisi.poo.app3.data.model.shop.products.*;
 import es.upm.etsisi.poo.app3.data.model.user.ClientType;
+import jakarta.persistence.Transient;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -22,6 +23,8 @@ public class Ticket extends Entity<String> {
     private String name;
     private final ClientType clientType;
     private final TicketType ticketType;
+    @Transient // No se guarda en DB, es comportamiento
+    private TicketPrintingStrategy printer;
 
     public Ticket(String id, TicketType ticketType, ClientType clientType) {
         super();
@@ -39,6 +42,7 @@ public class Ticket extends Entity<String> {
             throw new InvalidAttributeException("User tickets only accept product tickets");
         else if (clientType == ClientType.COMPANY &&  ticketType == TicketType.PRODUCT)
             throw new InvalidAttributeException("Company tickets do not accept only-products tickets");
+        this.printer = null;
     }
 
     public Ticket(TicketType ticketType, ClientType clientType) {
@@ -66,6 +70,10 @@ public class Ticket extends Entity<String> {
 
     public String getName() {
         return this.name;
+    }
+
+    public void setPrinter(TicketPrintingStrategy printer) {
+        this.printer = printer;
     }
 
     public void add(Purchasable<?> purchasable, Integer quantity) {
@@ -173,29 +181,19 @@ public class Ticket extends Entity<String> {
     }
 
     public void closeTicket() {
-        if (this.status == Status.CLOSED) {
-            return;
-        }
+        if (this.status == Status.CLOSED) return;
 
-        boolean hasProduct = false;
-        boolean hasService = false;
+        if (this.ticketType == TicketType.COMBINED) {
+            boolean hasProduct = itemList.stream().anyMatch(item -> item.getPurchasable() instanceof Product);
+            boolean hasService = itemList.stream().anyMatch(item -> item.getPurchasable() instanceof ServiceProduct);
+
+            if (!hasProduct || !hasService) {
+                throw new InvalidAttributeException("Combined ticket must contain at least one product and one service");
+            }
+        }
 
         for (TicketItem item : this.itemList) {
-            Purchasable<?> purchasable = item.getPurchasable();
-            if(purchasable instanceof ServiceProduct){
-                hasService = true;
-                purchasable.validateAvailability();
-            } else{
-                hasProduct = true;
-            }
-
-            if (purchasable instanceof TimeProduct) {
-                purchasable.validateAvailability();
-            }
-        }
-
-        if(ticketType == TicketType.COMBINED && (!hasService || !hasProduct)) {
-            throw new InvalidAttributeException("Combined ticket must contain at least one product and one service");
+            item.getPurchasable().validateAvailability();
         }
 
         this.status = Status.CLOSED;
@@ -206,7 +204,7 @@ public class Ticket extends Entity<String> {
         this.name = this.id;
     }
 
-    private double calculateCategoryDiscount() {
+    public double calculateCategoryDiscount() {
         double result = 0.0;
 
         Map<Category, Integer> quantitiesEachCategory = new HashMap<>();
@@ -231,27 +229,30 @@ public class Ticket extends Entity<String> {
         return result;
     }
 
-    private double calculateServiceDiscount(){
-        double result = 0.0;
-        int numberOfServices = 0;
-        for(TicketItem item : this.itemList){
-            if(item.getPurchasable() instanceof ServiceProduct){
-                numberOfServices++;
-            }
+    public double calculateServiceDiscount(){
+        if (this.clientType != ClientType.COMPANY || this.ticketType != TicketType.COMBINED) {
+            return 0.0;
         }
 
-        if(numberOfServices > 0){
-            result = this.calculateTotalPrice() * 0.15 *  numberOfServices;
-        }
+        long numberOfServices = itemList.stream()
+                .filter(item -> item.getPurchasable() instanceof ServiceProduct)
+                .count();
 
-        return result;
+        if (numberOfServices == 0) return 0.0;
+
+        double totalProductsPrice = itemList.stream()
+                .filter(item -> !(item.getPurchasable() instanceof ServiceProduct))
+                .mapToDouble(TicketItem::getTotalPrice)
+                .sum();
+
+        return totalProductsPrice * (0.15 * numberOfServices);
     }
 
-    private double calculateTotalDiscount(){
+    public double calculateTotalDiscount(){
         return this.calculateCategoryDiscount() + this.calculateServiceDiscount();
     }
 
-    private double calculateTotalPrice() {
+    public double calculateTotalPrice() {
         double result = 0.0;
         for (TicketItem item : this.itemList) {
             result += item.getTotalPrice();
@@ -259,7 +260,7 @@ public class Ticket extends Entity<String> {
         return result;
     }
 
-    private double calculateFinalPrice() {
+    public double calculateFinalPrice() {
         return Math.max(0.0, this.calculateTotalPrice() - this.calculateTotalDiscount());
     }
 
@@ -273,86 +274,11 @@ public class Ticket extends Entity<String> {
 
     @Override
     public String toString() {
-        StringBuilder result = new StringBuilder("Ticket: " + this.name + "\n");
-
-        int numberOfServices = 0;
-        int numberOfProducts = 0;
-        for (TicketItem item : this.itemList) {
-            if(item.getPurchasable() instanceof ServiceProduct){
-                numberOfServices++;
-            }else{
-                numberOfProducts++;
-            }
+        // Fallback de seguridad: si no hay printer, decidimos por tipo de cliente
+        if (this.printer == null) {
+            this.printer = (this.clientType == ClientType.COMPANY)
+                    ? new CompanyTicketPrinter() : new PersonTicketPrinter();
         }
-
-        if (numberOfServices > 0) {
-            result.append("Services Included: \n");
-            for (TicketItem item : itemList) {
-                if (item.getPurchasable() instanceof ServiceProduct) {
-                    result.append("  ").append(item).append("\n");
-                }
-            }
-        }
-
-        if (numberOfProducts > 0) {
-            result.append("Product Included: \n");
-
-            Map<Category, Integer> quantitiesEachCategory = new HashMap<>();
-            for (TicketItem item : this.itemList) {
-                if (item instanceof BasicTicketItem) {
-                    Category category = ((BasicProduct) item.getPurchasable()).getCategory();
-                    int currentQuantity = quantitiesEachCategory.getOrDefault(category, 0);
-                    quantitiesEachCategory.put(category, currentQuantity + item.getQuantity());
-                }
-            }
-
-            List<TicketItem> sortedItems = new ArrayList<>(this.itemList);
-            sortedItems.sort(Comparator.comparing(item -> ((Product)item.getPurchasable()).getName()));
-
-            for (TicketItem item : sortedItems) {
-                if (item instanceof TimeTicketItem) {
-                    result.append("\t").append(item);
-                    result.append("\n");
-                }
-
-                if (item instanceof BasicTicketItem) {
-                    Category category = ((BasicProduct) item.getPurchasable()).getCategory();
-
-                    double perUnitPrice = item.getTotalPrice() / item.getQuantity();
-                    double discountEachProduct = perUnitPrice * category.getDiscount();
-
-                    for (int i = 0; i < item.getQuantity(); i++) {
-                        result.append("\t").append(item);
-                        if (quantitiesEachCategory.get(category) > 1 && discountEachProduct > 0) {
-                            result.append(" **discount -").append(Math.floor(discountEachProduct * 1000) / 1000.0);
-                        }
-                        result.append("\n");
-                    }
-                }
-            }
-        }
-
-        if (numberOfProducts > 0) {
-
-            double totalPrice = Math.floor(calculateTotalPrice() * 1000) / 1000.0;
-            double serviceDiscount = Math.floor(calculateServiceDiscount() * 1000) / 1000.0;
-            double totalDiscount = Math.floor(calculateTotalDiscount() * 1000) / 1000.0;
-            double finalPrice = Math.floor(calculateFinalPrice() * 1000) / 1000.0;
-
-            result.append("  Total price: ").append(totalPrice).append("\n");
-
-            if (numberOfServices > 0 && serviceDiscount > 0) {
-                result.append("  Extra Discount from services:")
-                        .append(serviceDiscount)
-                        .append(" **discount -")
-                        .append(serviceDiscount)
-                        .append("\n");
-            }
-
-            result.append("  Total discount: ").append(totalDiscount).append("\n");
-            result.append("  Final Price: ").append(finalPrice);
-        }
-
-        return result.toString();
+        return this.printer.format(this);
     }
 }
