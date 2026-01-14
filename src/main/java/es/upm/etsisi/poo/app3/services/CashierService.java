@@ -1,12 +1,12 @@
 package es.upm.etsisi.poo.app3.services;
 
 import es.upm.etsisi.poo.app3.data.model.shop.products.CustomProduct;
-import es.upm.etsisi.poo.app3.data.model.shop.products.Product;
 import es.upm.etsisi.poo.app3.data.model.shop.products.Purchasable;
-import es.upm.etsisi.poo.app3.data.model.shop.products.ServiceProduct;
 import es.upm.etsisi.poo.app3.data.model.shop.ticket.Ticket;
 import es.upm.etsisi.poo.app3.data.model.user.Cashier;
+import es.upm.etsisi.poo.app3.data.model.user.Client;
 import es.upm.etsisi.poo.app3.data.repositories.CashierRepository;
+import es.upm.etsisi.poo.app3.data.repositories.ClientRepository;
 import es.upm.etsisi.poo.app3.services.exceptions.DuplicateException;
 import es.upm.etsisi.poo.app3.services.exceptions.NotFoundException;
 
@@ -16,9 +16,11 @@ import java.util.List;
 public class CashierService implements Service<Cashier> {
 
     private final CashierRepository cashierRepository;
+    private final ClientRepository clientRepository;
 
-    public CashierService(CashierRepository cashierRepository) {
+    public CashierService(CashierRepository cashierRepository, ClientRepository  clientRepository) {
         this.cashierRepository = cashierRepository;
+        this.clientRepository = clientRepository;
     }
 
     @Override
@@ -51,12 +53,19 @@ public class CashierService implements Service<Cashier> {
         this.cashierRepository.add(cashier);
     }
 
-    public void newTicket(Ticket ticket, String cashierId) {
+    public void newTicket(Ticket ticket, String cashierId, String clientId) {
         Cashier cashier = this.cashierRepository.findById(cashierId);
+        Client client = this.clientRepository.findById(clientId);
         if (cashier == null) {
             throw new NotFoundException("There is no cashier with id " + cashierId + " registered.");
         }
+        if (client == null) {
+            throw new NotFoundException("There is no client with id " + clientId + " registered.");
+        }
+        client.addTicket(ticket.getId());
         cashier.newTicket(ticket);
+        this.cashierRepository.add(cashier);
+        this.clientRepository.add(client, clientId);
     }
 
     public Ticket print(String cashierId, String ticketId) {

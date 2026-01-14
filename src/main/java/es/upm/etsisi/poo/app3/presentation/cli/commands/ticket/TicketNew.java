@@ -81,25 +81,18 @@ public class TicketNew implements Command {
         TicketType ticketType;
         ClientType clientType;
         Ticket ticket;
-        switch (type) {
-            case "-c":
-                ticketType = TicketType.COMBINED;
-                break;
-            case "-s":
-                ticketType = TicketType.SERVICE;
-                break;
-            case "-p":
-            default:
-                ticketType = TicketType.PRODUCT;
-                break;
-        }
+        ticketType = switch (type) {
+            case "-c" -> TicketType.COMBINED;
+            case "-s" -> TicketType.SERVICE;
+            default -> TicketType.PRODUCT;
+        };
         clientType = this.clientService.findById(clientId).getClientType();
         if (id != null) {
-            ticket = new Ticket(id, clientId, cashId, ticketType, clientType);
+            ticket = new Ticket(id, ticketType, clientType);
         } else {
-            ticket = new Ticket(clientId, cashId, ticketType, clientType);
+            ticket = new Ticket(ticketType, clientType);
         }
-        this.cashierService.newTicket(ticket, cashId);
+        this.cashierService.newTicket(ticket, cashId, clientId);
         this.view.showEntity(ticket);
         this.view.show("ticket new: ok");
     }

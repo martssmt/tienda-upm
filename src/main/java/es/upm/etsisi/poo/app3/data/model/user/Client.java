@@ -72,4 +72,17 @@ public class Client extends User {
         return "Client{identifier='" + this.getId() + "', name='" + this.getName() +
                 "', email='" + this.getMail() + "', cash=" + this.cashierId + "}";
     }
+
+    public void addTicket(String ticketId) {
+        this.ticketIds.add(ticketId);
+    }
+
+    public void removeTicket(String ticketId) {
+        this.ticketIds.remove(ticketId);
+    }
+
+    public void updateTicketId(String ticketIdOld, String ticketIdNew) {
+        this.ticketIds.remove(ticketIdOld);
+        this.ticketIds.add(ticketIdNew);
+    }
 }

@@ -41,7 +41,7 @@ public class DependencyInjector {
         cashierRepository = new CashierRepositoryHibernate();
 
         clientService = new ClientService(this.clientRepository);
-        cashierService = new CashierService(this.cashierRepository);
+        cashierService = new CashierService(this.cashierRepository, this.clientRepository);
         purchasableService = new PurchasableService(this.purchasableRepository);
 
         this.view = new View();
