@@ -45,11 +45,11 @@ public class ClientAdd implements Command {
     public void execute(String[] params) {
         params = this.assessParams(params);
         String name = params[0];
-        String dni = params[1];
+        String id = params[1];
         String mail = params[2];
         String cashId = params[3];
         Client client = new Client(name, mail, cashId);
-        this.clientService.add(client, dni);
+        this.clientService.add(client, id);
         this.view.showEntity(client);
         this.view.show("client add: ok");
     }

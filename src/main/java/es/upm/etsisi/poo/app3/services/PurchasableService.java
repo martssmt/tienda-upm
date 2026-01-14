@@ -52,8 +52,7 @@ public class PurchasableService implements Service<Purchasable<Object>> {
     }
 
     public Product update(String id, String field, String value) {
-        Integer idInteger = Integer.parseInt(id);
-        Purchasable purchasable = findProd(idInteger);
+        Purchasable purchasable = findProd(id);
         if (purchasable instanceof ServiceProduct) {
             throw new NotFoundException("There is no product with id " + id + " in the Catalog. Services cannot be updated");
         }

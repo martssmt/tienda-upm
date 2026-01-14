@@ -25,12 +25,12 @@ public class ClientRemove implements Command {
 
     @Override
     public List<String> params() {
-        return List.of("<DNI>");
+        return List.of("<ID>");
     }
 
     @Override
     public String helpMessage() {
-        return "Deletes a client by their DNI.";
+        return "Deletes a client by their id.";
     }
 
     @Override
@@ -44,8 +44,8 @@ public class ClientRemove implements Command {
     @Override
     public void execute(String[] params) {
         params = this.assessParams(params);
-        String dni = params[0];
-        Client client = this.clientService.remove(dni);
+        String id = params[0];
+        Client client = this.clientService.remove(id);
         this.view.showEntity(client);
         this.view.show("client remove: ok");
     }

@@ -43,7 +43,7 @@ public class ClientList implements Command {
 
     @Override
     public void execute(String[] params) {
-        //params = this.assessParams(params);
+        this.assessParams(params);
         List<Client> clients = this.clientService.list();
         this.view.showList("Client:", clients);
         this.view.show("client list: ok");
