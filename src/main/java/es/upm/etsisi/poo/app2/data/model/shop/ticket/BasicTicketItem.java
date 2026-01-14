@@ -27,4 +27,9 @@ public class BasicTicketItem extends TicketItem {
         return this.discountApplied * this.getTotalPrice();
     }
 
+    @Override
+    public String toString() {
+
+        return this.product.toString();
+    }
 }

@@ -4,7 +4,7 @@ import es.upm.etsisi.poo.app2.data.model.Entity;
 
 import java.util.List;
 
-public interface RepositoryShop<T extends Entity<?>> {
+public interface RepositoryShop<T extends Entity> {
 
     void add(T entity, Integer id);
 
