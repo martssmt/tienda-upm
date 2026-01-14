@@ -74,6 +74,7 @@ public class CashierService implements Service<Cashier> {
             throw new NotFoundException("There is no cashier with id " + cashierId + " registered.");
         }
         cashier.closeTicket(ticketId);
+        this.cashierRepository.add(cashier);
         return cashier.getTicket(ticketId);
     }
 
