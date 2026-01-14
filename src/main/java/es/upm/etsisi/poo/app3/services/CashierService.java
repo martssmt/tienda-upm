@@ -98,12 +98,13 @@ public class CashierService implements Service<Cashier> {
         return cashier.getTicket(ticketId);
     }
 
-    public Ticket removeProduct(String cashierId, String ticketId, Integer prodId) {
+    public Ticket removeProduct(String cashierId, String ticketId, String prodId) {
         Cashier cashier = this.cashierRepository.findById(cashierId);
         if (cashier == null) {
             throw new NotFoundException("There is no cashier with id " + cashierId + " registered.");
         }
         cashier.removeProduct(ticketId, prodId);
+        this.cashierRepository.add(cashier);
         return cashier.getTicket(ticketId);
     }
 

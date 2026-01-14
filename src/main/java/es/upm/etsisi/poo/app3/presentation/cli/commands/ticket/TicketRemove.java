@@ -35,7 +35,7 @@ public class TicketRemove implements Command {
 
     @Override
     public String[] assessParams(String[] params) {
-        if (params.length != 3 || !params[2].matches("-?\\d+"))
+        if (params.length != 3)
             throw new CommandException("Usage: " + this.help());
         return params;
     }
@@ -45,7 +45,7 @@ public class TicketRemove implements Command {
         params = this.assessParams(params);
         String ticketId = params[0];
         String cashId = params[1];
-        Integer prodId = Integer.parseInt(params[2]);
+        String prodId = params[2];
         Ticket ticket = this.cashierService.removeProduct(cashId, ticketId, prodId);
         this.view.showEntity(ticket);
         this.view.show("ticket remove: ok");

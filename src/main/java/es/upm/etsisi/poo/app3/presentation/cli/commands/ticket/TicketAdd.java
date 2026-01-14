@@ -39,7 +39,7 @@ public class TicketAdd implements Command {
 
     @Override
     public String[] assessParams(String[] params) {
-        if (params.length < 4 || !params[2].matches("-?\\d+") || !params[3].matches("-?\\d+"))
+        if (params.length < 4 || !params[3].matches("-?\\d+"))
             throw new CommandException("Usage: " + this.help());
         return params;
     }
@@ -49,7 +49,7 @@ public class TicketAdd implements Command {
         params = this.assessParams(params);
         String ticketid = params[0];
         String cashid = params[1];
-        Integer prodid = Integer.parseInt(params[2]);
+        String prodid = params[2];
         Integer amount = Integer.parseInt(params[3]);
         Purchasable purchasable = this.purchasableService.findProd(prodid);
         Ticket ticket;

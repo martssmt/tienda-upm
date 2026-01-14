@@ -78,7 +78,7 @@ public class PurchasableService implements Service<Purchasable<Object>> {
         return prod;
     }
 
-    public Purchasable findProd(Integer id) {
+    public Purchasable findProd(String id) {
         Purchasable purchasable = this.purchasableRepository.findById(id);
         if (purchasable == null) {
             throw new NotFoundException("There is no product with id " + id + " in the Catalog.");

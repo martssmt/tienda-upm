@@ -17,8 +17,12 @@ public abstract class RepositoryShopHibernate<T extends Entity<ID>, ID> implemen
     @Override
     public void add(T entity, ID id) {
         try (EntityManager em = JPAUtil.em()) {
+            Object idProcesado = id;
+            if (id instanceof String strId && strId.matches("\\d+")) {
+                idProcesado = Integer.parseInt(strId);
+            }
             em.getTransaction().begin();
-            entity.setId(id);
+            entity.setId((ID) idProcesado);
             em.merge(entity);
             em.getTransaction().commit();
         }
