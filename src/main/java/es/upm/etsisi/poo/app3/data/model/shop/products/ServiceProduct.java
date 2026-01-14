@@ -21,10 +21,9 @@ public class ServiceProduct extends Purchasable<String> {
         super();
     }
 
-    public ServiceProduct(LocalDate maxUsageDate, ServiceType serviceType, Integer nextId) {
+    public ServiceProduct(LocalDate maxUsageDate, ServiceType serviceType) {
         this.maxUsageDate = maxUsageDate;
         this.serviceType = serviceType;
-        this.id = nextId.toString() + "S";
     }
 
     public ServiceProduct(ServiceProduct original) {

@@ -1,7 +1,7 @@
 package es.upm.etsisi.poo.app3.presentation.cli.commands.product;
 
 import es.upm.etsisi.poo.app3.data.model.shop.products.Product;
-import es.upm.etsisi.poo.app3.services.ProductService;
+import es.upm.etsisi.poo.app3.services.PurchasableService;
 import es.upm.etsisi.poo.app3.presentation.cli.Command;
 import es.upm.etsisi.poo.app3.presentation.cli.exceptions.CommandException;
 import es.upm.etsisi.poo.app3.presentation.view.View;
@@ -10,11 +10,11 @@ import java.util.List;
 
 public class ProdUpdate implements Command {
 
-    private final ProductService productService;
+    private final PurchasableService purchasableService;
     private final View view;
 
-    public ProdUpdate(View view, ProductService productService) {
-        this.productService = productService;
+    public ProdUpdate(View view, PurchasableService purchasableService) {
+        this.purchasableService = purchasableService;
         this.view = view;
     }
 
@@ -74,7 +74,7 @@ public class ProdUpdate implements Command {
         String id = params[0];
         String field = params[1];
         String value = params[2];
-        Product product = this.productService.update(id, field, value);
+        Product product = this.purchasableService.update(id, field, value);
         this.view.showEntity(product);
         this.view.show("prod update: ok");
     }

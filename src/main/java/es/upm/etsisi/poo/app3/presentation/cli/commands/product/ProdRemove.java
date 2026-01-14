@@ -1,7 +1,7 @@
 package es.upm.etsisi.poo.app3.presentation.cli.commands.product;
 
 import es.upm.etsisi.poo.app3.data.model.shop.products.Product;
-import es.upm.etsisi.poo.app3.services.ProductService;
+import es.upm.etsisi.poo.app3.services.PurchasableService;
 import es.upm.etsisi.poo.app3.presentation.cli.Command;
 import es.upm.etsisi.poo.app3.presentation.cli.exceptions.CommandException;
 import es.upm.etsisi.poo.app3.presentation.view.View;
@@ -10,11 +10,11 @@ import java.util.List;
 
 public class ProdRemove implements Command {
 
-    private final ProductService productService;
+    private final PurchasableService purchasableService;
     private final View view;
 
-    public ProdRemove(View view, ProductService productService) {
-        this.productService = productService;
+    public ProdRemove(View view, PurchasableService purchasableService) {
+        this.purchasableService = purchasableService;
         this.view = view;
     }
 
@@ -45,7 +45,7 @@ public class ProdRemove implements Command {
     public void execute(String[] params) {
         params = this.assessParams(params);
         String id = params[0];
-        Product product = this.productService.remove(id);
+        Product product = this.purchasableService.remove(id);
         this.view.showEntity(product);
         this.view.show("prod remove: ok");
     }

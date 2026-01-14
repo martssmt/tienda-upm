@@ -4,27 +4,28 @@ import es.upm.etsisi.poo.app3.data.model.exceptions.InvalidAttributeException;
 import es.upm.etsisi.poo.app3.data.model.shop.Category;
 import es.upm.etsisi.poo.app3.data.model.shop.products.BasicProduct;
 import es.upm.etsisi.poo.app3.data.model.shop.products.Product;
+import es.upm.etsisi.poo.app3.data.model.shop.products.Purchasable;
 import es.upm.etsisi.poo.app3.data.repositories.PurchasableRepository;
 import es.upm.etsisi.poo.app3.services.exceptions.DuplicateException;
 import es.upm.etsisi.poo.app3.services.exceptions.NotFoundException;
 
 import java.util.List;
 
-public class ProductService implements Service<Product> {
+public class PurchasableService implements Service<Purchasable<?>> {
 
     private final PurchasableRepository purchasableRepository;
 
-    public ProductService(PurchasableRepository purchasableRepository) {
+    public PurchasableService(PurchasableRepository purchasableRepository) {
         this.purchasableRepository = purchasableRepository;
     }
 
     @Override
-    public void add(Product product, String id) {
+    public void add(Purchasable purchasable, String id) {
         Integer idInteger = Integer.parseInt(id);
         if (this.purchasableRepository.findById(idInteger) != null) {
             throw new DuplicateException("There is already a product with id " + id + " in the Catalog.");
         }
-        this.purchasableRepository.add(product, idInteger);
+        this.purchasableRepository.add(purchasable, idInteger);
     }
 
     @Override
@@ -39,15 +40,15 @@ public class ProductService implements Service<Product> {
     }
 
     @Override
-    public List<Product> list() {
+    public List<Purchasable> list() {
         return this.purchasableRepository.list();
     }
 
-    public void add(Product product) {
-        if (this.purchasableRepository.find(product)) {
+    public void add(Purchasable purchasable) {
+        if (this.purchasableRepository.find(purchasable)) {
             throw new DuplicateException("There is already a product with this exact data in the Catalog.");
         }
-        this.purchasableRepository.add(product);
+        this.purchasableRepository.add(purchasable);
     }
 
     public Product update(String id, String field, String value) {

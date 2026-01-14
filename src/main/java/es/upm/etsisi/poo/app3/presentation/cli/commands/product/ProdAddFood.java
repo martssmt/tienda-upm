@@ -2,7 +2,7 @@ package es.upm.etsisi.poo.app3.presentation.cli.commands.product;
 
 import es.upm.etsisi.poo.app3.data.model.shop.TimeProductType;
 import es.upm.etsisi.poo.app3.data.model.shop.products.TimeProduct;
-import es.upm.etsisi.poo.app3.services.ProductService;
+import es.upm.etsisi.poo.app3.services.PurchasableService;
 import es.upm.etsisi.poo.app3.presentation.cli.Command;
 import es.upm.etsisi.poo.app3.presentation.cli.exceptions.CommandException;
 import es.upm.etsisi.poo.app3.presentation.view.View;
@@ -12,11 +12,11 @@ import java.util.List;
 
 public class ProdAddFood implements Command {
 
-    private final ProductService productService;
+    private final PurchasableService purchasableService;
     private final View view;
 
-    public ProdAddFood(View view, ProductService productService) {
-        this.productService = productService;
+    public ProdAddFood(View view, PurchasableService purchasableService) {
+        this.purchasableService = purchasableService;
         this.view = view;
     }
 
@@ -79,9 +79,9 @@ public class ProdAddFood implements Command {
         Integer maxPeople = Integer.valueOf(params[4]);
         TimeProduct product = new TimeProduct(name, TimeProductType.FOOD, price, expiration, maxPeople);
         if (id != null) {
-            this.productService.add(product, id);
+            this.purchasableService.add(product, id);
         } else {
-            this.productService.add(product);
+            this.purchasableService.add(product);
         }
         this.view.showEntity(product);
         this.view.show("prod addFood: ok");

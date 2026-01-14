@@ -4,9 +4,9 @@ import es.upm.etsisi.poo.app3.data.repositories.CashierRepository;
 import es.upm.etsisi.poo.app3.data.repositories.ClientRepository;
 import es.upm.etsisi.poo.app3.data.repositories.hibernate.JPAUtil;
 import es.upm.etsisi.poo.app3.data.repositories.PurchasableRepository;
-import es.upm.etsisi.poo.app3.data.repositories.map.CashierRepositoryMap;
-import es.upm.etsisi.poo.app3.data.repositories.map.ClientRepositoryMap;
-import es.upm.etsisi.poo.app3.data.repositories.map.ProductRepositoryMap;
+import es.upm.etsisi.poo.app3.data.repositories.hibernate.CashierRepositoryHibernate;
+import es.upm.etsisi.poo.app3.data.repositories.hibernate.ClientRepositoryHibernate;
+import es.upm.etsisi.poo.app3.data.repositories.hibernate.PurchasableRepositoryHibernate;
 import es.upm.etsisi.poo.app3.presentation.cli.CommandLineInterface;
 import es.upm.etsisi.poo.app3.presentation.cli.ErrorHandler;
 import es.upm.etsisi.poo.app3.presentation.cli.commands.Echo;
@@ -18,7 +18,7 @@ import es.upm.etsisi.poo.app3.presentation.cli.commands.user.*;
 import es.upm.etsisi.poo.app3.presentation.view.View;
 import es.upm.etsisi.poo.app3.services.CashierService;
 import es.upm.etsisi.poo.app3.services.ClientService;
-import es.upm.etsisi.poo.app3.services.ProductService;
+import es.upm.etsisi.poo.app3.services.PurchasableService;
 
 public class DependencyInjector {
     private static final DependencyInjector instance = new DependencyInjector();
@@ -29,20 +29,20 @@ public class DependencyInjector {
 
     private final ClientService clientService;
     private final CashierService cashierService;
-    private final ProductService productService;
+    private final PurchasableService purchasableService;
 
     private final ErrorHandler errorHandler;
     private final View view;
     private final CommandLineInterface commandLineInterface;
 
     private DependencyInjector() {
-        purchasableRepository = new ProductRepositoryMap();
-        clientRepository = new ClientRepositoryMap();
-        cashierRepository = new CashierRepositoryMap();
+        purchasableRepository = new PurchasableRepositoryHibernate();
+        clientRepository = new ClientRepositoryHibernate();
+        cashierRepository = new CashierRepositoryHibernate();
 
         clientService = new ClientService(this.clientRepository);
         cashierService = new CashierService(this.cashierRepository);
-        productService = new ProductService(this.purchasableRepository);
+        purchasableService = new PurchasableService(this.purchasableRepository);
 
         this.view = new View();
         this.commandLineInterface = new CommandLineInterface(this.view);
@@ -57,17 +57,17 @@ public class DependencyInjector {
         this.commandLineInterface.add(new CashTickets(this.view, this.cashierService));
         // commands.ticket
         this.commandLineInterface.add(new TicketNew(this.view, this.cashierService, this.clientService));
-        this.commandLineInterface.add(new TicketAdd(this.view, this.cashierService, this.productService));
+        this.commandLineInterface.add(new TicketAdd(this.view, this.cashierService, this.purchasableService));
         this.commandLineInterface.add(new TicketRemove(this.view, this.cashierService));
         this.commandLineInterface.add(new TicketPrint(this.view, this.cashierService));
         this.commandLineInterface.add(new TicketList(this.view, this.cashierService));
         // commands.product
-        this.commandLineInterface.add(new ProdAdd(this.view, this.productService));
-        this.commandLineInterface.add(new ProdUpdate(this.view, this.productService));
-        this.commandLineInterface.add(new ProdAddFood(this.view, this.productService));
-        this.commandLineInterface.add(new ProdAddMeeting(this.view, this.productService));
-        this.commandLineInterface.add(new ProdList(this.view, this.productService));
-        this.commandLineInterface.add(new ProdRemove(this.view, this.productService));
+        this.commandLineInterface.add(new ProdAdd(this.view, this.purchasableService));
+        this.commandLineInterface.add(new ProdUpdate(this.view, this.purchasableService));
+        this.commandLineInterface.add(new ProdAddFood(this.view, this.purchasableService));
+        this.commandLineInterface.add(new ProdAddMeeting(this.view, this.purchasableService));
+        this.commandLineInterface.add(new ProdList(this.view, this.purchasableService));
+        this.commandLineInterface.add(new ProdRemove(this.view, this.purchasableService));
         // commands
         this.commandLineInterface.add(new Help(this.commandLineInterface));
         this.commandLineInterface.add(new Echo(this.view));
@@ -108,8 +108,8 @@ public class DependencyInjector {
         return cashierService;
     }
 
-    public ProductService getProductService() {
-        return productService;
+    public PurchasableService getProductService() {
+        return purchasableService;
     }
 
     public ClientRepository getClientRepository() {

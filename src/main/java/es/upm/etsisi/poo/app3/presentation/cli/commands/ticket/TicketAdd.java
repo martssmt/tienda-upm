@@ -3,7 +3,7 @@ package es.upm.etsisi.poo.app3.presentation.cli.commands.ticket;
 import es.upm.etsisi.poo.app3.data.model.shop.products.BasicProduct;
 import es.upm.etsisi.poo.app3.data.model.shop.products.CustomProduct;
 import es.upm.etsisi.poo.app3.data.model.shop.products.Product;
-import es.upm.etsisi.poo.app3.services.ProductService;
+import es.upm.etsisi.poo.app3.services.PurchasableService;
 import es.upm.etsisi.poo.app3.data.model.shop.ticket.Ticket;
 import es.upm.etsisi.poo.app3.services.CashierService;
 import es.upm.etsisi.poo.app3.presentation.cli.Command;
@@ -15,12 +15,12 @@ import java.util.List;
 public class TicketAdd implements Command {
 
     private final CashierService cashierService;
-    private final ProductService productService;
+    private final PurchasableService purchasableService;
     private final View view;
 
-    public TicketAdd(View view, CashierService cashierService, ProductService productService) {
+    public TicketAdd(View view, CashierService cashierService, PurchasableService purchasableService) {
         this.cashierService = cashierService;
-        this.productService = productService;
+        this.purchasableService = purchasableService;
         this.view = view;
     }
 
@@ -53,7 +53,7 @@ public class TicketAdd implements Command {
         String cashid = params[1];
         Integer prodid = Integer.parseInt(params[2]);
         Integer amount = Integer.parseInt(params[3]);
-        Product product = this.productService.findProd(prodid);
+        Product product = this.purchasableService.findProd(prodid);
         Ticket ticket;
         if (product instanceof CustomProduct) {
             String[] texts = java.util.Arrays.copyOfRange(params, 4, params.length);
