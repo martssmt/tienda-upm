@@ -1,6 +1,7 @@
 package es.upm.etsisi.poo.app3.data.model.shop.products;
 
 import es.upm.etsisi.poo.app3.data.model.exceptions.InvalidAttributeException;
+import es.upm.etsisi.poo.app3.data.model.shop.ticket.TicketItem;
 
 import java.util.Objects;
 
@@ -62,5 +63,10 @@ public abstract class Product extends Purchasable<Integer> {
             throw new InvalidAttributeException("Id cannot be negative");
         }
         this.id = id;
+    }
+
+    @Override
+    public double getUnitPrice(TicketItem context) {
+        return this.price;
     }
 }

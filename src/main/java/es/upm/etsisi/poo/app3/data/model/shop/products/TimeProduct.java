@@ -88,6 +88,7 @@ public class TimeProduct extends Product {
         return stringBuilder.toString();
     }
 
+    @Override
     public void validateAvailability() {
         LocalDateTime minDate = LocalDateTime.now().plusHours(this.planningHours);
         if(openDate.atStartOfDay().isBefore(minDate)){

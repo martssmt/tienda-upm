@@ -2,6 +2,7 @@ package es.upm.etsisi.poo.app3.data.model.shop.products;
 
 import es.upm.etsisi.poo.app3.data.model.exceptions.InvalidAttributeException;
 import es.upm.etsisi.poo.app3.data.model.shop.Category;
+import es.upm.etsisi.poo.app3.data.model.shop.ticket.TicketItem;
 
 public class CustomProduct extends BasicProduct {
 
@@ -40,6 +41,11 @@ public class CustomProduct extends BasicProduct {
             throw new InvalidAttributeException("NumberTexts cannot be negative");
         }
         this.numberTexts = numberTexts;
+    }
+
+    @Override
+    public double getUnitPrice(TicketItem context) {
+        return this.originalPrice * (1 + 0.1 * context.getCustomTextsSize());
     }
 
     @Override

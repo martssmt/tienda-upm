@@ -74,9 +74,11 @@ public class Ticket extends Entity<String> {
             throw new InvalidAttributeException("Quantity must be greater than 0");
         }
 
-        boolean isService = purchasable instanceof ProductService;
+        boolean isService = purchasable instanceof ServiceProduct;
 
         validateType(purchasable, isService);
+
+        purchasable.validateAvailability();
 
         if (!isService && this.numberOfProducts + quantity > MAX_PRODUCTS) {
             throw new FullTicketException();
@@ -94,13 +96,13 @@ public class Ticket extends Entity<String> {
 
         if (!itemFound) {
             TicketItem newItem;
-            if(isService){
-                newItem = new ServiceTicketItem(new ProductService((ProductService) purchasable));
-            } else if (purchasable instanceof BasicProduct) {
-                newItem = new BasicTicketItem(new BasicProduct((BasicProduct) purchasable), quantity, ((BasicProduct) purchasable).getCategory().getDiscount());
+            if(purchasable instanceof TimeProduct) {
+                newItem = new TicketItem(new TimeProduct((TimeProduct) purchasable), quantity);
+            } else if (isService) {
+                newItem = new TicketItem(new ServiceProduct((ServiceProduct) purchasable), quantity);
                 this.numberOfProducts += quantity;
             } else {
-                newItem = new TimeTicketItem(new TimeProduct((TimeProduct) purchasable), quantity);
+                newItem = new TicketItem(new BasicProduct((BasicProduct) purchasable), quantity);
                 this.numberOfProducts += quantity;
             }
             this.itemList.add(newItem);
@@ -125,13 +127,9 @@ public class Ticket extends Entity<String> {
         if (this.clientType == ClientType.PERSON && isService) {
             throw new InvalidAttributeException("User clients cannot add services");
         }
-
-        if(purchasable instanceof TimeProduct) {
-            ((TimeProduct) purchasable).validateAvailability();
-        }
     }
 
-    public void addCustom(CustomProduct product, Integer quantity, String[] texts) {
+    public void addCustom(CustomProduct product, Integer quantity, List<String> texts) {
 
         if (quantity <= 0) {
             throw new InvalidAttributeException("Quantity must be greater than 0");
@@ -144,7 +142,8 @@ public class Ticket extends Entity<String> {
         if (this.numberOfProducts + quantity > MAX_PRODUCTS) {
             throw new FullTicketException();
         }
-        TicketItem newItem = new CustomTicketItem(new CustomProduct(product), quantity, product.getCategory().getDiscount(), texts);
+
+        TicketItem newItem = new TicketItem(new CustomProduct(product), quantity, texts);
         this.itemList.add(newItem);
         this.numberOfProducts += quantity;
 
@@ -161,7 +160,7 @@ public class Ticket extends Entity<String> {
             TicketItem item = iterator.next();
             if (item.getPurchasable().getId().equals(purchasableId)) {
                 itemFound = true;
-                if(!(item.getPurchasable() instanceof ProductService)){
+                if(!(item.getPurchasable() instanceof TimeProduct)){
                     this.numberOfProducts -= item.getQuantity();
                 }
                 iterator.remove();
@@ -183,15 +182,15 @@ public class Ticket extends Entity<String> {
 
         for (TicketItem item : this.itemList) {
             Purchasable<?> purchasable = item.getPurchasable();
-            if(purchasable instanceof ProductService){
+            if(purchasable instanceof ServiceProduct){
                 hasService = true;
-                ((ProductService) purchasable).validateUsage();
-            }else{
+                purchasable.validateAvailability();
+            } else{
                 hasProduct = true;
             }
 
             if (purchasable instanceof TimeProduct) {
-                ((TimeProduct) purchasable).validateAvailability();
+                purchasable.validateAvailability();
             }
         }
 
@@ -212,7 +211,7 @@ public class Ticket extends Entity<String> {
 
         Map<Category, Integer> quantitiesEachCategory = new HashMap<>();
         for (TicketItem item : this.itemList) {
-            if (item instanceof BasicTicketItem) {
+            if (item.getPurchasable() instanceof BasicProduct) {
                 Category category = ((BasicProduct) item.getPurchasable()).getCategory();
                 int currentQuantity = quantitiesEachCategory.getOrDefault(category, 0);
                 quantitiesEachCategory.put(category, currentQuantity + item.getQuantity());
@@ -220,11 +219,11 @@ public class Ticket extends Entity<String> {
         }
 
         for (TicketItem item : this.itemList) {
-            if (item instanceof BasicTicketItem) {
+            if (item.getPurchasable() instanceof BasicProduct) {
                 Category category = ((BasicProduct) item.getPurchasable()).getCategory();
                 int totalEachCategory = quantitiesEachCategory.get(category);
                 if (totalEachCategory > 1) {
-                    result += ((BasicTicketItem) item).getDiscount();
+                    result += ((BasicProduct) item.getPurchasable()).getCategory().getDiscount();
                 }
             }
         }
@@ -236,7 +235,7 @@ public class Ticket extends Entity<String> {
         double result = 0.0;
         int numberOfServices = 0;
         for(TicketItem item : this.itemList){
-            if(item.getPurchasable() instanceof ProductService){
+            if(item.getPurchasable() instanceof ServiceProduct){
                 numberOfServices++;
             }
         }
@@ -279,7 +278,7 @@ public class Ticket extends Entity<String> {
         int numberOfServices = 0;
         int numberOfProducts = 0;
         for (TicketItem item : this.itemList) {
-            if(item.getPurchasable() instanceof ProductService){
+            if(item.getPurchasable() instanceof ServiceProduct){
                 numberOfServices++;
             }else{
                 numberOfProducts++;
@@ -289,7 +288,7 @@ public class Ticket extends Entity<String> {
         if (numberOfServices > 0) {
             result.append("Services Included: \n");
             for (TicketItem item : itemList) {
-                if (item.getPurchasable() instanceof ProductService) {
+                if (item.getPurchasable() instanceof ServiceProduct) {
                     result.append("  ").append(item).append("\n");
                 }
             }

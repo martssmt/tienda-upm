@@ -41,7 +41,7 @@ public class Cashier extends User {
         ticket.add(purchasable, quantity);
     }
 
-    public void addCustomProduct(String ticketId, CustomProduct product, Integer quantity, String[] texts) {
+    public void addCustomProduct(String ticketId, CustomProduct product, Integer quantity, List<String> texts) {
         Ticket ticket = this.ticketList.get(ticketId);
         if (ticket == null) {
             throw new EntityNotFoundException("Ticket not found");
