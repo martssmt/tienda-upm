@@ -29,14 +29,13 @@ public class PurchasableService implements Service<Purchasable<Object>> {
     }
 
     @Override
-    public Product remove(String id) {
-        Integer integerId = Integer.parseInt(id);
-        Product product = this.purchasableRepository.findById(integerId);
-        if (product == null) {
+    public Purchasable remove(String id) {
+        Purchasable purchasable = this.purchasableRepository.findById(id);
+        if (purchasable == null) {
             throw new NotFoundException("There is no product with id " + id + " in the Catalog.");
         }
-        this.purchasableRepository.remove(integerId);
-        return product;
+        this.purchasableRepository.remove(id);
+        return purchasable;
     }
 
     @Override
