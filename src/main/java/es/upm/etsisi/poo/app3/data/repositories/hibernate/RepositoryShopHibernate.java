@@ -8,10 +8,10 @@ import java.util.List;
 
 public abstract class RepositoryShopHibernate<T extends Entity<ID>, ID> implements RepositoryShop<T, ID> {
 
-    private final Class<T> entityManager;
+    private final Class<T> entityClass;
 
-    public RepositoryShopHibernate(Class<T> entityManager) {
-        this.entityManager = entityManager;
+    public RepositoryShopHibernate(Class<T> entityClass) {
+        this.entityClass = entityClass;
     }
 
     @Override
@@ -28,8 +28,8 @@ public abstract class RepositoryShopHibernate<T extends Entity<ID>, ID> implemen
     public void remove(ID id) {
         try (EntityManager em = JPAUtil.em()) {
             em.getTransaction().begin();
-            T entity = em.find(this.entityManager, id);
-            if (entity == null)
+            T entity = em.find(this.entityClass, id);
+            if (entity != null)
                 em.remove(entity);
             em.getTransaction().commit();
         }
@@ -38,15 +38,15 @@ public abstract class RepositoryShopHibernate<T extends Entity<ID>, ID> implemen
     @Override
     public List<T> list() {
         try (EntityManager em = JPAUtil.em()) {
-            String jpql = "SELECT e FROM " + this.entityManager.getSimpleName() + " e";
-            return em.createQuery(jpql, this.entityManager).getResultList();
+            String jpql = "SELECT e FROM " + this.entityClass.getSimpleName() + " e";
+            return em.createQuery(jpql, this.entityClass).getResultList();
         }
     }
 
     @Override
     public T findById(ID id) {
         try (EntityManager em = JPAUtil.em()) {
-            return em.find(this.entityManager, id);
+            return em.find(this.entityClass, id);
         }
     }
 

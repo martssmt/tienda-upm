@@ -6,6 +6,8 @@ import es.upm.etsisi.poo.app3.data.model.shop.products.ServiceProduct;
 import es.upm.etsisi.poo.app3.data.repositories.PurchasableRepository;
 import jakarta.persistence.EntityManager;
 
+import java.util.List;
+
 public class PurchasableRepositoryHibernate extends RepositoryShopHibernate<Purchasable<Object>, Object> implements PurchasableRepository {
 
     @SuppressWarnings("unchecked")
@@ -55,23 +57,25 @@ public class PurchasableRepositoryHibernate extends RepositoryShopHibernate<Purc
     }
 
     private String findFirstAvailableServiceId(EntityManager em) {
-        int i = 1;
-        while (true) {
-            String candidate = i + "S";
-            if (em.find(Purchasable.class, candidate) == null) {
-                return candidate;
-            }
-            i++;
-        }
+        // Buscamos el ID más alto que termine en 'S'
+        String jpql = "SELECT p.id FROM Purchasable p WHERE p.id LIKE '%S'";
+        List<String> ids = em.createQuery(jpql, String.class).getResultList();
+
+        // Extraemos los números, buscamos el máximo y sumamos 1
+        int max = ids.stream()
+                .map(id -> id.replace("S", ""))
+                .mapToInt(Integer::parseInt)
+                .max()
+                .orElse(0);
+
+        return (max + 1) + "S";
     }
 
     private Integer findFirstAvailableIntegerId(EntityManager em) {
-        int i = 1;
-        while (true) {
-            if (em.find(Purchasable.class, i) == null) {
-                return i;
-            }
-            i++;
-        }
+        // Buscamos el máximo ID numérico directamente
+        String jpql = "SELECT MAX(p.id) FROM Purchasable p WHERE TYPE(p) = Product";
+        Integer max = em.createQuery(jpql, Integer.class).getSingleResult();
+
+        return (max == null) ? 1 : max + 1;
     }
 }

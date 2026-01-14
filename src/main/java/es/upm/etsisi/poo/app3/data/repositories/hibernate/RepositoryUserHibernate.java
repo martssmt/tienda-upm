@@ -8,10 +8,10 @@ import java.util.List;
 
 public abstract class RepositoryUserHibernate<T extends User> implements RepositoryUser<T> {
 
-    private final Class<T> entityManager;
+    private final Class<T> entityClass;
 
-    public RepositoryUserHibernate(Class<T> entityManager) {
-        this.entityManager = entityManager;
+    public RepositoryUserHibernate(Class<T> entityClass) {
+        this.entityClass = entityClass;
     }
 
     @Override
@@ -28,7 +28,7 @@ public abstract class RepositoryUserHibernate<T extends User> implements Reposit
     public void remove(String id) {
         try (EntityManager em = JPAUtil.em()) {
             em.getTransaction().begin();
-            T entity = em.find(this.entityManager, id);
+            T entity = em.find(this.entityClass, id);
             if (entity != null) {
                 em.remove(entity);
             }
@@ -39,23 +39,23 @@ public abstract class RepositoryUserHibernate<T extends User> implements Reposit
     @Override
     public List<T> list() {
         try (EntityManager em = JPAUtil.em()) {
-            String jpql = "SELECT u FROM " + this.entityManager.getSimpleName() + " u";
-            return em.createQuery(jpql, this.entityManager).getResultList();
+            String jpql = "SELECT u FROM " + this.entityClass.getSimpleName() + " u";
+            return em.createQuery(jpql, this.entityClass).getResultList();
         }
     }
 
     @Override
     public T findById(String id) {
         try (EntityManager em = JPAUtil.em()) {
-            return em.find(this.entityManager, id);
+            return em.find(this.entityClass, id);
         }
     }
 
     @Override
     public T findByMail(String mail) {
         try (EntityManager em = JPAUtil.em()) {
-            String jpql = "SELECT u FROM " + this.entityManager.getSimpleName() + " u WHERE u.mail = :email";
-            List<T> results = em.createQuery(jpql, this.entityManager)
+            String jpql = "SELECT u FROM " + this.entityClass.getSimpleName() + " u WHERE u.mail = :email";
+            List<T> results = em.createQuery(jpql, this.entityClass)
                     .setParameter("email", mail)
                     .getResultList();
             return results.isEmpty() ? null : results.getFirst();
