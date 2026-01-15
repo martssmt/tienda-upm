@@ -19,7 +19,11 @@ public abstract class RepositoryUserHibernate<T extends User> implements Reposit
         try (EntityManager em = JPAUtil.em()) {
             em.getTransaction().begin();
             entity.setId(id);
-            em.merge(entity);
+            if (em.find(entityClass, id) == null) {
+                em.persist(entity);
+            } else {
+                em.merge(entity);
+            }
             em.getTransaction().commit();
         }
     }
@@ -32,6 +36,15 @@ public abstract class RepositoryUserHibernate<T extends User> implements Reposit
             if (entity != null) {
                 em.remove(entity);
             }
+            em.getTransaction().commit();
+        }
+    }
+
+    @Override
+    public void update(T entity) {
+        try (EntityManager em = JPAUtil.em()) {
+            em.getTransaction().begin();
+            em.merge(entity);
             em.getTransaction().commit();
         }
     }

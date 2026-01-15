@@ -10,6 +10,8 @@ public interface RepositoryUser<T extends User> {
 
     void remove(String id);
 
+    void update(T entity);
+
     List<T> list();
 
     T findById(String id);

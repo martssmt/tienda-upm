@@ -23,7 +23,12 @@ public abstract class RepositoryShopHibernate<T extends Entity<ID>, ID> implemen
             }
             em.getTransaction().begin();
             entity.setId((ID) idProcesado);
-            em.merge(entity);
+            T existing = em.find(entityClass, id);
+            if (existing == null) {
+                em.persist(entity);
+            } else {
+                em.merge(entity);
+            }
             em.getTransaction().commit();
         }
     }
@@ -35,6 +40,15 @@ public abstract class RepositoryShopHibernate<T extends Entity<ID>, ID> implemen
             T entity = em.find(this.entityClass, id);
             if (entity != null)
                 em.remove(entity);
+            em.getTransaction().commit();
+        }
+    }
+
+    @Override
+    public void update(T entity) {
+        try (EntityManager em = JPAUtil.em()) {
+            em.getTransaction().begin();
+            em.merge(entity);
             em.getTransaction().commit();
         }
     }

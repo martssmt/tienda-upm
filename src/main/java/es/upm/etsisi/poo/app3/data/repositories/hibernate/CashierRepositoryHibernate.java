@@ -25,7 +25,7 @@ public class CashierRepositoryHibernate extends RepositoryUserHibernate<Cashier>
                 generatedId = String.format("UW%07d", number);
             } while (em.find(Cashier.class, generatedId) != null);
             cashier.setId(generatedId);
-            em.merge(cashier);
+            em.persist(cashier);
             em.getTransaction().commit();
         }
     }
@@ -37,4 +37,5 @@ public class CashierRepositoryHibernate extends RepositoryUserHibernate<Cashier>
             return em.createQuery(jpql, Ticket.class).getResultList();
         }
     }
+
 }

@@ -73,7 +73,7 @@ public class PurchasableService implements Service<Purchasable<Object>> {
             default:
                 throw new InvalidAttributeException("Field not recognised");
         }
-        this.purchasableRepository.add((Purchasable) prod);
+        this.purchasableRepository.update((Purchasable) prod);
         return prod;
     }
 

@@ -10,6 +10,8 @@ public interface RepositoryShop<T extends Entity, ID> {
 
     void remove(ID id);
 
+    void update(T entity);
+
     List<T> list();
 
     T findById(ID id);

@@ -26,7 +26,7 @@ public class PurchasableRepositoryHibernate extends RepositoryShopHibernate<Purc
                 generatedId = findFirstAvailableIntegerId(em);
             }
             purchasable.setId(generatedId);
-            em.merge(purchasable);
+            em.persist(purchasable);
             em.getTransaction().commit();
         }
     }
@@ -73,9 +73,8 @@ public class PurchasableRepositoryHibernate extends RepositoryShopHibernate<Purc
 
     private Integer findFirstAvailableIntegerId(EntityManager em) {
         // Buscamos el máximo ID numérico directamente
-        String jpql = "SELECT MAX(p.id) FROM Purchasable p WHERE TYPE(p) = Product";
+        String jpql = "SELECT COALESCE(MAX(p.id), 0) FROM Product p";
         Integer max = em.createQuery(jpql, Integer.class).getSingleResult();
-
-        return (max == null) ? 1 : max + 1;
+        return max + 1;
     }
 }

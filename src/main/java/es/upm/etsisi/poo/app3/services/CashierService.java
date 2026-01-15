@@ -64,8 +64,8 @@ public class CashierService implements Service<Cashier> {
         }
         client.addTicket(ticket.getId());
         cashier.newTicket(ticket);
-        this.cashierRepository.add(cashier);
-        this.clientRepository.add(client, clientId);
+        this.cashierRepository.update(cashier);
+        this.clientRepository.update(client);
     }
 
     public Ticket print(String cashierId, String ticketId) {
@@ -74,7 +74,7 @@ public class CashierService implements Service<Cashier> {
             throw new NotFoundException("There is no cashier with id " + cashierId + " registered.");
         }
         cashier.closeTicket(ticketId);
-        this.cashierRepository.add(cashier);
+        this.cashierRepository.update(cashier);
         return cashier.getTicket(ticketId);
     }
 
@@ -84,7 +84,7 @@ public class CashierService implements Service<Cashier> {
             throw new NotFoundException("There is no cashier with id " + cashierId + " registered.");
         }
         cashier.addProduct(ticketId, purchasable, quantity);
-        this.cashierRepository.add(cashier);
+        this.cashierRepository.update(cashier);
         return cashier.getTicket(ticketId);
     }
 
@@ -94,7 +94,7 @@ public class CashierService implements Service<Cashier> {
             throw new NotFoundException("There is no cashier with id " + cashierId + " registered.");
         }
         cashier.addCustomProduct(ticketId, product, quantity, List.of(texts));
-        this.cashierRepository.add(cashier);
+        this.cashierRepository.update(cashier);
         return cashier.getTicket(ticketId);
     }
 
@@ -104,7 +104,7 @@ public class CashierService implements Service<Cashier> {
             throw new NotFoundException("There is no cashier with id " + cashierId + " registered.");
         }
         cashier.removeProduct(ticketId, prodId);
-        this.cashierRepository.add(cashier);
+        this.cashierRepository.update(cashier);
         return cashier.getTicket(ticketId);
     }
 
