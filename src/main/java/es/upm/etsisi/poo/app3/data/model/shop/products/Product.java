@@ -4,12 +4,10 @@ import es.upm.etsisi.poo.app3.data.model.exceptions.InvalidAttributeException;
 import es.upm.etsisi.poo.app3.data.model.shop.ticket.TicketItem;
 import jakarta.persistence.*;
 
-import java.util.Objects;
-
 @jakarta.persistence.Entity
 @Table(name = "products")
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class Product extends Purchasable<Integer> {
+public abstract class Product extends Purchasable<String> {
 
     @Column(name = "name")
     private String name;
@@ -32,8 +30,12 @@ public abstract class Product extends Purchasable<Integer> {
         this.price = original.price;
     }
 
-    public Integer getId() {
+    public String getId() {
         return this.id;
+    }
+
+    public Integer getIdAsInt() {
+        return id != null ? Integer.parseInt(id) : null;
     }
 
     public String getName() {
@@ -57,12 +59,12 @@ public abstract class Product extends Purchasable<Integer> {
 
     @Override
     public String toString() {
-        return "{class:Product, id:" + this.getId() + ", name:'" + this.getName() +
+        return "{class:Product, id:" + this.getIdAsInt() + ", name:'" + this.getName() +
                 "', price:" + this.getPrice() + "}";
     }
 
-    public void setId(Integer id) {
-        if (id < 0) {
+    public void setId(String id) {
+        if (Integer.parseInt(id) < 0) {
             throw new InvalidAttributeException("Id cannot be negative");
         }
         this.id = id;

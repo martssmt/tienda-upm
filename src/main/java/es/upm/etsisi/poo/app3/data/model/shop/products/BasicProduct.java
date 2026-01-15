@@ -34,7 +34,7 @@ public class BasicProduct extends Product {
 
     @Override
     public String toString() {
-        return "{class:Product, id:" + this.getId() + ", name:'" + this.getName() +
+        return "{class:Product, id:" + this.getIdAsInt() + ", name:'" + this.getName() +
                 "', category:" + this.category + ", price:" + this.getPrice() + "}";
     }
 

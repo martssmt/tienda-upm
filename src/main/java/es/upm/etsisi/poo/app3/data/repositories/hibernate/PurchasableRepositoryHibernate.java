@@ -19,7 +19,7 @@ public class PurchasableRepositoryHibernate extends RepositoryShopHibernate<Purc
     public void add(Purchasable purchasable) {
         try (EntityManager em = JPAUtil.em()) {
             em.getTransaction().begin();
-            Object generatedId;
+            String generatedId;
             if (purchasable instanceof ServiceProduct) {
                 generatedId = findFirstAvailableServiceId(em);
             } else {
@@ -71,10 +71,15 @@ public class PurchasableRepositoryHibernate extends RepositoryShopHibernate<Purc
         return (max + 1) + "S";
     }
 
-    private Integer findFirstAvailableIntegerId(EntityManager em) {
-        // Buscamos el máximo ID numérico directamente
-        String jpql = "SELECT COALESCE(MAX(p.id), 0) FROM Product p";
-        Integer max = em.createQuery(jpql, Integer.class).getSingleResult();
-        return max + 1;
+    private String findFirstAvailableIntegerId(EntityManager em) {
+        String jpql = "SELECT p.id FROM Product p";
+        List<String> ids = em.createQuery(jpql, String.class).getResultList();
+
+        int max = ids.stream()
+                .filter(s -> s.matches("\\d+"))
+                .mapToInt(Integer::parseInt)
+                .max()
+                .orElse(0);
+        return String.valueOf(max + 1);
     }
 }

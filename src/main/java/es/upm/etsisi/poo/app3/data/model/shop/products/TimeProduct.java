@@ -82,7 +82,7 @@ public class TimeProduct extends Product {
         }
 
         stringBuilder.append("{class:").append(productType)
-                .append(", id:").append(this.getId())
+                .append(", id:").append(this.getIdAsInt())
                 .append(", name:'").append(this.getName()).append("'")
                 .append(", price:").append(this.getPrice())
                 .append(", date of Event:");

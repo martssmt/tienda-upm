@@ -49,7 +49,7 @@ public class View {
                 comparator = (a, b) -> {
                     Product p1 = (Product) a;
                     Product p2 = (Product) b;
-                    return Integer.compare(p1.getId(), p2.getId());
+                    return Integer.compare(p1.getIdAsInt(), p2.getIdAsInt());
                 };
             }
             if (comparator != null)

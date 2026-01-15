@@ -1,11 +1,14 @@
 package es.upm.etsisi.poo.app3.data.model;
 
+import jakarta.persistence.Access;
+import jakarta.persistence.AccessType;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 
 import java.util.Objects;
 
 @MappedSuperclass
+@Access(AccessType.FIELD)
 public abstract class Entity<T> {
 
     @Id

@@ -22,11 +22,10 @@ public class PurchasableService implements Service<Purchasable<Object>> {
 
     @Override
     public void add(Purchasable purchasable, String id) {
-        Integer idInteger = Integer.parseInt(id);
-        if (this.purchasableRepository.findById(idInteger) != null) {
+        if (this.purchasableRepository.findById(id) != null) {
             throw new DuplicateException("There is already a product with id " + id + " in the Catalog.");
         }
-        this.purchasableRepository.add(purchasable, idInteger);
+        this.purchasableRepository.add(purchasable, id);
     }
 
     @Override
