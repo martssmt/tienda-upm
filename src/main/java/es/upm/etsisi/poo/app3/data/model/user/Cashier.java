@@ -16,7 +16,7 @@ import java.util.Map;
 @Table(name = "cashiers")
 public class Cashier extends User {
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JoinColumn(name = "cashier_id")
     @MapKey(name = "id")
     private Map<String, Ticket> ticketList;
