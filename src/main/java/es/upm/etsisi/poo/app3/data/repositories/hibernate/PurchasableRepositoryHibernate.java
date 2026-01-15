@@ -72,14 +72,19 @@ public class PurchasableRepositoryHibernate extends RepositoryShopHibernate<Purc
     }
 
     private String findFirstAvailableIntegerId(EntityManager em) {
+        // Obtenemos todos los IDs de los productos actuales
         String jpql = "SELECT p.id FROM Product p";
-        List<String> ids = em.createQuery(jpql, String.class).getResultList();
-
-        int max = ids.stream()
-                .filter(s -> s.matches("\\d+"))
-                .mapToInt(Integer::parseInt)
-                .max()
-                .orElse(0);
-        return String.valueOf(max + 1);
+        List<String> currentIds = em.createQuery(jpql, String.class).getResultList();
+        // Los pasamos a un Set de Integers para buscar rápidamente
+        java.util.Set<Integer> numericIds = currentIds.stream()
+                .filter(id -> id != null && id.matches("\\d+"))
+                .map(Integer::parseInt)
+                .collect(java.util.stream.Collectors.toSet());
+        // Buscamos el primer número (0, 1, 2...) que NO esté en el set
+        int candidate = 0;
+        while (numericIds.contains(candidate)) {
+            candidate++;
+        }
+        return String.valueOf(candidate);
     }
 }
