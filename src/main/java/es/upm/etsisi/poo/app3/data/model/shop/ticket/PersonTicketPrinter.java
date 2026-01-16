@@ -71,18 +71,28 @@ public class PersonTicketPrinter implements TicketPrintingStrategy {
                 double unitDiscount = item.getUnitDiscount();
                 boolean hasDiscount = item.getPurchasable() instanceof BasicProduct bp && categoryCounts.get(bp.getCategory()) >= 2;
                 for (int i = 0; i < item.getQuantity(); i++) {
-                    sb.append("  ").append(item);
+                    String baseString = item.toString();
+                    if (item.getCustomTexts() != null && !item.getCustomTexts().isEmpty()) {
+                        baseString = baseString.replaceFirst("price:[\\d.]+", "price:" + item.getSalePrice());
+                        baseString = baseString.substring(0, baseString.length() - 1)
+                                + ", personalizationList:" + item.getCustomTexts() + "}";
+                    }
+                    sb.append("  ").append(baseString);
                     if (hasDiscount && unitDiscount > 0) {
-                        sb.append(" **discount -").append(unitDiscount);
+                        sb.append(" **discount -").append(String.format(java.util.Locale.US, "%.3f", unitDiscount).replaceAll("\\.?0+$", ""));
                     }
                     sb.append("\n");
                 }
             }
         }
 
-        sb.append("  Total price: ").append(ticket.calculateTotalPrice()).append("\n");
-        sb.append("  Total discount: ").append(ticket.calculateTotalDiscount()).append("\n");
-        sb.append("  Final Price: ").append(ticket.calculateFinalPrice());
+        sb.append("  Total price: ").append(String.format(java.util.Locale.US, "%.1f", ticket.calculateTotalPrice())).append("\n");
+
+        String totDisc = String.format(java.util.Locale.US, "%.3f", ticket.calculateTotalDiscount()).replaceAll("\\.?0+$", "");
+        sb.append("  Total discount: ").append(totDisc).append("\n");
+
+        String finalP = String.format(java.util.Locale.US, "%.3f", ticket.calculateFinalPrice()).replaceAll("\\.?0+$", "");
+        sb.append("  Final Price: ").append(finalP);
 
         return sb.toString();
     }

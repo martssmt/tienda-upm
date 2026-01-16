@@ -155,7 +155,9 @@ public class TicketItem implements Comparable<TicketItem> {
         this.purchasable = purchasable;
         this.quantity = quantity;
         this.discountApplied = purchasable.getCategory().getDiscount();
-        this.customTexts = customTexts;
+        this.customTexts = customTexts.stream()
+                    .map(text -> text.startsWith("--p") ? text.substring(3) : text)
+                    .toList();
     }
 
     /**
