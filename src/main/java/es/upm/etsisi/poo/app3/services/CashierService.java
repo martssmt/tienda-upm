@@ -7,6 +7,7 @@ import es.upm.etsisi.poo.app3.data.model.user.Cashier;
 import es.upm.etsisi.poo.app3.data.model.user.Client;
 import es.upm.etsisi.poo.app3.data.repositories.CashierRepository;
 import es.upm.etsisi.poo.app3.data.repositories.ClientRepository;
+import es.upm.etsisi.poo.app3.data.repositories.PurchasableRepository;
 import es.upm.etsisi.poo.app3.services.exceptions.DuplicateException;
 import es.upm.etsisi.poo.app3.services.exceptions.NotFoundException;
 

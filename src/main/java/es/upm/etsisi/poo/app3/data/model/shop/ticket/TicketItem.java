@@ -70,6 +70,12 @@ public class TicketItem implements Comparable<TicketItem> {
     private double discountApplied;
 
     /**
+     * Snapshot of the item's price at the time of adding it to the Ticket
+     */
+    @Column(name = "sale_price")
+    private double salePrice;
+
+    /**
      * Custom text fragments associated with the item, mainly used for {@link CustomProduct}.
      */
     @ElementCollection(fetch = FetchType.EAGER)
@@ -152,7 +158,7 @@ public class TicketItem implements Comparable<TicketItem> {
      * @return the total price for this item
      */
     public Double getTotalPrice() {
-        return this.purchasable.getUnitPrice(this) * this.quantity;
+        return this.salePrice * this.quantity;
     }
 
     /**
@@ -183,12 +189,30 @@ public class TicketItem implements Comparable<TicketItem> {
     }
 
     /**
+     * Returns the sale price of this item.
+     *
+     * @return the sale price
+     */
+    public double getSalePrice() {
+        return this.salePrice;
+    }
+
+    /**
      * Sets the quantity of this item.
      *
      * @param quantity the new quantity
      */
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
+    }
+
+    /**
+     * Sets the sale price of this item.
+     *
+     * @param salePrice the new salePrice
+     */
+    public void setSalePrice(Double salePrice) {
+        this.salePrice = salePrice;
     }
 
     /**

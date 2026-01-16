@@ -46,6 +46,9 @@ public abstract class RepositoryUserHibernate<T extends User> implements Reposit
             em.getTransaction().begin();
             em.merge(entity);
             em.getTransaction().commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
         }
     }
 
