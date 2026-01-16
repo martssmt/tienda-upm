@@ -2,6 +2,7 @@ package es.upm.etsisi.poo.app3.data.model.shop.ticket;
 
 import es.upm.etsisi.poo.app3.data.model.shop.Category;
 import es.upm.etsisi.poo.app3.data.model.shop.products.BasicProduct;
+import es.upm.etsisi.poo.app3.data.model.shop.products.TimeProduct;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -58,14 +59,24 @@ public class PersonTicketPrinter implements TicketPrintingStrategy {
         }
 
         for (TicketItem item : ticket.getItemList()) {
-            double unitDiscount = item.getUnitDiscount();
-            boolean hasDiscount = item.getPurchasable() instanceof BasicProduct bp && categoryCounts.get(bp.getCategory()) >= 2;
-            for (int i = 0; i < item.getQuantity(); i++) {
-                sb.append("  ").append(item);
-                if (hasDiscount && unitDiscount > 0) {
-                    sb.append(" **discount -").append(unitDiscount);
+            if (item.getPurchasable() instanceof TimeProduct) {
+                String original = item.toString();
+                double totalLinePrice = item.getSalePrice() * item.getQuantity();
+                String fixedPrice = original.replaceFirst("price:[\\d.]+", "price:" + totalLinePrice);
+                String content = fixedPrice.substring(0, fixedPrice.length() - 1);
+                sb.append("  ").append(content)
+                        .append(", actual people in event:").append(item.getQuantity())
+                        .append("}\n");
+            } else {
+                double unitDiscount = item.getUnitDiscount();
+                boolean hasDiscount = item.getPurchasable() instanceof BasicProduct bp && categoryCounts.get(bp.getCategory()) >= 2;
+                for (int i = 0; i < item.getQuantity(); i++) {
+                    sb.append("  ").append(item);
+                    if (hasDiscount && unitDiscount > 0) {
+                        sb.append(" **discount -").append(unitDiscount);
+                    }
+                    sb.append("\n");
                 }
-                sb.append("\n");
             }
         }
 

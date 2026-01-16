@@ -184,7 +184,7 @@ public class TimeProduct extends Product {
         StringBuilder stringBuilder = new StringBuilder();
 
         String productType;
-        if (type == TimeProductType.MEETING) {
+        if (this.type == TimeProductType.MEETING) {
             productType = "Meeting";
         } else {
             productType = "Food";
@@ -199,11 +199,11 @@ public class TimeProduct extends Product {
         if (this.openDate == null) {
             stringBuilder.append("null");
         } else {
-            stringBuilder.append(openDate);
+            stringBuilder.append(this.openDate);
         }
 
         stringBuilder.append(", max people allowed:");
-        stringBuilder.append(MAX_PEOPLE_GLOBAL);
+        stringBuilder.append(this.maxPeople);
 
         stringBuilder.append("}");
 
@@ -222,7 +222,7 @@ public class TimeProduct extends Product {
     @Override
     public void validateAvailability() {
         LocalDateTime minDate = LocalDateTime.now().plusHours(this.planningHours);
-        if (openDate.atStartOfDay().isBefore(minDate)) {
+        if (this.openDate.atStartOfDay().isBefore(minDate)) {
             throw new InvalidAttributeException("Product is already expired");
         }
     }
