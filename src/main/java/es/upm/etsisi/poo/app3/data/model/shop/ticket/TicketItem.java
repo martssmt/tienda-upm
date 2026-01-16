@@ -166,8 +166,18 @@ public class TicketItem implements Comparable<TicketItem> {
      *
      * @return the discount amount for this item
      */
-    public Double getDiscount() {
+    public Double getTotalDiscount() {
         return this.discountApplied * this.getTotalPrice();
+    }
+
+    /**
+     * Computes the discount amount applied to a single unit of this item.
+     *
+     * @return the discount amount for a single unit of this item
+     */
+
+    public Double getUnitDiscount() {
+        return this.discountApplied * this.salePrice;
     }
 
     /**

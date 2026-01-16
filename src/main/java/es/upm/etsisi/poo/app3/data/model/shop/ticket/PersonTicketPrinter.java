@@ -44,11 +44,11 @@ public class PersonTicketPrinter implements TicketPrintingStrategy {
         StringBuilder sb = new StringBuilder("Ticket : " + ticket.getName() + "\n");
 
         for (TicketItem item : ticket.getItemList()) {
+            double unitDiscount = item.getUnitDiscount();
             for (int i = 0; i < item.getQuantity(); i++) {
                 sb.append("  ").append(item.getPurchasable().toString());
-                if (item.getDiscount() > 0) {
-                    sb.append(" **discount -")
-                            .append(Math.round(item.getDiscount() * 100.0) / 100.0);
+                if (unitDiscount > 0 && ticket.calculateCategoryDiscount() > 0) {
+                    sb.append(" **discount -").append(unitDiscount);
                 }
                 sb.append("\n");
             }

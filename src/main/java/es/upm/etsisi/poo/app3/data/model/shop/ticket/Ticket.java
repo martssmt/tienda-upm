@@ -436,19 +436,17 @@ public class Ticket extends Entity<String> {
 
         Map<Category, Integer> quantitiesEachCategory = new HashMap<>();
         for (TicketItem item : this.itemList) {
-            if (item.getPurchasable() instanceof BasicProduct) {
-                Category category = ((BasicProduct) item.getPurchasable()).getCategory();
-                int currentQuantity = quantitiesEachCategory.getOrDefault(category, 0);
-                quantitiesEachCategory.put(category, currentQuantity + item.getQuantity());
+            if (item.getPurchasable() instanceof BasicProduct bp) {
+                Category category = bp.getCategory();
+                quantitiesEachCategory.put(category, quantitiesEachCategory.getOrDefault(category, 0) + item.getQuantity());
             }
         }
 
         for (TicketItem item : this.itemList) {
-            if (item.getPurchasable() instanceof BasicProduct) {
-                Category category = ((BasicProduct) item.getPurchasable()).getCategory();
-                int totalEachCategory = quantitiesEachCategory.get(category);
-                if (totalEachCategory > 1) {
-                    result += ((BasicProduct) item.getPurchasable()).getCategory().getDiscount();
+            if (item.getPurchasable() instanceof BasicProduct bp) {
+                Category category = bp.getCategory();
+                if (quantitiesEachCategory.get(category) > 1) {
+                    result += item.getTotalDiscount();
                 }
             }
         }
