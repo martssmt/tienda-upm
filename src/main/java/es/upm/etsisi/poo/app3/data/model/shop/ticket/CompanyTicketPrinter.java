@@ -64,7 +64,7 @@ public class CompanyTicketPrinter implements TicketPrintingStrategy {
             sb.append("Services Included: \n");
             ticket.getItemList().stream()
                     .filter(item -> item.getPurchasable() instanceof ServiceProduct)
-                    .forEach(item -> sb.append("  ").append(item.getPurchasable().toString()).append("\n"));
+                    .forEach(item -> sb.append("  ").append(item).append("\n"));
         }
 
         // 2. Products section (combined or product part of combined)
@@ -76,7 +76,7 @@ public class CompanyTicketPrinter implements TicketPrintingStrategy {
             ticket.getItemList().stream()
                     .filter(item -> !(item.getPurchasable() instanceof ServiceProduct))
                     .forEach(item -> {
-                        sb.append("  ").append(item.getPurchasable().toString());
+                        sb.append("  ").append(item);
                         sb.append("\n");
                     });
 

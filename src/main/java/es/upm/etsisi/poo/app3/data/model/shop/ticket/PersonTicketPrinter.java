@@ -1,5 +1,11 @@
 package es.upm.etsisi.poo.app3.data.model.shop.ticket;
 
+import es.upm.etsisi.poo.app3.data.model.shop.Category;
+import es.upm.etsisi.poo.app3.data.model.shop.products.BasicProduct;
+
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * The {@code PersonTicketPrinter} class implements a printing strategy for
  * tickets belonging to personal (non-company) clients.
@@ -43,11 +49,20 @@ public class PersonTicketPrinter implements TicketPrintingStrategy {
     public String format(Ticket ticket) {
         StringBuilder sb = new StringBuilder("Ticket : " + ticket.getName() + "\n");
 
+        Map<Category, Integer> categoryCounts = new HashMap<>();
+        for (TicketItem item : ticket.getItemList()) {
+            if (item.getPurchasable() instanceof BasicProduct bp) {
+                Category cat = bp.getCategory();
+                categoryCounts.put(cat, categoryCounts.getOrDefault(cat, 0) + item.getQuantity());
+            }
+        }
+
         for (TicketItem item : ticket.getItemList()) {
             double unitDiscount = item.getUnitDiscount();
+            boolean hasDiscount = item.getPurchasable() instanceof BasicProduct bp && categoryCounts.get(bp.getCategory()) >= 2;
             for (int i = 0; i < item.getQuantity(); i++) {
-                sb.append("  ").append(item.getPurchasable().toString());
-                if (unitDiscount > 0 && ticket.calculateCategoryDiscount() > 0) {
+                sb.append("  ").append(item);
+                if (hasDiscount && unitDiscount > 0) {
                     sb.append(" **discount -").append(unitDiscount);
                 }
                 sb.append("\n");

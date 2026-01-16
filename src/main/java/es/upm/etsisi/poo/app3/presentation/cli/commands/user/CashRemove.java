@@ -45,8 +45,7 @@ public class CashRemove implements Command {
     public void execute(String[] params) {
         params = this.assessParams(params);
         String id = params[0];
-        Cashier cashier = this.cashierService.remove(id);
-        this.view.showEntity(cashier);
+        this.cashierService.remove(id);
         this.view.show("cash remove: ok");
     }
 }

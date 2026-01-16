@@ -284,13 +284,16 @@ public class Ticket extends Entity<String> {
             if (purchasable instanceof BasicProduct) {
                 newItem = new TicketItem((BasicProduct) purchasable, quantity);
                 newItem.setSalePrice(purchasable.getUnitPrice(newItem));
+                newItem.setFrozenString(purchasable.toString());
                 this.numberOfProducts += quantity;
             } else if (isService) {
                 newItem = new TicketItem(purchasable, quantity);
                 newItem.setSalePrice(purchasable.getUnitPrice(newItem));
+                newItem.setFrozenString(purchasable.toString());
             } else { // instanceof TimeProduct
                 newItem = new TicketItem(purchasable, quantity);
                 newItem.setSalePrice(purchasable.getUnitPrice(newItem));
+                newItem.setFrozenString(purchasable.toString());
                 this.numberOfProducts += quantity;
             }
             this.itemList.add(newItem);
@@ -353,6 +356,7 @@ public class Ticket extends Entity<String> {
 
         TicketItem newItem = new TicketItem(product, quantity, texts);
         newItem.setSalePrice(product.getUnitPrice(newItem));
+        newItem.setFrozenString(product.toString());
 
         this.itemList.add(newItem);
         this.numberOfProducts += quantity;

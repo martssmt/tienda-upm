@@ -76,6 +76,12 @@ public class TicketItem implements Comparable<TicketItem> {
     private double salePrice;
 
     /**
+     * Snapshot of the item's toString() at the time of adding it to the Ticket
+     */
+    @Column(name = "frozen_string")
+    private String frozenString;
+
+    /**
      * Custom text fragments associated with the item, mainly used for {@link CustomProduct}.
      */
     @ElementCollection(fetch = FetchType.EAGER)
@@ -235,6 +241,15 @@ public class TicketItem implements Comparable<TicketItem> {
     }
 
     /**
+     * Sets the item's toString() at the moment of adding the purchasable to the ticket.
+     *
+     * @param frozenString the purchasable's toString() at the moment
+     */
+    public void setFrozenString(String frozenString) {
+        this.frozenString = frozenString;
+    }
+
+    /**
      * Sets the custom texts associated with this item.
      *
      * @param customTexts the list of custom texts
@@ -262,7 +277,7 @@ public class TicketItem implements Comparable<TicketItem> {
      */
     @Override
     public String toString() {
-        return this.purchasable.toString();
+        return this.frozenString;
     }
 
     /**
