@@ -156,13 +156,13 @@ exit
 3. Ejecución interactiva:
 
 ```bash
-java -jar tienda-upm-v3.0.0.jar
+java -jar MyTiendaUPM.jar
 ```
 
 4. Ejecución con fichero de comandos:
 
 ```bash
-java -jar tienda-upm-v3.0.0.jar input.txt
+java -jar MyTiendaUPM.jar input.txt
 ```
 
 ---
