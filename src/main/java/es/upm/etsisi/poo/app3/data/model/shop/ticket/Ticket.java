@@ -265,13 +265,13 @@ public class Ticket extends Entity<String> {
 
         purchasable.validateAvailability();
 
-        if (!isService && this.numberOfProducts + quantity > MAX_PRODUCTS) {
+        if (quantity != null && this.numberOfProducts + quantity > MAX_PRODUCTS) {
             throw new FullTicketException();
         }
 
         boolean itemFound = false;
         Iterator<TicketItem> iterator = this.itemList.iterator();
-        while (!isService && iterator.hasNext() && !itemFound) {
+        while (quantity != null && iterator.hasNext() && !itemFound) {
             TicketItem item = iterator.next();
             if (item.getPurchasable().equals(purchasable)) {
                 itemFound = true;

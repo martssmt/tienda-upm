@@ -51,7 +51,7 @@ public class TicketAdd implements Command {
         String cashid = params[1];
         String prodid = params[2];
         Integer amount=null;
-        if (params.length == 4)
+        if (params.length >= 4)
             amount = Integer.parseInt(params[3]);
         Purchasable purchasable = this.purchasableService.findProd(prodid);
         Ticket ticket;

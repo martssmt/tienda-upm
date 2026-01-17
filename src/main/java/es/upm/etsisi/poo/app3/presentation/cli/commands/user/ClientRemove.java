@@ -45,8 +45,7 @@ public class ClientRemove implements Command {
     public void execute(String[] params) {
         params = this.assessParams(params);
         String id = params[0];
-        Client client = this.clientService.remove(id);
-        this.view.showEntity(client);
+        this.clientService.remove(id);
         this.view.show("client remove: ok");
     }
 }
