@@ -151,25 +151,4 @@ public abstract class RepositoryUserHibernate<T extends User> implements Reposit
             return em.find(this.entityClass, id);
         }
     }
-
-    /**
-     * Finds a user entity by email address.
-     * <p>
-     * This method returns the first matching entity if multiple matches exist.
-     * If no entity is found, {@code null} is returned.
-     * </p>
-     *
-     * @param mail the email address to search for
-     * @return the matching user entity, or {@code null} if not found
-     */
-    @Override
-    public T findByMail(String mail) {
-        try (EntityManager em = JPAUtil.em()) {
-            String jpql = "SELECT u FROM " + this.entityClass.getSimpleName() + " u WHERE u.mail = :email";
-            List<T> results = em.createQuery(jpql, this.entityClass)
-                    .setParameter("email", mail)
-                    .getResultList();
-            return results.isEmpty() ? null : results.getFirst();
-        }
-    }
 }

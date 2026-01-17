@@ -119,9 +119,9 @@ public class CashierService implements Service<Cashier> {
      * repository updates.
      * </p>
      *
-     * @param ticket     the ticket to create
-     * @param cashierId  the cashier identifier
-     * @param clientId   the client identifier
+     * @param ticket    the ticket to create
+     * @param cashierId the cashier identifier
+     * @param clientId  the client identifier
      * @throws NotFoundException if the cashier or client does not exist
      */
     public void newTicket(Ticket ticket, String cashierId, String clientId) {

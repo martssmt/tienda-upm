@@ -1,10 +1,10 @@
 package es.upm.etsisi.poo.app3.presentation.cli.commands.product;
 
 import es.upm.etsisi.poo.app3.data.model.shop.products.Purchasable;
-import es.upm.etsisi.poo.app3.services.PurchasableService;
 import es.upm.etsisi.poo.app3.presentation.cli.Command;
 import es.upm.etsisi.poo.app3.presentation.cli.exceptions.CommandException;
 import es.upm.etsisi.poo.app3.presentation.view.View;
+import es.upm.etsisi.poo.app3.services.PurchasableService;
 
 import java.util.List;
 

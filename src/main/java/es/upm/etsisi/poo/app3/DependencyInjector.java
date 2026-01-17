@@ -2,10 +2,10 @@ package es.upm.etsisi.poo.app3;
 
 import es.upm.etsisi.poo.app3.data.repositories.CashierRepository;
 import es.upm.etsisi.poo.app3.data.repositories.ClientRepository;
-import es.upm.etsisi.poo.app3.data.repositories.hibernate.JPAUtil;
 import es.upm.etsisi.poo.app3.data.repositories.PurchasableRepository;
 import es.upm.etsisi.poo.app3.data.repositories.hibernate.CashierRepositoryHibernate;
 import es.upm.etsisi.poo.app3.data.repositories.hibernate.ClientRepositoryHibernate;
+import es.upm.etsisi.poo.app3.data.repositories.hibernate.JPAUtil;
 import es.upm.etsisi.poo.app3.data.repositories.hibernate.PurchasableRepositoryHibernate;
 import es.upm.etsisi.poo.app3.presentation.cli.CommandLineInterface;
 import es.upm.etsisi.poo.app3.presentation.cli.ErrorHandler;

@@ -2,7 +2,10 @@ package es.upm.etsisi.poo.app3.data.model.user;
 
 import es.upm.etsisi.poo.app3.data.model.Entity;
 import es.upm.etsisi.poo.app3.data.model.exceptions.InvalidAttributeException;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
+import jakarta.persistence.Table;
 
 /**
  * Abstract persistent user entity of the system.

@@ -112,7 +112,8 @@ public class Ticket extends Entity<String> {
     /**
      * Protected no-argument constructor required by JPA.
      */
-    protected Ticket() {}
+    protected Ticket() {
+    }
 
     /**
      * Creates a ticket with an explicit identifier, ticket type, and client type.

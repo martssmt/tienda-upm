@@ -2,7 +2,10 @@ package es.upm.etsisi.poo.app3.presentation.cli.commands.product;
 
 import es.upm.etsisi.poo.app3.data.model.shop.Category;
 import es.upm.etsisi.poo.app3.data.model.shop.ServiceType;
-import es.upm.etsisi.poo.app3.data.model.shop.products.*;
+import es.upm.etsisi.poo.app3.data.model.shop.products.BasicProduct;
+import es.upm.etsisi.poo.app3.data.model.shop.products.CustomProduct;
+import es.upm.etsisi.poo.app3.data.model.shop.products.Purchasable;
+import es.upm.etsisi.poo.app3.data.model.shop.products.ServiceProduct;
 import es.upm.etsisi.poo.app3.presentation.cli.Command;
 import es.upm.etsisi.poo.app3.presentation.cli.exceptions.CommandException;
 import es.upm.etsisi.poo.app3.presentation.view.View;
@@ -52,7 +55,7 @@ public class ProdAdd implements Command {
     /**
      * Creates a new {@code prod add} command.
      *
-     * @param view             the view used to display output
+     * @param view               the view used to display output
      * @param purchasableService the service used to add purchasables
      */
     public ProdAdd(View view, PurchasableService purchasableService) {

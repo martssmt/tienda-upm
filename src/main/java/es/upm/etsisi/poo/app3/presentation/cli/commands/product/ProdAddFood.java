@@ -2,10 +2,10 @@ package es.upm.etsisi.poo.app3.presentation.cli.commands.product;
 
 import es.upm.etsisi.poo.app3.data.model.shop.TimeProductType;
 import es.upm.etsisi.poo.app3.data.model.shop.products.TimeProduct;
-import es.upm.etsisi.poo.app3.services.PurchasableService;
 import es.upm.etsisi.poo.app3.presentation.cli.Command;
 import es.upm.etsisi.poo.app3.presentation.cli.exceptions.CommandException;
 import es.upm.etsisi.poo.app3.presentation.view.View;
+import es.upm.etsisi.poo.app3.services.PurchasableService;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -51,7 +51,7 @@ public class ProdAddFood implements Command {
     /**
      * Creates a new {@code prod addFood} command.
      *
-     * @param view              the view used to display output
+     * @param view               the view used to display output
      * @param purchasableService the service used to add purchasables
      */
     public ProdAddFood(View view, PurchasableService purchasableService) {

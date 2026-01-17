@@ -1,7 +1,9 @@
 package es.upm.etsisi.poo.app3.data.model.shop.products;
 
 import es.upm.etsisi.poo.app3.data.model.shop.Category;
-import jakarta.persistence.*;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Table;
 
 /**
  * The {@code BasicProduct} class represents a standard purchasable product
@@ -107,5 +109,6 @@ public class BasicProduct extends Product {
      * </p>
      */
     @Override
-    public void validateAvailability() {}
+    public void validateAvailability() {
+    }
 }

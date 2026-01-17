@@ -94,7 +94,8 @@ public class TicketItem implements Comparable<TicketItem> {
     /**
      * Protected no-argument constructor required by JPA.
      */
-    protected TicketItem() {}
+    protected TicketItem() {
+    }
 
     /**
      * Creates a ticket item for a generic purchasable element.
@@ -125,7 +126,7 @@ public class TicketItem implements Comparable<TicketItem> {
      *
      * @param purchasable the service product
      */
-    public TicketItem (ServiceProduct purchasable) {
+    public TicketItem(ServiceProduct purchasable) {
         this.purchasable = purchasable;
         this.quantity = 1;
         this.discountApplied = 0.0;
@@ -158,9 +159,9 @@ public class TicketItem implements Comparable<TicketItem> {
      * The discount rate is initialized using the product category discount.
      * </p>
      *
-     * @param purchasable  the custom product
-     * @param quantity     the quantity to assign
-     * @param customTexts  the custom texts associated with the product
+     * @param purchasable the custom product
+     * @param quantity    the quantity to assign
+     * @param customTexts the custom texts associated with the product
      * @throws InvalidAttributeException if quantity is not positive
      */
     public TicketItem(CustomProduct purchasable, Integer quantity, List<String> customTexts) {
@@ -171,8 +172,8 @@ public class TicketItem implements Comparable<TicketItem> {
         this.quantity = quantity;
         this.discountApplied = purchasable.getCategory().getDiscount();
         this.customTexts = customTexts.stream()
-                    .map(text -> text.startsWith("--p") ? text.substring(3) : text)
-                    .toList();
+                .map(text -> text.startsWith("--p") ? text.substring(3) : text)
+                .toList();
     }
 
     /**
@@ -307,7 +308,7 @@ public class TicketItem implements Comparable<TicketItem> {
      *
      * @param other the other ticket item
      * @return a negative value, zero, or a positive value as this item is less than,
-     *         equal to, or greater than the specified item
+     * equal to, or greater than the specified item
      */
     @Override
     public int compareTo(TicketItem other) {

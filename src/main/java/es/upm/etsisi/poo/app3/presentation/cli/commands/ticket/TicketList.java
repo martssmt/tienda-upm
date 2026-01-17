@@ -1,9 +1,9 @@
 package es.upm.etsisi.poo.app3.presentation.cli.commands.ticket;
 
-import es.upm.etsisi.poo.app3.services.CashierService;
 import es.upm.etsisi.poo.app3.presentation.cli.Command;
 import es.upm.etsisi.poo.app3.presentation.cli.exceptions.CommandException;
 import es.upm.etsisi.poo.app3.presentation.view.View;
+import es.upm.etsisi.poo.app3.services.CashierService;
 
 import java.util.List;
 

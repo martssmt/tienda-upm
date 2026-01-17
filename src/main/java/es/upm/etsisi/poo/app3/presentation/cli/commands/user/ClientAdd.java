@@ -1,10 +1,10 @@
 package es.upm.etsisi.poo.app3.presentation.cli.commands.user;
 
 import es.upm.etsisi.poo.app3.data.model.user.Client;
-import es.upm.etsisi.poo.app3.services.ClientService;
 import es.upm.etsisi.poo.app3.presentation.cli.Command;
 import es.upm.etsisi.poo.app3.presentation.cli.exceptions.CommandException;
 import es.upm.etsisi.poo.app3.presentation.view.View;
+import es.upm.etsisi.poo.app3.services.ClientService;
 
 import java.util.List;
 

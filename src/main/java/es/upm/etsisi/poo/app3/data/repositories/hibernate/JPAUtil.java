@@ -35,7 +35,8 @@ public final class JPAUtil {
     /**
      * Private constructor to prevent instantiation.
      */
-    private JPAUtil() {}
+    private JPAUtil() {
+    }
 
     /**
      * Creates and returns a new {@link EntityManager}.

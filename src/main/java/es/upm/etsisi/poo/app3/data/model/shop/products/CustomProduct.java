@@ -3,7 +3,8 @@ package es.upm.etsisi.poo.app3.data.model.shop.products;
 import es.upm.etsisi.poo.app3.data.model.exceptions.InvalidAttributeException;
 import es.upm.etsisi.poo.app3.data.model.shop.Category;
 import es.upm.etsisi.poo.app3.data.model.shop.ticket.TicketItem;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Table;
 
 /**
  * The {@code CustomProduct} class represents a customizable product in the store system.

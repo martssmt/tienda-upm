@@ -151,7 +151,7 @@ public class CommandLineInterface {
      *
      * @param line the raw input line
      * @return {@code true} if the command is {@link #EXIT} and execution should stop,
-     *         {@code false} otherwise
+     * {@code false} otherwise
      * @throws CommandException if the command does not exist
      */
     private boolean runCommandLine(String line) {

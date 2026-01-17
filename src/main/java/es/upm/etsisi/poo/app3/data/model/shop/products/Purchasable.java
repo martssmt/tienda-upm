@@ -2,7 +2,9 @@ package es.upm.etsisi.poo.app3.data.model.shop.products;
 
 import es.upm.etsisi.poo.app3.data.model.Entity;
 import es.upm.etsisi.poo.app3.data.model.shop.ticket.TicketItem;
-import jakarta.persistence.*;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
+import jakarta.persistence.Table;
 
 /**
  * The {@code Purchasable} abstract class represents any element that can be
