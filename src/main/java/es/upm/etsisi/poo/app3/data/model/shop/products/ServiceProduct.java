@@ -125,9 +125,13 @@ public class ServiceProduct extends Purchasable<String> {
      */
     @Override
     public String toString() {
-        return "{class:ProductService, id:" + this.getId() +
+        java.util.Date legacyDate = java.util.Date.from(this.maxUsageDate.atStartOfDay()
+                .atZone(java.time.ZoneId.systemDefault())
+                .toInstant());
+        String cleanId = this.getId().replace("S", "");
+        return "{class:ProductService, id:" + cleanId +
                 ", category:" + this.serviceType +
-                ", expiration:" + this.maxUsageDate + "}";
+                ", expiration:" + legacyDate + "}";
     }
 
     /**

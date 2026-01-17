@@ -118,6 +118,21 @@ public class TicketItem implements Comparable<TicketItem> {
     }
 
     /**
+     * Creates a ticket item for a service product.
+     * <p>
+     * The discount rate is initialized at 0 and quantity is set at 1.
+     * </p>
+     *
+     * @param purchasable the service product
+     */
+    public TicketItem (ServiceProduct purchasable) {
+        this.purchasable = purchasable;
+        this.quantity = 1;
+        this.discountApplied = 0.0;
+        this.customTexts = new ArrayList<>();
+    }
+
+    /**
      * Creates a ticket item for a basic product.
      * <p>
      * The discount rate is initialized using the product category discount.

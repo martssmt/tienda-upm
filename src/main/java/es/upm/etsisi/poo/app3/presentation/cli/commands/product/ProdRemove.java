@@ -36,7 +36,7 @@ public class ProdRemove implements Command {
 
     @Override
     public String[] assessParams(String[] params) {
-        if (params.length != 1 || !params[0].matches("-?\\d+")) {
+        if (params.length != 1) {
             throw new CommandException("Usage: " + this.help());
         }
         return params;

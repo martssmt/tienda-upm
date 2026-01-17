@@ -161,7 +161,8 @@ public class Client extends User {
      */
     @Override
     public String toString() {
-        return "Client{identifier='" + this.getId() + "', name='" + this.getName() +
+        String type = (this.clientType == ClientType.COMPANY) ? "COMPANY" : "USER";
+        return type + "{identifier='" + this.getId() + "', name='" + this.getName() +
                 "', email='" + this.getMail() + "', cash=" + this.cashierId + "}";
     }
 }

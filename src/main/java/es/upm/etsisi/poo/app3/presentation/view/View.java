@@ -1,6 +1,7 @@
 package es.upm.etsisi.poo.app3.presentation.view;
 
 import es.upm.etsisi.poo.app3.data.model.shop.products.Product;
+import es.upm.etsisi.poo.app3.data.model.shop.products.Purchasable;
 import es.upm.etsisi.poo.app3.data.model.user.User;
 
 import java.util.Comparator;
@@ -45,11 +46,11 @@ public class View {
                     User u2 = (User) b;
                     return u1.getName().compareToIgnoreCase(u2.getName());
                 };
-            } else if (first instanceof Product) {
+            } else if (first instanceof Purchasable) {
                 comparator = (a, b) -> {
-                    Product p1 = (Product) a;
-                    Product p2 = (Product) b;
-                    return Integer.compare(p1.getIdAsInt(), p2.getIdAsInt());
+                    Purchasable p1 = (Purchasable) a;
+                    Purchasable p2 = (Purchasable) b;
+                    return ((String) p1.getId()).compareTo((String) p2.getId());
                 };
             }
             if (comparator != null)

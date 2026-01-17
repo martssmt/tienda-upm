@@ -1,6 +1,8 @@
 package es.upm.etsisi.poo.app3.data.model.shop.ticket;
 
+import es.upm.etsisi.poo.app3.data.model.shop.products.CustomProduct;
 import es.upm.etsisi.poo.app3.data.model.shop.products.ServiceProduct;
+import es.upm.etsisi.poo.app3.data.model.shop.products.TimeProduct;
 
 /**
  * The {@code CompanyTicketPrinter} class implements a printing strategy for
@@ -73,12 +75,35 @@ public class CompanyTicketPrinter implements TicketPrintingStrategy {
 
         if (hasProducts) {
             sb.append("Product Included\n");
-            ticket.getItemList().stream()
-                    .filter(item -> !(item.getPurchasable() instanceof ServiceProduct))
-                    .forEach(item -> {
-                        sb.append("  ").append(item);
-                        sb.append("\n");
-                    });
+            for (TicketItem item : ticket.getItemList()) {
+                if (item.getPurchasable() instanceof ServiceProduct) continue;
+
+                if (item.getPurchasable() instanceof TimeProduct) {
+                    // Lógica para TimeProduct: inyectar precio total y personas reales
+                    String original = item.toString();
+                    double totalLinePrice = item.getSalePrice() * item.getQuantity();
+
+                    // Reemplazamos el precio unitario por el total de la línea
+                    String fixedPrice = original.replaceFirst("price:[\\d.]+", "price:" + totalLinePrice);
+                    // Quitamos la llave de cierre para añadir el campo extra
+                    String content = fixedPrice.substring(0, fixedPrice.length() - 1);
+
+                    sb.append("  ").append(content)
+                            .append(", actual people in event:").append(item.getQuantity())
+                            .append("}\n");
+                } else if (item.getPurchasable() instanceof CustomProduct) {
+                    // Lógica para CustomProduct: inyectar personalización si existe
+                    String baseString = item.toString();
+                    if (item.getCustomTexts() != null && !item.getCustomTexts().isEmpty()) {
+                        baseString = baseString.substring(0, baseString.length() - 1)
+                                + ", personalizationList:" + item.getCustomTexts() + "}";
+                    }
+                    sb.append("  ").append(baseString).append("\n");
+                } else {
+                    // BasicProduct u otros
+                    sb.append("  ").append(item).append("\n");
+                }
+            }
 
             // Company-specific totals
             double totalPrice = ticket.calculateTotalPrice();

@@ -58,7 +58,7 @@ public class PurchasableRepositoryHibernate extends RepositoryShopHibernate<Purc
 
     private String findFirstAvailableServiceId(EntityManager em) {
         // Buscamos el ID más alto que termine en 'S'
-        String jpql = "SELECT p.id FROM Purchasable p WHERE p.id LIKE '%S'";
+        String jpql = "SELECT p.id FROM Purchasable p WHERE CAST(p.id AS string) LIKE '%S'";
         List<String> ids = em.createQuery(jpql, String.class).getResultList();
 
         // Extraemos los números, buscamos el máximo y sumamos 1

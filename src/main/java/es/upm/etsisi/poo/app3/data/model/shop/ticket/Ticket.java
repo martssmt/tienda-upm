@@ -255,7 +255,7 @@ public class Ticket extends Entity<String> {
      */
     public void add(Purchasable<?> purchasable, Integer quantity) {
 
-        if (quantity <= 0) {
+        if (quantity != null && quantity <= 0) {
             throw new InvalidAttributeException("Quantity must be greater than 0");
         }
 
@@ -271,7 +271,7 @@ public class Ticket extends Entity<String> {
 
         boolean itemFound = false;
         Iterator<TicketItem> iterator = this.itemList.iterator();
-        while (iterator.hasNext() && !itemFound) {
+        while (!isService && iterator.hasNext() && !itemFound) {
             TicketItem item = iterator.next();
             if (item.getPurchasable().equals(purchasable)) {
                 itemFound = true;
@@ -287,8 +287,8 @@ public class Ticket extends Entity<String> {
                 newItem.setFrozenString(purchasable.toString());
                 this.numberOfProducts += quantity;
             } else if (isService) {
-                newItem = new TicketItem(purchasable, quantity);
-                newItem.setSalePrice(purchasable.getUnitPrice(newItem));
+                newItem = new TicketItem((ServiceProduct) purchasable);
+                newItem.setSalePrice(0.0);
                 newItem.setFrozenString(purchasable.toString());
             } else { // instanceof TimeProduct
                 newItem = new TicketItem(purchasable, quantity);
