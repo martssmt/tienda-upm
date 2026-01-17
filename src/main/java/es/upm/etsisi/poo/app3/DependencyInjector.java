@@ -23,6 +23,23 @@ import es.upm.etsisi.poo.app3.services.PurchasableService;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Utility class responsible for configuring and providing application dependencies.
+ * <p>
+ * This class centralizes the creation and wiring of repositories, services,
+ * and other core components, acting as a simple dependency injection mechanism
+ * for the application.
+ * </p>
+ *
+ * <p>
+ * By isolating object creation logic, it improves modularity, testability,
+ * and maintainability of the system.
+ * </p>
+ *
+ * @author Tomás
+ * @version 3.0
+ */
+
 public class DependencyInjector {
     private static final DependencyInjector instance = new DependencyInjector();
 
