@@ -1,48 +1,76 @@
-# 🏪 Tienda UPM — Práctica POO 2025-2026 (Entrega 2)
+# 🏪 Tienda UPM — Práctica POO 2025-2026 (Entrega 3)
 
 ## 📘 Descripción
 
-Proyecto desarrollado como **Entrega 2 (E2)** de la asignatura **Programación Orientada a Objetos** (Grado en Ingeniería del Software, ETSISI-UPM) por el **grupo IWSIM22_09**.
+Proyecto desarrollado como **Entrega 3 (E3)** de la asignatura **Programación Orientada a Objetos** (Grado en Ingeniería del Software, ETSISI-UPM) por el **grupo IWSIM22_09**.
 
-En esta versión, se amplía el sistema de la **Entrega 1**, incorporando:
+Esta entrega amplía y consolida el sistema desarrollado en la **Entrega 2**, incorporando **persistencia con JPA/Hibernate**, una **arquitectura desacoplada basada en repositorios**, y una separación más clara entre **modelo, repositorio, servicios y presentación**, manteniendo la interfaz CLI.
 
-* **Usuarios**: Clientes y Cajeros, con registro, identificación y gestión de alta/baja.
-* **Productos avanzados**: Comidas en campus, Reuniones y Productos Personalizables, con reglas de creación y precios específicos.
-* **Tickets extendidos**: Asociados a un Cajero y un Cliente, con estados (`VACIO`, `ACTIVO`, `CERRADO`) y operaciones de creación, modificación y cierre.
-* **Validaciones temporales y restricciones**:
+Las principales novedades de esta entrega son:
 
-    * Comidas → mínimo 3 días de antelación.
-    * Reuniones → mínimo 12 horas de planificación.
-    * Productos personalizables → recargo del 10 % por cada personalización; máximo de textos permitidos.
-* Generación de **IDs únicos** para todos los elementos del sistema:
-
-    * Clientes → DNI.
-    * Cajeros → `UW` + 7 dígitos aleatorios.
-    * Productos → ID numérico o generado automáticamente.
-    * Tickets → `YY-MM-dd-HH:mm-#####` y fecha de cierre al imprimir.
+* **Persistencia en base de datos relacional** mediante **JPA / Hibernate**.
+* Sustitución de repositorios en memoria por **repositorios Hibernate**.
+* Uso de **entidades persistentes**, herencia JPA y relaciones (`@OneToMany`, `@ManyToOne`, `@ElementCollection`).
+* **Estrategia de impresión de tickets** (Strategy Pattern) según tipo de cliente.
+* Gestión avanzada de **productos, servicios y tickets combinados**.
+* Mantenimiento completo de las **reglas de negocio y validaciones** de E2.
 
 ---
 
 ## 🧱 Entregables
-- 🗂️ Código fuente completo en este repositorio.
-- 🧾 Ejecutable `.jar` publicado en **Releases**.
-- 🧩 Diagrama UML en `/docs`.
 
+* 🗂️ Código fuente completo en este repositorio.
+* 🧾 Ejecutable `.jar` publicado en **Releases**.
+* 🧩 Diagrama UML actualizado en `/docs`.
+* 🗄️ Configuración de persistencia JPA (`persistence.xml`).
 
 ---
 
 ## 🧩 Arquitectura del proyecto
 
-El sistema sigue el patrón **3 capas** con inyección de dependencias:
+El sistema sigue una arquitectura **en capas**, con **inyección de dependencias manual** y persistencia desacoplada mediante repositorios.
 
-| Capa                                                         | Clases principales                                                                    | Descripción                                                                                                   |
-| ------------------------------------------------------------ | ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| **Modelo (`es.upm.etsisi.poo.app2.data.model`)**             | `Product`, `CustomProduct`, `BasicProduct`, `Ticket`, `Cashier`, `Client`, `Category` | Representan productos, tickets y usuarios, incluyendo reglas de negocio, validaciones y descuentos.           |
-| **Repositorio (`es.upm.etsisi.poo.app2.data.repositories`)** | `ProductRepositoryMap`, `CashierRepositoryMap`, `ClientRepositoryMap`                 | Manejo de datos en memoria con IDs únicos y listas de entidades.                                              |
-| **Servicios (`es.upm.etsisi.poo.app2.services`)**            | `ProductService`, `CashierService`, `ClientService`                                   | Capa intermedia que valida operaciones y asegura reglas de negocio antes de interactuar con los repositorios. |
-| **Vista (`es.upm.etsisi.poo.app2.presentation.view`)**       | `View`                                                                                | Encargada de mostrar información, mensajes de error y listas ordenadas por consola.                           |
-| **CLI (`es.upm.etsisi.poo.app2.presentation.cli`)**          | `CommandLineInterface`, `Command`, `ErrorHandler`                                     | Interpretación y ejecución de comandos por consola o desde archivo, con manejo de errores.                    |
-| **Aplicación (`es.upm.etsisi.poo.app2`)**                    | `App`, `DependencyInjector`                                                           | Inicializa la aplicación, inyecta dependencias y registra comandos.                                           |
+| Capa                      | Paquetes principales                                 | Descripción                                                                   |
+| ------------------------- | ---------------------------------------------------- | ----------------------------------------------------------------------------- |
+| **Modelo**                | `es.upm.etsisi.poo.app3.data.model`                  | Entidades persistentes JPA: usuarios, productos, tickets y reglas de negocio. |
+| **Repositorio**           | `es.upm.etsisi.poo.app3.data.repositories`           | Interfaces de acceso a datos independientes de la tecnología.                 |
+| **Repositorio Hibernate** | `es.upm.etsisi.poo.app3.data.repositories.hibernate` | Implementaciones JPA/Hibernate con `EntityManager`.                           |
+| **Servicios**             | `es.upm.etsisi.poo.app3.services`                    | Lógica de aplicación, validaciones y coordinación entre repositorios.         |
+| **Vista**                 | `es.upm.etsisi.poo.app3.presentation.view`           | Salida por consola y presentación de resultados.                              |
+| **CLI**                   | `es.upm.etsisi.poo.app3.presentation.cli`            | Interpretación y ejecución de comandos (interactivos o por fichero).          |
+| **Aplicación**            | `es.upm.etsisi.poo.app3`                             | Inicialización, inyección de dependencias y arranque de la aplicación.        |
+
+---
+
+## 🗄️ Persistencia (Entrega 3)
+
+En esta entrega:
+
+* Todas las entidades principales están anotadas con **JPA** (`@Entity`).
+* Se emplea **herencia JOINED** para usuarios y productos.
+* Se utilizan relaciones:
+
+  * `Client → Tickets` mediante `@ElementCollection`.
+  * `Cashier → Ticket` mediante `@OneToMany`.
+  * `Ticket → TicketItem` mediante `@OneToMany`.
+* El acceso a la base de datos se realiza con **EntityManager** gestionado por `JPAUtil`.
+* La aplicación es **independiente del motor** (H2, MySQL, etc.).
+
+---
+
+## 🎟️ Tickets y estrategia de impresión
+
+Se aplica el **patrón Strategy** para la impresión de tickets:
+
+* `TicketPrintingStrategy`
+
+  * `PersonTicketPrinter`
+  * `CompanyTicketPrinter`
+
+La estrategia se asigna automáticamente según el **tipo de cliente**:
+
+* **PERSON** → impresión detallada con precios y descuentos.
+* **COMPANY** → separación de servicios y productos, con descuentos adicionales por servicios combinados.
 
 ---
 
@@ -51,8 +79,8 @@ El sistema sigue el patrón **3 capas** con inyección de dependencias:
 ### Clientes / Cajeros
 
 ```
-client add "<nombre>" <DNI> <email> <cashId>
-client remove <DNI>
+client add "<nombre>" (<DNI>|<NIF>) <email> <cashId>
+client remove <ID>
 client list
 
 cash add [<id>] "<nombre>" <email>
@@ -61,11 +89,13 @@ cash list
 cash tickets <id>
 ```
 
+---
+
 ### Tickets
 
 ```
-ticket new [<id>] <cashId> <userId>
-ticket add <ticketId> <cashId> <prodId> <amount> [--p<texto> --p<texto> ...]
+ticket new [<id>] <cashId> <userId> -[c|p|s]
+ticket add <ticketId> <cashId> <prodId> <amount> [--p<texto> ...]
 ticket remove <ticketId> <cashId> <prodId>
 ticket print <ticketId> <cashId>
 ticket list
@@ -73,27 +103,26 @@ ticket list
 
 **Notas:**
 
-* `--p<texto>` solo aplica a productos personalizables.
-* Reuniones y comidas no se pueden añadir dos veces al mismo ticket.
-* Imprimir un ticket **cierra automáticamente** el ticket.
-* Solo el cajero que inició el ticket puede modificarlo o imprimirlo.
+* `-p` (PRODUCT) es el tipo por defecto.
+* `-c` → ticket combinado (productos + servicios).
+* `-s` → solo servicios.
+* Imprimir un ticket **lo cierra automáticamente**.
+* Los clientes PERSON no pueden usar servicios.
 
-### Productos
+---
+
+### Productos y servicios
 
 ```
-prod add [<id>] "<name>" <category> <price> [<maxPers>]
+prod add [<id>] "<name>" <category> <price> [<maxTexts>]
+prod addFood [<id>] "<name>" <price> <expiration:yyyy-MM-dd> <max_people>
+prod addMeeting [<id>] "<name>" <price> <expiration:yyyy-MM-dd> <max_people>
 prod update <id> NAME|CATEGORY|PRICE <value>
-prod addFood [<id>] "<name>" <price> <expiration: yyyy-MM-dd> <max_people>
-prod addMeeting [<id>] "<name>" <price> <expiration: yyyy-MM-dd> <max_people>
 prod list
 prod remove <id>
 ```
 
-**Notas:**
-
-* `max_people` para comidas y reuniones → precio calculado por persona.
-* Productos personalizables → precio incrementado un 10 % por cada personalización.
-* Validaciones temporales: comidas 3 días, reuniones 12 horas antes de la fecha.
+---
 
 ### Generales
 
@@ -108,33 +137,33 @@ exit
 ## 📚 Categorías y descuentos
 
 * Categorías: `MERCH`, `STATIONERY`, `CLOTHES`, `BOOK`, `ELECTRONICS`
-* Descuentos aplicados si hay ≥2 productos por categoría:
+* Descuentos por categoría si hay ≥ 2 unidades:
 
-    * MERCH → 0 %
-    * STATIONERY → 5 %
-    * CLOTHES → 7 %
-    * BOOK → 10 %
-    * ELECTRONICS → 3 %
+| Categoría   | Descuento |
+| ----------- | --------- |
+| MERCH       | 0 %       |
+| STATIONERY  | 5 %       |
+| CLOTHES     | 7 %       |
+| BOOK        | 10 %      |
+| ELECTRONICS | 3 %       |
 
 ---
 
 ## ⚙️ Ejecución
 
 1. Asegúrate de tener **Java 22 o superior**.
-2. Descarga el `.jar` desde **Releases** o compílalo desde el repositorio.
-3. Ejecuta en modo interactivo:
+2. Descarga el `.jar` desde **Releases**.
+3. Ejecución interactiva:
 
 ```bash
-java -jar tienda-upm-v2.0.0.jar
+java -jar tienda-upm-v3.0.0.jar
 ```
 
-4. Ejecuta con archivo de comandos:
+4. Ejecución con fichero de comandos:
 
 ```bash
-java -jar tienda-upm-v2.0.0.jar input.txt
+java -jar tienda-upm-v3.0.0.jar input.txt
 ```
-
-Se imprimirán los comandos y sus resultados como si fueran interactivos.
 
 ---
 
@@ -142,10 +171,14 @@ Se imprimirán los comandos y sus resultados como si fueran interactivos.
 
 ```
 tiendas-upm/
-├── src/                          # Código fuente Java
-├── docs/                         # Diagrama UML actualizado
-├── README.md                     # Este archivo
-└── pom.xml / build.gradle        # Configuración de compilación
+├── src/
+│   └── main/java/es/upm/etsisi/poo/app3/
+├── docs/
+│   └── UML.pdf
+├── db/
+│   └── app3_db.mv.db
+├── README.md
+└── pom.xml
 ```
 
 ---
@@ -164,8 +197,8 @@ tiendas-upm/
 
 ## 🗓️ Versión
 
-**v2.0.0 — Segunda entrega (E2, 2025-2026)**
-Código funcional y ejecutable, validado según el enunciado de la práctica extendida “Tienda UPM”.
+**v3.0.0 — Tercera entrega (E3, 2025-2026)**
+Persistencia JPA/Hibernate, arquitectura desacoplada y sistema completo validado.
 
 ---
 
