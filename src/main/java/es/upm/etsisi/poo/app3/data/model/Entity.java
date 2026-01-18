@@ -44,7 +44,7 @@ public abstract class Entity<T> {
      * </p>
      */
     @Id
-    protected T id;
+    protected String id;
 
     /**
      * Protected no-argument constructor required by JPA.
@@ -61,7 +61,7 @@ public abstract class Entity<T> {
      *
      * @return the entity identifier
      */
-    public T getId() {
+    public String getId() {
         return this.id;
     }
 
