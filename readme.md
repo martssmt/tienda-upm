@@ -18,12 +18,30 @@ Las principales novedades de esta entrega son:
 ---
 
 ## 🧱 Entregables
+Para esta entrega se han generado los siguientes recursos, disponibles en el repositorio y en la sección de Releases:
 
-* 🗂️ Código fuente completo en este repositorio.
-* 🧾 Ejecutable `.jar` publicado en **Releases**.
-* 🧩 Diagrama UML actualizado en `/docs`.
-* 🗄️ Configuración de persistencia JPA (`persistence.xml`).
+### 🚀 Ejecutables (Binarios)
+- `MyTiendaUPMEmpty.jar`: Versión del ejecutable con la base de datos vacía. Ideal para realizar pruebas desde cero o procesar ficheros de comandos de ejemplo para verificación.
 
+- `MyTiendaUPM.jar`: Versión del ejecutable que incluye la base de datos poblada con los datos de prueba y estados almacenados tras las ejecuciones de control.
+
+### 📄 Documentación Técnica
+Localizada en `docs/`
+- `documentación_E3_(persistencia,_librerías,_gestión_de_excepciones).pdf`: Documento detallado que incluye:
+
+  - Presentación, diseño y justificación de la persistencia (JPA/Hibernate). 
+  - Documentación de las librerías externas utilizadas. 
+  - Explicación del sistema de gestión de excepciones de la aplicación.
+
+- `ejemplo_ejecución_E3.pdf`: Documento anexo que contiene los pantallazos (screenshots) de la ejecución de todos los comandos disponibles en la aplicación, demostrando su correcto funcionamiento.
+
+- `javadoc.zip`: Archivo comprimido con la documentación técnica generada a partir del código fuente.
+
+- `UML_3.pdf`: El diagrama de clases actualizado se encuentra en la carpeta /docs/UML.pdf.
+
+### 🛠️ Código y Configuración
+- Código fuente completo en la carpeta `src/main/java/es/upm/etsisi/poo/app3/`.
+- `src/main/resources/META-INF/persistence.xml`: Archivo de configuración de JPA.
 ---
 
 ## 🧩 Arquitectura del proyecto
