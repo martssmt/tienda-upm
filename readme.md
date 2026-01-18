@@ -21,9 +21,8 @@ Las principales novedades de esta entrega son:
 Para esta entrega se han generado los siguientes recursos, disponibles en el repositorio y en la sección de Releases:
 
 ### 🚀 Ejecutables (Binarios)
-- `MyTiendaUPMEmpty.jar`: Versión del ejecutable con la base de datos vacía. Ideal para realizar pruebas desde cero o procesar ficheros de comandos de ejemplo para verificación.
-
 - `MyTiendaUPM.jar`: Versión del ejecutable que incluye la base de datos poblada con los datos de prueba y estados almacenados tras las ejecuciones de control.
+- `db/`: Base de datos local poblada con el input proporcionado.
 
 ### 📄 Documentación Técnica
 Localizada en `docs/`
