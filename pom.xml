@@ -77,7 +77,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>es.upm.etsisi.poo.app2.App</mainClass>
+                            <mainClass>es.upm.etsisi.poo.app3.App</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -94,7 +94,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>es.upm.etsisi.poo.app2.App</mainClass>
+                            <mainClass>es.upm.etsisi.poo.app3.App</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
